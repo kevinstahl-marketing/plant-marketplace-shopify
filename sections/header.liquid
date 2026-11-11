@@ -37,6 +37,16 @@
 
   {% render 'header-mobile-menu', menu: section.settings.menu %}
 
+  {% if section.settings.show_inline_search %}
+    <div class="header__inline-search">
+      {% render 'marketplace-search',
+        context: 'header',
+        placeholder: 'Search the marketplace',
+        show_button: false
+      %}
+    </div>
+  {% endif %}
+
   <nav class="header__menu" aria-label="Main navigation">
     {% for link in section.settings.menu.links %}
       {% if link.links.size > 0 %}
@@ -256,6 +266,12 @@
       "step": 5,
       "unit": "%",
       "default": 90
+    },
+    {
+      "type": "checkbox",
+      "id": "show_inline_search",
+      "label": "Show inline desktop search",
+      "default": false
     }
   ]
 }

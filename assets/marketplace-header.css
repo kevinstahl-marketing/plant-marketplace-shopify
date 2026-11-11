@@ -636,3 +636,17 @@
     margin-right: auto;
   }
 }
+
+/* Optional reusable inline search */
+
+.marketplace-header .header__inline-search {
+  flex: 0 1 320px;
+  min-width: 180px;
+  max-width: 360px;
+}
+
+@media (max-width: 1050px) {
+  .marketplace-header .header__inline-search {
+    display: none;
+  }
+}

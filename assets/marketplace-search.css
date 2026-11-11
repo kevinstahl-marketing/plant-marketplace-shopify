@@ -1,0 +1,208 @@
+/* Marketplace Search — Component */
+
+.marketplace-search {
+  --search-height: 54px;
+  --search-radius: var(--radius-sm);
+  --search-background: var(--color-surface);
+
+  display: block;
+  position: relative;
+  width: 100%;
+  color: var(--color-text);
+  font-family: var(--font-body);
+}
+
+.marketplace-search__form {
+  position: relative;
+  margin: 0;
+}
+
+.marketplace-search__field {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: var(--search-height);
+  padding: 0 16px;
+  background: var(--search-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--search-radius);
+  transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.marketplace-search__field:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px color-mix(
+    in srgb,
+    var(--color-primary) 9%,
+    transparent
+  );
+}
+
+.marketplace-search__icon {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 auto;
+  color: var(--color-text-muted);
+}
+
+.marketplace-search__input {
+  width: 100%;
+  min-width: 0;
+  flex: 1;
+  padding: 14px 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--color-text);
+  font-size: .92rem;
+  line-height: 1.4;
+}
+
+.marketplace-search__input:focus {
+  outline: none;
+}
+
+.marketplace-search__input::placeholder {
+  color: var(--color-text-muted);
+  opacity: 1;
+}
+
+.marketplace-search__input::-webkit-search-cancel-button {
+  cursor: pointer;
+}
+
+.marketplace-search__submit {
+  flex: 0 0 auto;
+  padding: 9px 16px;
+  border: 0;
+  border-radius: 4px;
+  background: var(--color-primary);
+  color: var(--color-background);
+  font-size: .78rem;
+  font-weight: 650;
+  letter-spacing: .01em;
+  cursor: pointer;
+}
+
+.marketplace-search__submit:hover {
+  background: var(--color-primary-dark);
+}
+
+.marketplace-search__results {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  z-index: var(--z-dropdown, 200);
+  max-height: min(65vh, 540px);
+  overflow-y: auto;
+  padding: 10px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-lg);
+}
+
+.marketplace-search__results[hidden] {
+  display: none;
+}
+
+.marketplace-search__heading {
+  margin: 8px 10px 6px;
+  color: var(--color-text-muted);
+  font-size: .65rem;
+  font-weight: 750;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.marketplace-search__result {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border-radius: 4px;
+  color: var(--color-text);
+  text-decoration: none;
+  transition: background 150ms ease;
+}
+
+.marketplace-search__result:hover,
+.marketplace-search__result:focus-visible,
+.marketplace-search__result[aria-selected="true"] {
+  background: var(--color-surface-muted);
+  color: var(--color-text);
+}
+
+.marketplace-search__result-image {
+  width: 48px;
+  height: 48px;
+  flex: 0 0 auto;
+  border-radius: 3px;
+  object-fit: cover;
+  background: var(--color-surface-muted);
+}
+
+.marketplace-search__result-copy {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 3px;
+}
+
+.marketplace-search__result-title {
+  font-size: .85rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.marketplace-search__result-meta {
+  color: var(--color-text-muted);
+  font-size: .72rem;
+}
+
+.marketplace-search__empty {
+  padding: 20px 12px;
+  color: var(--color-text-muted);
+  font-size: .85rem;
+}
+
+.marketplace-search__all {
+  display: block;
+  margin-top: 8px;
+  padding: 14px 10px 6px;
+  border-top: 1px solid var(--color-border);
+  color: var(--color-primary);
+  font-size: .82rem;
+  font-weight: 650;
+  text-decoration: none;
+}
+
+/* Component variants */
+
+.marketplace-search--header {
+  --search-height: 42px;
+}
+
+.marketplace-search--header .marketplace-search__input {
+  font-size: .8rem;
+}
+
+.marketplace-search--hero {
+  --search-height: 66px;
+  --search-radius: var(--radius-md);
+}
+
+.marketplace-search--hero .marketplace-search__input {
+  font-size: 1rem;
+}
+
+.marketplace-search--page {
+  --search-height: 58px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marketplace-search * {
+    transition: none !important;
+  }
+}
