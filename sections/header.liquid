@@ -1,15 +1,108 @@
-<header>
-  <h2 class="header__title">
-    {{ shop.name | link_to: routes.root_url }}
-  </h2>
+{{ 'marketplace-header.css' | asset_url | stylesheet_tag }}
 
-  <div class="header__menu">
-    {% for link in section.settings.menu.links %}
-      {{ link.title | link_to: link.url }}
-    {% endfor %}
+<header class="marketplace-header" style="--brand-logo-width: {{ section.settings.logo_width }}px;">
+  <div class="header__branding">
+    <a href="{{ routes.root_url }}" class="header__brand-link" aria-label="{{ shop.name | escape }} — Home">
+      {% if section.settings.logo != blank %}
+        {{
+          section.settings.logo
+          | image_url: width: 500
+          | image_tag:
+            class: 'header__logo',
+            widths: '120, 180, 240, 360, 500',
+            loading: 'eager',
+            alt: shop.name
+        }}
+      {% else %}
+        <span class="header__brand-mark" aria-hidden="true">✳</span>
+        <span class="header__brand-name">{{ shop.name | escape }}</span>
+      {% endif %}
+    </a>
   </div>
 
+  {% render 'header-mobile-menu', menu: section.settings.menu %}
+
+  <nav class="header__menu" aria-label="Main navigation">
+    {% for link in section.settings.menu.links %}
+      {% if link.links.size > 0 %}
+        <details class="header__dropdown">
+          <summary class="header__dropdown-trigger">
+            <span>{{ link.title | escape }}</span>
+            <span class="header__chevron" aria-hidden="true"></span>
+          </summary>
+
+          <div class="header__dropdown-panel header__mega-menu">
+            <div class="header__mega-content">
+              <div class="header__mega-links">
+                <div class="header__mega-heading">
+                  <span class="header__mega-eyebrow">
+                    THE BOTANICAL DIRECTORY
+                  </span>
+                  <h2>{{ link.title | escape }}</h2>
+                  <a href="{{ link.url }}">Explore collection →</a>
+                </div>
+
+                <div class="header__mega-grid">
+                  {% for child in link.links %}
+                    <div class="header__mega-group">
+                      <a class="header__mega-group-title"
+                         href="{{ child.url }}">
+                        {{ child.title | escape }}
+                      </a>
+
+                      {% for grandchild in child.links %}
+                        <a class="header__mega-child"
+                           href="{{ grandchild.url }}">
+                          {{ grandchild.title | escape }}
+                        </a>
+                      {% endfor %}
+                    </div>
+                  {% endfor %}
+                </div>
+              </div>
+
+              {% if section.settings.mega_image != blank %}
+                <div class="header__mega-feature">
+                  {{
+                    section.settings.mega_image
+                    | image_url: width: 700
+                    | image_tag:
+                      loading: 'lazy',
+                      widths: '300, 500, 700',
+                      alt: 'Botanical discovery'
+                  }}
+                  <div class="header__mega-feature-copy">
+                    <span>EXPLORE THE COLLECTION</span>
+                    <strong>
+                      {{ section.settings.mega_heading | escape }}
+                    </strong>
+                  </div>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        </details>
+      {% else %}
+        <a class="header__nav-link" href="{{ link.url }}">
+          {{ link.title | escape }}
+        </a>
+      {% endif %}
+    {% endfor %}
+  </nav>
+
   <div class="header__icons">
+    <a class="header__search-link"
+       href="{{ routes.search_url }}"
+       aria-label="Search marketplace">
+      <svg viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="1.8"
+           stroke-linecap="round" stroke-linejoin="round"
+           aria-hidden="true">
+        <circle cx="10.8" cy="10.8" r="7.3"></circle>
+        <path d="m16.2 16.2 5 5"></path>
+      </svg>
+    </a>
+
     {% if shop.customer_accounts_enabled %}
       {{ 'icon-account.svg' | inline_asset_content | link_to: routes.account_url }}
     {% endif %}
@@ -24,42 +117,42 @@
   </div>
 </header>
 
-{% stylesheet %}
-  header {
-    height: 5rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  header a {
-    position: relative;
-    text-decoration: none;
-    color: var(--color-foreground);
-  }
-  header a sup {
-    position: absolute;
-    left: 100%;
-    overflow: hidden;
-    max-width: var(--page-margin);
-  }
-  header svg {
-    width: 2rem;
-  }
-  header .header__menu,
-  header .header__icons {
-    display: flex;
-    gap: 1rem;
-  }
-{% endstylesheet %}
+
 
 {% schema %}
 {
   "name": "t:general.header",
   "settings": [
     {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Store logo"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "label": "Logo width",
+      "min": 40,
+      "max": 260,
+      "step": 10,
+      "unit": "px",
+      "default": 160
+    },
+    {
       "type": "link_list",
       "id": "menu",
       "label": "t:labels.menu"
+    },
+    {
+      "type": "image_picker",
+      "id": "mega_image",
+      "label": "Mega menu feature image"
+    },
+    {
+      "type": "text",
+      "id": "mega_heading",
+      "label": "Mega menu feature heading",
+      "default": "Explore the botanical world"
     }
   ]
 }

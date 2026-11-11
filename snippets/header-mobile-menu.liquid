@@ -1,0 +1,51 @@
+{% comment %}
+  Mobile navigation drawer.
+  Uses Shopify's native navigation menu.
+{% endcomment %}
+
+<details class="marketplace-mobile-nav">
+  <summary class="marketplace-mobile-toggle" aria-label="Open navigation">
+    <span class="marketplace-hamburger" aria-hidden="true">
+      <span></span><span></span><span></span>
+    </span>
+  </summary>
+
+  <div class="marketplace-mobile-panel">
+    <div class="marketplace-mobile-panel__top">
+      <span>Explore</span>
+      <span class="marketplace-mobile-panel__hint">Tap the menu icon to close</span>
+    </div>
+
+    <nav aria-label="Mobile navigation">
+      {% for link in menu.links %}
+        {% if link.links.size > 0 %}
+          <details class="marketplace-mobile-group">
+            <summary>{{ link.title | escape }}</summary>
+            <div class="marketplace-mobile-submenu">
+              <a href="{{ link.url }}">View all {{ link.title | escape }}</a>
+              {% for child in link.links %}
+                <a href="{{ child.url }}">{{ child.title | escape }}</a>
+                {% for grandchild in child.links %}
+                  <a class="marketplace-mobile-grandchild" href="{{ grandchild.url }}">
+                    {{ grandchild.title | escape }}
+                  </a>
+                {% endfor %}
+              {% endfor %}
+            </div>
+          </details>
+        {% else %}
+          <a class="marketplace-mobile-link" href="{{ link.url }}">
+            {{ link.title | escape }}
+          </a>
+        {% endif %}
+      {% endfor %}
+    </nav>
+
+    <div class="marketplace-mobile-panel__footer">
+      <a href="{{ routes.search_url }}">Search the marketplace</a>
+      {% if shop.customer_accounts_enabled %}
+        <a href="{{ routes.account_url }}">My account</a>
+      {% endif %}
+    </div>
+  </div>
+</details>
