@@ -9,8 +9,8 @@
 }
 
 .marketplace-header {
-  --header-ink: #243c31;
-  --header-accent: #52785a;
+  --header-ink: var(--color-text);
+  --header-accent: var(--color-primary);
 
   display: flex;
   align-items: center;
@@ -21,9 +21,9 @@
   min-height: 82px;
   padding: 12px clamp(20px, 4vw, 72px);
 
-  background: rgba(250, 251, 247, 0.88);
-  border-bottom: 1px solid rgba(36, 60, 49, 0.1);
-  box-shadow: 0 5px 28px rgba(28, 49, 36, 0.035);
+  background: color-mix(in srgb, var(--color-background) 88%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-border) 70%, transparent);
+  box-shadow: 0 5px 28px color-mix(in srgb, var(--color-text) 3.5%, transparent);
   -webkit-backdrop-filter: blur(18px);
   backdrop-filter: blur(18px);
 
@@ -69,8 +69,8 @@
   width: 35px;
   height: 35px;
   border-radius: 11px;
-  background: #e5eee2;
-  color: #38654a;
+  background: var(--color-surface-muted);
+  color: var(--color-primary);
   font-size: 25px;
 }
 
@@ -194,8 +194,8 @@
     cursor: pointer;
     list-style: none;
     border-radius: 12px;
-    background: rgba(65, 100, 72, .07);
-    border: 1px solid rgba(36, 60, 49, .1);
+    background: color-mix(in srgb, var(--color-primary) 7%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-border) 70%, transparent);
   }
 
   .marketplace-mobile-toggle::-webkit-details-marker {
@@ -212,7 +212,7 @@
     width: 19px;
     height: 2px;
     border-radius: 2px;
-    background: #243c31;
+    background: var(--color-text);
     transition: transform .2s ease, opacity .2s ease;
   }
 
@@ -237,9 +237,9 @@
     max-height: calc(100dvh - 66px);
     overflow-y: auto;
     padding: 22px 20px 28px;
-    background: rgba(250, 251, 247, .98);
-    border-bottom: 1px solid rgba(36, 60, 49, .12);
-    box-shadow: 0 24px 40px rgba(28, 49, 36, .12);
+    background: color-mix(in srgb, var(--color-background) 98%, transparent);
+    border-bottom: 1px solid var(--color-border);
+    box-shadow: 0 24px 40px color-mix(in srgb, var(--color-text) 12%, transparent);
     backdrop-filter: blur(22px);
   }
 
@@ -268,7 +268,7 @@
   .marketplace-mobile-group > summary {
     display: block;
     padding: 15px 4px;
-    border-bottom: 1px solid rgba(36, 60, 49, .1);
+    border-bottom: 1px solid color-mix(in srgb, var(--color-border) 70%, transparent);
     font-size: 1rem;
     font-weight: 650;
     cursor: pointer;
@@ -316,7 +316,7 @@
     flex-wrap: wrap;
     margin-top: 24px;
     padding-top: 20px;
-    border-top: 1px solid rgba(36, 60, 49, .12);
+    border-top: 1px solid var(--color-border);
     font-size: .85rem;
     font-weight: 600;
   }
@@ -382,9 +382,9 @@
     overflow-y: auto;
     padding: 18px 22px;
     border-radius: 16px;
-    background: #fafbf7;
-    border: 1px solid rgba(36, 60, 49, .1);
-    box-shadow: 0 20px 55px rgba(28, 49, 36, .14);
+    background: var(--color-surface);
+    border: 1px solid color-mix(in srgb, var(--color-border) 70%, transparent);
+    box-shadow: 0 20px 55px color-mix(in srgb, var(--color-text) 14%, transparent);
     z-index: 110;
   }
 
@@ -392,7 +392,7 @@
     display: block;
     padding-bottom: 14px;
     margin-bottom: 8px;
-    border-bottom: 1px solid rgba(36, 60, 49, .12);
+    border-bottom: 1px solid var(--color-border);
     font-weight: 750 !important;
   }
 
@@ -471,9 +471,9 @@
     overflow-y: auto;
     padding: 36px clamp(24px, 5vw, 90px);
     border-radius: 0 0 18px 18px;
-    background: #fafbf7;
-    border: 1px solid rgba(36, 60, 49, .1);
-    box-shadow: 0 25px 55px rgba(28, 49, 36, .12);
+    background: var(--color-surface);
+    border: 1px solid color-mix(in srgb, var(--color-border) 70%, transparent);
+    box-shadow: 0 25px 55px color-mix(in srgb, var(--color-text) 12%, transparent);
   }
 
   .header__mega-content {
@@ -495,7 +495,7 @@
   .header__mega-eyebrow {
     display: block;
     margin-bottom: 8px;
-    color: #52785a;
+    color: var(--color-primary);
     font-size: .68rem;
     font-weight: 750;
     letter-spacing: .15em;
@@ -503,7 +503,7 @@
 
   .header__mega-heading h2 {
     margin: 0 0 10px;
-    color: #243c31;
+    color: var(--color-text);
     font-size: clamp(1.7rem, 2.5vw, 2.5rem);
     font-weight: 650;
     letter-spacing: -.045em;
@@ -547,7 +547,7 @@
     min-height: 290px;
     overflow: hidden;
     border-radius: 14px;
-    background: #e5eee2;
+    background: var(--color-surface-muted);
   }
 
   .header__mega-feature img {
@@ -567,7 +567,7 @@
     padding: 55px 24px 24px;
     background: linear-gradient(
       transparent,
-      rgba(12, 35, 21, .8)
+      color-mix(in srgb, var(--color-text) 80%, transparent)
     );
     color: white;
   }

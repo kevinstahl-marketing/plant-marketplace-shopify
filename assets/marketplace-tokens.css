@@ -1,17 +1,9 @@
 
 :root {
-  /* COLORS */
-  --color-primary: #285943;
-  --color-primary-dark: #193e2e;
-  --color-accent: #b8d69a;
-
-  --color-background: #fafaf6;
-  --color-surface: #ffffff;
-  --color-surface-muted: #edf2e9;
-
-  --color-text: #202b24;
-  --color-text-muted: #637067;
-  --color-border: #dce3d9;
+  /* COLORS
+     Owned by Shopify color schemes.
+     See snippets/css-variables.liquid.
+  */
 
   /* TYPOGRAPHY */
   --font-body: system-ui, -apple-system, sans-serif;
@@ -49,14 +41,14 @@
   --radius-full: 9999px;
 
   /* GLASS */
-  --glass-background: rgba(255, 255, 255, 0.72);
-  --glass-border: rgba(255, 255, 255, 0.8);
+  --glass-background: color-mix(in srgb, var(--color-background) 72%, transparent);
+  --glass-border: color-mix(in srgb, var(--color-foreground) 10%, transparent);
   --glass-blur: 16px;
 
   /* SHADOWS */
-  --shadow-sm: 0 2px 8px rgba(20, 50, 35, 0.05);
-  --shadow-md: 0 8px 24px rgba(20, 50, 35, 0.08);
-  --shadow-lg: 0 16px 48px rgba(20, 50, 35, 0.12);
+  --shadow-sm: 0 2px 8px color-mix(in srgb, var(--color-foreground) 5%, transparent);
+  --shadow-md: 0 8px 24px color-mix(in srgb, var(--color-foreground) 8%, transparent);
+  --shadow-lg: 0 16px 48px color-mix(in srgb, var(--color-foreground) 12%, transparent);
 
   /* MOTION */
   --transition-fast: 150ms ease;
