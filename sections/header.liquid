@@ -1,6 +1,21 @@
 {{ 'marketplace-header.css' | asset_url | stylesheet_tag }}
+{% style %}
+  #shopify-section-{{ section.id }} {
+    position: {% if section.settings.sticky_header %}sticky{% else %}relative{% endif %};
+    top: {% if section.settings.sticky_header %}0{% else %}auto{% endif %};
+    z-index: var(--z-header);
+  }
+{% endstyle %}
 
-<header class="marketplace-header color-{{ section.settings.color_scheme }}" style="--brand-logo-width: {{ section.settings.logo_width }}px;">
+<header
+  class="marketplace-header color-{{ section.settings.color_scheme }} header-layout--{{ section.settings.header_layout }} header-shadow--{{ section.settings.header_shadow }}{% unless section.settings.header_border %} header-no-border{% endunless %}"
+  style="
+    --brand-logo-width: {{ section.settings.logo_width }}px;
+    --header-height: {{ section.settings.header_height }}px;
+    --header-padding: {{ section.settings.header_padding }}px;
+    --header-opacity: {{ section.settings.header_opacity | divided_by: 100.0 }};
+  "
+>
   <div class="header__branding">
     <a href="{{ routes.root_url }}" class="header__brand-link" aria-label="{{ shop.name | escape }} — Home">
       {% if section.settings.logo != blank %}
@@ -159,6 +174,88 @@
       "id": "mega_heading",
       "label": "Mega menu feature heading",
       "default": "Explore the botanical world"
+    },
+    {
+      "type": "header",
+      "content": "Header appearance"
+    },
+    {
+      "type": "select",
+      "id": "header_layout",
+      "label": "Header layout",
+      "options": [
+        {
+          "value": "balanced",
+          "label": "Balanced"
+        },
+        {
+          "value": "compact",
+          "label": "Compact"
+        }
+      ],
+      "default": "balanced"
+    },
+    {
+      "type": "range",
+      "id": "header_height",
+      "label": "Minimum header height",
+      "min": 60,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "default": 82
+    },
+    {
+      "type": "range",
+      "id": "header_padding",
+      "label": "Horizontal padding",
+      "min": 12,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky_header",
+      "label": "Sticky header",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "header_border",
+      "label": "Show bottom border",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "header_shadow",
+      "label": "Header shadow",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "subtle",
+          "label": "Subtle"
+        },
+        {
+          "value": "strong",
+          "label": "Strong"
+        }
+      ],
+      "default": "subtle"
+    },
+    {
+      "type": "range",
+      "id": "header_opacity",
+      "label": "Background opacity",
+      "min": 60,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 90
     }
   ]
 }

@@ -1,9 +1,7 @@
 /* Plant Marketplace — Header Foundation */
 
+/* Sticky behavior is controlled by the section schema. */
 .shopify-section:has(> .marketplace-header) {
-  position: sticky;
-  top: 0;
-  z-index: 100;
   display: block;
   width: 100%;
 }
@@ -18,10 +16,10 @@
   gap: clamp(16px, 2vw, 32px);
 
   width: 100%;
-  min-height: 82px;
-  padding: 12px clamp(20px, 4vw, 72px);
+  min-height: var(--header-height, 82px);
+  padding: 12px var(--header-padding, 32px);
 
-  background: color-mix(in srgb, var(--color-background) 88%, transparent);
+  background: color-mix(in srgb, var(--color-background) calc(var(--header-opacity, .9) * 100%), transparent);
   border-bottom: 1px solid color-mix(in srgb, var(--color-border) 70%, transparent);
   box-shadow: 0 5px 28px color-mix(in srgb, var(--color-text) 3.5%, transparent);
   -webkit-backdrop-filter: blur(18px);
@@ -569,7 +567,7 @@
       transparent,
       color-mix(in srgb, var(--color-text) 80%, transparent)
     );
-    color: white;
+    color: var(--color-background);
   }
 
   .header__mega-feature-copy span {
@@ -609,5 +607,32 @@
   .marketplace-header *::after {
     transition-duration: .01ms !important;
     animation-duration: .01ms !important;
+  }
+}
+
+
+/* Header editor-controlled variants */
+
+.marketplace-header.header-no-border {
+  border-bottom: 0;
+}
+
+.marketplace-header.header-shadow--none {
+  box-shadow: none;
+}
+
+.marketplace-header.header-shadow--strong {
+  box-shadow: var(--shadow-lg);
+}
+
+@media (min-width: 750px) {
+  .marketplace-header.header-layout--compact {
+    justify-content: flex-start;
+  }
+
+  .marketplace-header.header-layout--compact .header__menu {
+    flex: 0 1 auto;
+    justify-content: flex-start;
+    margin-right: auto;
   }
 }
