@@ -1,0 +1,80 @@
+{% comment %}
+  Marketplace Search
+  Reusable predictive search component.
+
+  Parameters:
+    context: header | hero | page
+    placeholder: input placeholder
+    show_button: true | false
+{% endcomment %}
+
+{{ 'marketplace-search.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'marketplace-search.js' | asset_url }}" defer></script>
+
+{% liquid
+  assign search_context = context | default: 'standard'
+  assign search_placeholder = placeholder | default: 'Search plants, seeds, cultivars...'
+  assign search_id = 'marketplace-search-' | append: section.id | append: '-' | append: search_context
+%}
+
+<marketplace-search
+  class="marketplace-search marketplace-search--{{ search_context | escape }}"
+  data-search-root="{{ routes.predictive_search_url }}"
+>
+  <form
+    action="{{ routes.search_url }}"
+    method="get"
+    role="search"
+    class="marketplace-search__form"
+  >
+    <input type="hidden" name="type" value="product,collection,article,page">
+
+    <label class="visually-hidden" for="{{ search_id }}">
+      Search the marketplace
+    </label>
+
+    <div class="marketplace-search__field">
+      <svg
+        class="marketplace-search__icon"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.7"
+        aria-hidden="true"
+      >
+        <circle cx="10.8" cy="10.8" r="7.3"></circle>
+        <path d="m16.2 16.2 5 5"></path>
+      </svg>
+
+      <input
+        id="{{ search_id }}"
+        class="marketplace-search__input"
+        type="search"
+        name="q"
+        placeholder="{{ search_placeholder | escape }}"
+        autocomplete="off"
+        spellcheck="false"
+        aria-autocomplete="list"
+        aria-expanded="false"
+        aria-controls="{{ search_id }}-results"
+        value="{{ search.terms | escape }}"
+      >
+
+      {% if show_button %}
+        <button class="marketplace-search__submit" type="submit">
+          Search
+        </button>
+      {% endif %}
+    </div>
+
+    <div
+      id="{{ search_id }}-results"
+      class="marketplace-search__results"
+      role="listbox"
+      aria-label="Search suggestions"
+      hidden
+    ></div>
+
+    <div class="visually-hidden" aria-live="polite" data-search-status></div>
+  </form>
+</marketplace-search>

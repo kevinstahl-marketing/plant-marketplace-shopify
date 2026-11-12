@@ -20,6 +20,32 @@
         "default": "work_sans_n4",
         "label": "t:general.primary"
       },
+      {
+        "type": "font_picker",
+        "id": "type_heading_font",
+        "label": "Heading font",
+        "default": "libre_baskerville_n4"
+      },
+      {
+        "type": "range",
+        "id": "body_font_size",
+        "label": "Body font size",
+        "min": 14,
+        "max": 22,
+        "step": 1,
+        "unit": "px",
+        "default": 16
+      },
+      {
+        "type": "range",
+        "id": "heading_letter_spacing",
+        "label": "Heading letter spacing",
+        "min": -3,
+        "max": 3,
+        "step": 0.5,
+        "unit": "px",
+        "default": -0.5
+      }
     ]
   },
   {
@@ -57,16 +83,70 @@
     "name": "t:general.colors",
     "settings": [
       {
-        "type": "color",
-        "id": "background_color",
-        "default": "#FFFFFF",
-        "label": "t:labels.background"
-      },
-      {
-        "type": "color",
-        "id": "foreground_color",
-        "default": "#333333",
-        "label": "t:labels.foreground"
+        "type": "color_scheme_group",
+        "id": "color_schemes",
+        "definition": [
+          {
+            "type": "color",
+            "id": "background",
+            "label": "Background",
+            "default": "#FAFAF6"
+          },
+          {
+            "type": "color",
+            "id": "foreground",
+            "label": "Text",
+            "default": "#202B24"
+          },
+          {
+            "type": "color",
+            "id": "primary",
+            "label": "Primary",
+            "default": "#285943"
+          },
+          {
+            "type": "color",
+            "id": "accent",
+            "label": "Accent",
+            "default": "#B8D69A"
+          },
+          {
+            "type": "color",
+            "id": "surface",
+            "label": "Surface",
+            "default": "#FFFFFF"
+          },
+          {
+            "type": "color",
+            "id": "surface_muted",
+            "label": "Muted surface",
+            "default": "#EDF2E9"
+          },
+          {
+            "type": "color",
+            "id": "text_muted",
+            "label": "Muted text",
+            "default": "#637067"
+          },
+          {
+            "type": "color",
+            "id": "border",
+            "label": "Borders",
+            "default": "#DCE3D9"
+          }
+        ],
+        "role": {
+          "background": "background",
+          "text": "foreground",
+          "links": "primary",
+          "icons": "foreground",
+          "primary_button": "primary",
+          "on_primary_button": "background",
+          "primary_button_border": "primary",
+          "secondary_button": "background",
+          "on_secondary_button": "foreground",
+          "secondary_button_border": "border"
+        }
       },
       {
         "type": "range",
@@ -75,7 +155,7 @@
         "max": 10,
         "step": 1,
         "unit": "px",
-        "label": "t:labels.input_corner_radius",
+        "label": "Input corner radius",
         "default": 4
       }
     ]

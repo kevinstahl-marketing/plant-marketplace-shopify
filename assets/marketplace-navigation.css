@@ -1,0 +1,181 @@
+/*
+ * Botanical Marketplace
+ * Category Navigation Design System
+ */
+
+@media (min-width: 750px) {
+
+  .marketplace-header .header__menu {
+    gap: var(--nav-gap, 22px);
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .marketplace-header .header__nav-link,
+  .marketplace-header .header__dropdown-trigger {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    padding: var(--nav-padding-y, 12px) 12px;
+    border: 1px solid transparent;
+    border-radius: var(--nav-radius, 24px);
+    font-size: var(--nav-font-size, 14px);
+    font-weight: 600;
+    line-height: 1.35;
+    text-decoration: none;
+    color: inherit;
+    background: transparent;
+    transition:
+      background .24s ease,
+      color .24s ease,
+      border-color .24s ease,
+      transform .24s ease;
+  }
+
+  /* Editorial */
+
+  .marketplace-header[data-nav-style="editorial"]
+  :is(.header__nav-link, .header__dropdown-trigger) {
+    padding-inline: 2px;
+    border-radius: 0;
+    letter-spacing: .025em;
+  }
+
+  /* Soft pills */
+
+  .marketplace-header[data-nav-style="pills"]
+  :is(.header__nav-link, .header__dropdown-trigger) {
+    background: color-mix(
+      in srgb,
+      var(--color-text) 5%,
+      transparent
+    );
+  }
+
+  .marketplace-header[data-nav-style="pills"]
+  :is(.header__nav-link, .header__dropdown-trigger):hover {
+    background: color-mix(
+      in srgb,
+      var(--color-text) 11%,
+      transparent
+    );
+  }
+
+  /* Outlined capsules */
+
+  .marketplace-header[data-nav-style="outlined"]
+  :is(.header__nav-link, .header__dropdown-trigger) {
+    border-color: var(--color-border);
+  }
+
+  .marketplace-header[data-nav-style="outlined"]
+  :is(.header__nav-link, .header__dropdown-trigger):hover {
+    border-color: currentColor;
+  }
+
+  /* Minimal */
+
+  .marketplace-header[data-nav-style="minimal"]
+  :is(.header__nav-link, .header__dropdown-trigger) {
+    padding-inline: 0;
+    font-weight: 500;
+  }
+
+  /* Active indicators */
+
+  .marketplace-header
+  :is(.header__nav-link, .header__dropdown-trigger)::after {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+  }
+
+  .marketplace-header[data-nav-indicator="underline"]
+  :is(.header__nav-link, .header__dropdown-trigger)::after {
+    left: 12px;
+    right: 12px;
+    bottom: 5px;
+    height: 2px;
+    border-radius: 2px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform .24s ease;
+  }
+
+  .marketplace-header[data-nav-indicator="underline"]
+  :is(
+    .header__nav-link[data-nav-active],
+    .header__dropdown-trigger[data-nav-active]
+  )::after {
+    transform: scaleX(1);
+  }
+
+  .marketplace-header[data-nav-indicator="dot"]
+  :is(
+    .header__nav-link[data-nav-active],
+    .header__dropdown-trigger[data-nav-active]
+  )::after {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: currentColor;
+    bottom: 3px;
+    left: calc(50% - 2.5px);
+  }
+
+  .marketplace-header[data-nav-indicator="background"]
+  :is(
+    .header__nav-link[data-nav-active],
+    .header__dropdown-trigger[data-nav-active]
+  ) {
+    background: color-mix(
+      in srgb,
+      var(--color-text) 12%,
+      transparent
+    );
+  }
+
+  /* Hover animations */
+
+  .marketplace-header[data-nav-hover="underline"]
+  :is(.header__nav-link, .header__dropdown-trigger):hover::after {
+    left: 12px;
+    right: 12px;
+    bottom: 5px;
+    height: 2px;
+    border-radius: 2px;
+    background: currentColor;
+    transform: scaleX(1);
+  }
+
+  .marketplace-header[data-nav-hover="lift"]
+  :is(.header__nav-link, .header__dropdown-trigger):hover {
+    transform: translateY(-2px);
+  }
+
+  .marketplace-header[data-nav-hover="fade"]
+  :is(.header__nav-link, .header__dropdown-trigger):hover {
+    color: var(--color-primary);
+  }
+
+  /* Dropdowns stay above the rail */
+
+  .marketplace-header .header__dropdown[open]
+  > .header__dropdown-trigger {
+    color: var(--color-primary);
+  }
+
+  .marketplace-header .header__mega-menu {
+    z-index: 120;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marketplace-header .header__nav-link,
+  .marketplace-header .header__dropdown-trigger {
+    transition: none !important;
+  }
+}

@@ -7,13 +7,17 @@
     {% # Load and preload the critical CSS %}
     {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
 
+    {{ 'marketplace-tokens.css' | asset_url | stylesheet_tag }}
+    {{ 'marketplace-base.css' | asset_url | stylesheet_tag }}
+    {{ 'marketplace-global.css' | asset_url | stylesheet_tag }}
+
     {% # Social, title, etc. %}
     {% render 'meta-tags' %}
 
     {{ content_for_header }}
   </head>
 
-  <body>
+  <body class="color-scheme-1">
     {% sections 'header-group' %}
 
     {{ content_for_layout }}
