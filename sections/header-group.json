@@ -20,10 +20,15 @@
     "marketplace_utility_bar": {
       "type": "utility-bar",
       "settings": {}
+    },
+    "category_navigation": {
+      "type": "category-navigation",
+      "settings": {}
     }
   },
   "order": [
     "marketplace_utility_bar",
-    "header"
+    "header",
+    "category_navigation"
   ]
 }
