@@ -13,10 +13,12 @@
   "sections": {
     "header": {
       "type": "header",
-      "settings": {}
+      "settings": {
+        "show_inline_search": true
+      }
     }
   },
   "order": [
     "header"
-  ],
+  ]
 }

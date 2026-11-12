@@ -1,0 +1,73 @@
+/*
+ * Plant Marketplace — Two-Rail Header
+ * Component-owned styles.
+ * Colors inherited from Shopify color schemes.
+ */
+
+.marketplace-utility {
+  background: var(--color-background);
+  color: var(--color-text);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.marketplace-utility__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 38px;
+  padding: 6px var(--header-utility-padding, 32px);
+}
+
+.marketplace-utility__message {
+  font-size: .73rem;
+  letter-spacing: .035em;
+  color: var(--color-text-muted);
+}
+
+.marketplace-utility__links {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: clamp(14px, 2vw, 28px);
+}
+
+.marketplace-utility__links a {
+  color: inherit;
+  font-size: .73rem;
+  font-weight: 550;
+  text-decoration: none;
+  transition: color 180ms ease;
+}
+
+.marketplace-utility__links a:hover {
+  color: var(--color-primary);
+}
+
+.marketplace-utility__links a:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 4px;
+}
+
+@media (max-width: 749px) {
+  .marketplace-utility__inner {
+    min-height: 30px;
+    padding: 6px 16px;
+    justify-content: center;
+  }
+
+  .marketplace-utility__message {
+    text-align: center;
+    font-size: .68rem;
+  }
+
+  .marketplace-utility__links {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marketplace-utility__links a {
+    transition: none;
+  }
+}

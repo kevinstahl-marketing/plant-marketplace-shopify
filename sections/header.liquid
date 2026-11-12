@@ -1,3 +1,4 @@
+{{ 'marketplace-header-rails.css' | asset_url | stylesheet_tag }}
 {{ 'marketplace-header.css' | asset_url | stylesheet_tag }}
 {% style %}
   #shopify-section-{{ section.id }} {
@@ -6,6 +7,10 @@
     z-index: var(--z-header);
   }
 {% endstyle %}
+
+{% if section.settings.show_utility_rail %}
+  {% render 'header-utility-rail', settings: section.settings %}
+{% endif %}
 
 <header
   class="marketplace-header color-{{ section.settings.color_scheme }} header-layout--{{ section.settings.header_layout }} header-shadow--{{ section.settings.header_shadow }}{% unless section.settings.header_border %} header-no-border{% endunless %}"
@@ -148,6 +153,40 @@
 {
   "name": "t:general.header",
   "settings": [
+    {
+      "type": "header",
+      "content": "Utility rail"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_utility_rail",
+      "label": "Show utility rail",
+      "default": true
+    },
+    {
+      "type": "color_scheme",
+      "id": "utility_color_scheme",
+      "label": "Utility rail color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "text",
+      "id": "utility_message",
+      "label": "Utility message",
+      "default": "Plants, seeds & growing knowledge"
+    },
+    {
+      "type": "link_list",
+      "id": "utility_menu",
+      "label": "Utility navigation menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "utility_show_account",
+      "label": "Show account link",
+      "default": true
+    },
+
     {
       "type": "color_scheme",
       "id": "color_scheme",
