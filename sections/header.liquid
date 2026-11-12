@@ -1,6 +1,6 @@
-{{ 'marketplace-header.css' | asset_url | stylesheet_tag }}
+{{ 'header.css' | asset_url | stylesheet_tag }}
 
-<header class="marketplace-header" style="--brand-logo-width: {{ section.settings.logo_width }}px;">
+<header class="site-header" style="--brand-logo-width: {{ section.settings.logo_width }}px;">
   <div class="header__branding">
     <a href="{{ routes.root_url }}" class="header__brand-link" aria-label="{{ shop.name | escape }} — Home">
       {% if section.settings.logo != blank %}

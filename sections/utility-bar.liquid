@@ -1,11 +1,11 @@
-<div class="marketplace-utility-bar color-{{ section.settings.color_scheme }}">
-  <div class="marketplace-utility-bar__inner">
-    <div class="marketplace-utility-bar__message">
+<div class="utility-bar color-{{ section.settings.color_scheme }}">
+  <div class="utility-bar__inner">
+    <div class="utility-bar__message">
       {{ section.settings.message | escape }}
     </div>
 
     {% if section.settings.menu != blank %}
-      <nav class="marketplace-utility-bar__nav" aria-label="Utility links">
+      <nav class="utility-bar__nav" aria-label="Utility links">
         {% for link in section.settings.menu.links %}
           <a href="{{ link.url }}">{{ link.title | escape }}</a>
         {% endfor %}
@@ -15,13 +15,13 @@
 </div>
 
 {% stylesheet %}
-  .marketplace-utility-bar {
+  .utility-bar {
     background: var(--color-background);
     color: var(--color-text);
     border-bottom: 1px solid var(--color-border);
   }
 
-  .marketplace-utility-bar__inner {
+  .utility-bar__inner {
     max-width: 1600px;
     margin: auto;
     min-height: 36px;
@@ -32,37 +32,37 @@
     gap: 24px;
   }
 
-  .marketplace-utility-bar__message {
+  .utility-bar__message {
     font-size: .7rem;
     letter-spacing: .11em;
     text-transform: uppercase;
     font-weight: 650;
   }
 
-  .marketplace-utility-bar__nav {
+  .utility-bar__nav {
     display: flex;
     align-items: center;
     gap: 24px;
   }
 
-  .marketplace-utility-bar__nav a {
+  .utility-bar__nav a {
     color: inherit;
     text-decoration: none;
     font-size: .73rem;
   }
 
   @media (max-width: 749px) {
-    .marketplace-utility-bar__inner {
+    .utility-bar__inner {
       justify-content: center;
       min-height: 32px;
     }
 
-    .marketplace-utility-bar__message {
+    .utility-bar__message {
       text-align: center;
       font-size: .63rem;
     }
 
-    .marketplace-utility-bar__nav {
+    .utility-bar__nav {
       display: none;
     }
   }

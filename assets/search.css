@@ -1,6 +1,6 @@
 /* Marketplace Search — Component */
 
-.marketplace-search {
+.site-search {
   --search-height: 54px;
   --search-radius: var(--radius-sm);
   --search-background: var(--color-surface);
@@ -12,12 +12,12 @@
   font-family: var(--font-body);
 }
 
-.marketplace-search__form {
+.site-search__form {
   position: relative;
   margin: 0;
 }
 
-.marketplace-search__field {
+.site-search__field {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -29,7 +29,7 @@
   transition: border-color 180ms ease, box-shadow 180ms ease;
 }
 
-.marketplace-search__field:focus-within {
+.site-search__field:focus-within {
   border-color: var(--color-primary);
   box-shadow: 0 0 0 3px color-mix(
     in srgb,
@@ -38,14 +38,14 @@
   );
 }
 
-.marketplace-search__icon {
+.site-search__icon {
   width: 20px;
   height: 20px;
   flex: 0 0 auto;
   color: var(--color-text-muted);
 }
 
-.marketplace-search__input {
+.site-search__input {
   width: 100%;
   min-width: 0;
   flex: 1;
@@ -58,20 +58,20 @@
   line-height: 1.4;
 }
 
-.marketplace-search__input:focus {
+.site-search__input:focus {
   outline: none;
 }
 
-.marketplace-search__input::placeholder {
+.site-search__input::placeholder {
   color: var(--color-text-muted);
   opacity: 1;
 }
 
-.marketplace-search__input::-webkit-search-cancel-button {
+.site-search__input::-webkit-search-cancel-button {
   cursor: pointer;
 }
 
-.marketplace-search__submit {
+.site-search__submit {
   flex: 0 0 auto;
   padding: 9px 16px;
   border: 0;
@@ -84,11 +84,11 @@
   cursor: pointer;
 }
 
-.marketplace-search__submit:hover {
+.site-search__submit:hover {
   background: var(--color-primary-dark);
 }
 
-.marketplace-search__results {
+.site-search__results {
   position: absolute;
   top: calc(100% + 8px);
   left: 0;
@@ -103,11 +103,11 @@
   box-shadow: var(--shadow-lg);
 }
 
-.marketplace-search__results[hidden] {
+.site-search__results[hidden] {
   display: none;
 }
 
-.marketplace-search__heading {
+.site-search__heading {
   margin: 8px 10px 6px;
   color: var(--color-text-muted);
   font-size: .65rem;
@@ -116,7 +116,7 @@
   text-transform: uppercase;
 }
 
-.marketplace-search__result {
+.site-search__result {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -127,14 +127,14 @@
   transition: background 150ms ease;
 }
 
-.marketplace-search__result:hover,
-.marketplace-search__result:focus-visible,
-.marketplace-search__result[aria-selected="true"] {
+.site-search__result:hover,
+.site-search__result:focus-visible,
+.site-search__result[aria-selected="true"] {
   background: var(--color-surface-muted);
   color: var(--color-text);
 }
 
-.marketplace-search__result-image {
+.site-search__result-image {
   width: 48px;
   height: 48px;
   flex: 0 0 auto;
@@ -143,31 +143,31 @@
   background: var(--color-surface-muted);
 }
 
-.marketplace-search__result-copy {
+.site-search__result-copy {
   display: flex;
   flex-direction: column;
   min-width: 0;
   gap: 3px;
 }
 
-.marketplace-search__result-title {
+.site-search__result-title {
   font-size: .85rem;
   font-weight: 600;
   line-height: 1.35;
 }
 
-.marketplace-search__result-meta {
+.site-search__result-meta {
   color: var(--color-text-muted);
   font-size: .72rem;
 }
 
-.marketplace-search__empty {
+.site-search__empty {
   padding: 20px 12px;
   color: var(--color-text-muted);
   font-size: .85rem;
 }
 
-.marketplace-search__all {
+.site-search__all {
   display: block;
   margin-top: 8px;
   padding: 14px 10px 6px;
@@ -180,29 +180,29 @@
 
 /* Component variants */
 
-.marketplace-search--header {
+.site-search--header {
   --search-height: 42px;
 }
 
-.marketplace-search--header .marketplace-search__input {
+.site-search--header .site-search__input {
   font-size: .8rem;
 }
 
-.marketplace-search--hero {
+.site-search--hero {
   --search-height: 66px;
   --search-radius: var(--radius-md);
 }
 
-.marketplace-search--hero .marketplace-search__input {
+.site-search--hero .site-search__input {
   font-size: 1rem;
 }
 
-.marketplace-search--page {
+.site-search--page {
   --search-height: 58px;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .marketplace-search * {
+  .site-search * {
     transition: none !important;
   }
 }

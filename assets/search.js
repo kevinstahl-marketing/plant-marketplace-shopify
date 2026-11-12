@@ -3,8 +3,8 @@
  * Reusable Shopify predictive search component.
  */
 
-if (!customElements.get('marketplace-search')) {
-  customElements.define('marketplace-search', class extends HTMLElement {
+if (!customElements.get('site-search')) {
+  customElements.define('site-search', class extends HTMLElement {
     constructor() {
       super();
 
@@ -15,8 +15,8 @@ if (!customElements.get('marketplace-search')) {
     }
 
     connectedCallback() {
-      this.input = this.querySelector('.marketplace-search__input');
-      this.results = this.querySelector('.marketplace-search__results');
+      this.input = this.querySelector('.site-search__input');
+      this.results = this.querySelector('.site-search__results');
       this.status = this.querySelector('[data-search-status]');
       this.form = this.querySelector('form');
 
@@ -116,20 +116,20 @@ if (!customElements.get('marketplace-search')) {
         if (!items.length) continue;
 
         const heading = document.createElement('div');
-        heading.className = 'marketplace-search__heading';
+        heading.className = 'site-search__heading';
         heading.textContent = label;
         this.results.append(heading);
 
         for (const item of items) {
           const link = document.createElement('a');
-          link.className = 'marketplace-search__result';
+          link.className = 'site-search__result';
           link.href = this.safeUrl(item.url);
           link.setAttribute('role', 'option');
           link.setAttribute('aria-selected', 'false');
 
           if (label === 'Products' && item.featured_image?.url) {
             const image = document.createElement('img');
-            image.className = 'marketplace-search__result-image';
+            image.className = 'site-search__result-image';
             image.src = item.featured_image.url;
             image.alt = '';
             image.loading = 'lazy';
@@ -137,14 +137,14 @@ if (!customElements.get('marketplace-search')) {
           }
 
           const copy = document.createElement('span');
-          copy.className = 'marketplace-search__result-copy';
+          copy.className = 'site-search__result-copy';
 
           const title = document.createElement('span');
-          title.className = 'marketplace-search__result-title';
+          title.className = 'site-search__result-title';
           title.textContent = item.title || '';
 
           const meta = document.createElement('span');
-          meta.className = 'marketplace-search__result-meta';
+          meta.className = 'site-search__result-meta';
           meta.textContent = label === 'Products'
             ? (item.vendor || 'Plant Marketplace')
             : label.slice(0, -1);
@@ -159,13 +159,13 @@ if (!customElements.get('marketplace-search')) {
 
       if (!count) {
         const empty = document.createElement('div');
-        empty.className = 'marketplace-search__empty';
+        empty.className = 'site-search__empty';
         empty.textContent = 'No instant matches. Try the full search.';
         this.results.append(empty);
       }
 
       const all = document.createElement('a');
-      all.className = 'marketplace-search__all';
+      all.className = 'site-search__all';
       all.href = `${this.form.action}?q=${encodeURIComponent(query)}`;
       all.textContent = `View all results for “${query}”`;
       this.results.append(all);
@@ -194,7 +194,7 @@ if (!customElements.get('marketplace-search')) {
       if (this.results.hidden) return;
 
       const options = [...this.results.querySelectorAll(
-        '.marketplace-search__result'
+        '.site-search__result'
       )];
 
       if (event.key === 'ArrowDown') {
