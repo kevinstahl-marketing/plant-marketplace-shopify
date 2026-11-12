@@ -1,11 +1,33 @@
-<div class="utility-bar color-{{ section.settings.color_scheme }}">
-  <div class="utility-bar__inner">
-    <div class="utility-bar__message">
-      {{ section.settings.message | escape }}
+{% liquid
+  assign announcement_text = section.settings.message
+  assign announcement_link = section.settings.message_link
+%}
+
+<div
+  class="announcement-bar color-{{ section.settings.color_scheme }}"
+  style="
+    --announcement-height: {{ section.settings.bar_height }}px;
+    --announcement-font-size: {{ section.settings.font_size }}px;
+    --announcement-alignment: {{ section.settings.text_alignment }};
+  "
+>
+  <div class="announcement-bar__inner">
+    <div class="announcement-bar__message">
+      {% if announcement_link != blank %}
+        <a href="{{ announcement_link }}">
+          {{ announcement_text | escape }}
+          <span aria-hidden="true">↗</span>
+        </a>
+      {% else %}
+        <span>{{ announcement_text | escape }}</span>
+      {% endif %}
     </div>
 
     {% if section.settings.menu != blank %}
-      <nav class="utility-bar__nav" aria-label="Utility links">
+      <nav
+        class="announcement-bar__nav{% if section.settings.show_mobile_menu %} announcement-bar__nav--mobile{% endif %}"
+        aria-label="Utility links"
+      >
         {% for link in section.settings.menu.links %}
           <a href="{{ link.url }}">{{ link.title | escape }}</a>
         {% endfor %}
@@ -15,62 +37,85 @@
 </div>
 
 {% stylesheet %}
-  .utility-bar {
+  .announcement-bar {
     background: var(--color-background);
     color: var(--color-text);
     border-bottom: 1px solid var(--color-border);
   }
 
-  .utility-bar__inner {
+  .announcement-bar__inner {
     max-width: 1600px;
-    margin: auto;
-    min-height: 36px;
-    padding: 7px clamp(18px, 3vw, 52px);
+    min-height: var(--announcement-height);
+    margin-inline: auto;
+    padding: 6px clamp(18px, 3vw, 52px);
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 24px;
   }
 
-  .utility-bar__message {
-    font-size: .7rem;
-    letter-spacing: .11em;
-    text-transform: uppercase;
-    font-weight: 650;
+  .announcement-bar__message {
+    flex: 1;
+    text-align: var(--announcement-alignment);
+    font-size: var(--announcement-font-size);
+    letter-spacing: .08em;
+    font-weight: 600;
   }
 
-  .utility-bar__nav {
-    display: flex;
-    align-items: center;
-    gap: 24px;
-  }
-
-  .utility-bar__nav a {
+  .announcement-bar__message a {
     color: inherit;
     text-decoration: none;
-    font-size: .73rem;
+  }
+
+  .announcement-bar__message a:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .announcement-bar__nav {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+  }
+
+  .announcement-bar__nav a {
+    color: inherit;
+    text-decoration: none;
+    font-size: .75rem;
+  }
+
+  .announcement-bar__nav a:hover {
+    text-decoration: underline;
   }
 
   @media (max-width: 749px) {
-    .utility-bar__inner {
+    .announcement-bar__inner {
+      flex-wrap: wrap;
       justify-content: center;
-      min-height: 32px;
+      gap: 6px 16px;
+      padding-block: 8px;
     }
 
-    .utility-bar__message {
+    .announcement-bar__message {
+      flex-basis: 100%;
       text-align: center;
-      font-size: .63rem;
     }
 
-    .utility-bar__nav {
+    .announcement-bar__nav {
       display: none;
+    }
+
+    .announcement-bar__nav--mobile {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
     }
   }
 {% endstylesheet %}
 
 {% schema %}
 {
-  "name": "Utility bar",
+  "name": "Announcement bar",
   "settings": [
     {
       "type": "color_scheme",
@@ -81,18 +126,64 @@
     {
       "type": "text",
       "id": "message",
-      "label": "Message",
+      "label": "Announcement text",
       "default": "Curated for the curious gardener"
+    },
+    {
+      "type": "url",
+      "id": "message_link",
+      "label": "Announcement link"
     },
     {
       "type": "link_list",
       "id": "menu",
-      "label": "Utility menu"
+      "label": "Utility links menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_mobile_menu",
+      "label": "Show utility links on mobile",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Appearance"
+    },
+    {
+      "type": "range",
+      "id": "bar_height",
+      "label": "Minimum height",
+      "min": 28,
+      "max": 64,
+      "step": 2,
+      "unit": "px",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "label": "Text size",
+      "min": 10,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
     }
   ],
   "presets": [
     {
-      "name": "Utility bar"
+      "name": "Announcement bar"
     }
   ]
 }
