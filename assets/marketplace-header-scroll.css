@@ -1,0 +1,228 @@
+/*
+ * Floating Header — Scroll Engine
+ */
+
+#shopify-section-header {
+  --header-scroll-duration: 280ms;
+}
+
+/* Shopify's section wrapper is the sticky element. */
+
+.shopify-section-group-header-group:has(
+  .marketplace-header[data-scroll-visibility="sticky"]
+),
+.shopify-section-group-header-group:has(
+  .marketplace-header[data-scroll-visibility="smart"]
+),
+.shopify-section-group-header-group:has(
+  .marketplace-header[data-scroll-visibility="hide"]
+) {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 100;
+}
+
+/* Prevent the utility bar from staying attached to the header. */
+
+.marketplace-header[data-scroll-visibility="static"] {
+  position: relative;
+}
+
+/* Transition speed */
+
+.marketplace-header[data-scroll-speed="instant"] {
+  --header-scroll-duration: 0ms;
+}
+
+.marketplace-header[data-scroll-speed="fast"] {
+  --header-scroll-duration: 160ms;
+}
+
+.marketplace-header[data-scroll-speed="smooth"] {
+  --header-scroll-duration: 280ms;
+}
+
+.marketplace-header[data-scroll-speed="cinematic"] {
+  --header-scroll-duration: 480ms;
+}
+
+/* Animate the entire floating shell */
+
+.marketplace-header {
+  transition:
+    transform var(--header-scroll-duration) ease,
+    opacity var(--header-scroll-duration) ease,
+    box-shadow var(--header-scroll-duration) ease,
+    margin var(--header-scroll-duration) ease;
+}
+
+/* Compact sizing */
+
+.marketplace-header.is-scrolled[data-scroll-sizing="compact"]
+.marketplace-header__main-inner,
+.marketplace-header.is-scrolled[data-scroll-sizing="morph"]
+.marketplace-header__main-inner {
+  min-height: 60px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
+.marketplace-header.is-scrolled[data-scroll-sizing="morph"]
+.header__logo {
+  max-height: 42px;
+  width: auto;
+}
+
+.marketplace-header.is-scrolled[data-scroll-sizing="morph"]
+.marketplace-header__search {
+  transform: scale(.94);
+  transform-origin: center;
+}
+
+/* Optional category collapse */
+
+.marketplace-header.is-scrolled[data-scroll-hide-categories="true"]
+.marketplace-header__category-rail {
+  display: none;
+}
+
+/* Hide effects */
+
+.marketplace-header.is-hidden[data-scroll-animation="fade"] {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.marketplace-header.is-hidden[data-scroll-animation="slide"] {
+  transform: translateY(calc(-100% - 30px));
+  pointer-events: none;
+}
+
+.marketplace-header.is-hidden[data-scroll-animation="scale"] {
+  transform: translateY(-12px) scale(.96);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.marketplace-header.is-hidden[data-scroll-animation="slide-fade"] {
+  transform: translateY(calc(-100% - 30px));
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Smooth internal transitions */
+
+.marketplace-header__main-inner,
+.marketplace-header__search,
+.marketplace-header .header__logo {
+  transition:
+    min-height var(--header-scroll-duration) ease,
+    padding var(--header-scroll-duration) ease,
+    transform var(--header-scroll-duration) ease,
+    max-height var(--header-scroll-duration) ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marketplace-header,
+  .marketplace-header * {
+    transition-duration: 0ms !important;
+  }
+}
+
+/* === Advanced floating motion === */
+
+.marketplace-header[data-scroll-easing="ease"] {
+  --header-motion-curve: cubic-bezier(.4, 0, .2, 1);
+}
+
+.marketplace-header[data-scroll-easing="ease-out"] {
+  --header-motion-curve: cubic-bezier(0, 0, .2, 1);
+}
+
+.marketplace-header[data-scroll-easing="spring"] {
+  --header-motion-curve: cubic-bezier(.2, 1.25, .3, 1);
+}
+
+.marketplace-header[data-scroll-speed="instant"] {
+  --header-motion-duration: 0ms;
+}
+
+.marketplace-header[data-scroll-speed="fast"] {
+  --header-motion-duration: 160ms;
+}
+
+.marketplace-header[data-scroll-speed="smooth"] {
+  --header-motion-duration: 280ms;
+}
+
+.marketplace-header[data-scroll-speed="cinematic"] {
+  --header-motion-duration: 480ms;
+}
+
+.marketplace-header[data-scroll-travel="20"] { --header-travel: 20%; }
+.marketplace-header[data-scroll-travel="30"] { --header-travel: 30%; }
+.marketplace-header[data-scroll-travel="40"] { --header-travel: 40%; }
+.marketplace-header[data-scroll-travel="50"] { --header-travel: 50%; }
+.marketplace-header[data-scroll-travel="60"] { --header-travel: 60%; }
+.marketplace-header[data-scroll-travel="70"] { --header-travel: 70%; }
+.marketplace-header[data-scroll-travel="80"] { --header-travel: 80%; }
+.marketplace-header[data-scroll-travel="90"] { --header-travel: 90%; }
+.marketplace-header[data-scroll-travel="100"] { --header-travel: 100%; }
+.marketplace-header[data-scroll-travel="110"] { --header-travel: 110%; }
+.marketplace-header[data-scroll-travel="120"] { --header-travel: 120%; }
+
+.marketplace-header.marketplace-header--stacked {
+  transition:
+    transform var(--header-motion-duration, 280ms)
+      var(--header-motion-curve, ease),
+    opacity var(--header-motion-duration, 280ms)
+      var(--header-motion-curve, ease),
+    box-shadow var(--header-motion-duration, 280ms) ease;
+}
+
+.marketplace-header.is-hidden[data-scroll-animation="fade"] {
+  transform: none;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.marketplace-header.is-hidden[data-scroll-animation="slide"] {
+  transform: translateY(calc(-1 * var(--header-travel, 100%)));
+  opacity: 1;
+  pointer-events: none;
+}
+
+.marketplace-header.is-hidden[data-scroll-animation="slide-fade"] {
+  transform: translateY(calc(-1 * var(--header-travel, 100%)));
+  opacity: 0;
+  pointer-events: none;
+}
+
+.marketplace-header.is-hidden[data-scroll-animation="scale"] {
+  transform: translateY(-12px) scale(.88);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/*
+ * Collapse and dock are provisional visual states.
+ * Full persistent mini-header layouts come later.
+ */
+
+.marketplace-header.is-hidden[data-scroll-animation="collapse"] {
+  transform: translateY(-65%) scaleY(.65);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.marketplace-header.is-hidden[data-scroll-animation="dock"] {
+  transform: translateY(-30%) scale(.82);
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marketplace-header.marketplace-header--stacked {
+    transition-duration: 0ms !important;
+  }
+}
