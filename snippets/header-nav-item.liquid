@@ -4,8 +4,8 @@
 {% endcomment %}
 
 {% if link.links.size > 0 %}
-  <details class="header__dropdown">
-    <summary class="header__dropdown-trigger">
+  <details class="header__dropdown{% if link.active or link.child_active %} is-active{% endif %}">
+    <summary class="header__dropdown-trigger"{% if link.active or link.child_active %} data-nav-active="true"{% endif %}>
       <span>{{ link.title | escape }}</span>
       <span class="header__chevron" aria-hidden="true"></span>
     </summary>
@@ -17,7 +17,7 @@
     %}
   </details>
 {% else %}
-  <a class="header__nav-link" href="{{ link.url }}">
+  <a class="header__nav-link"{% if link.active %} aria-current="page" data-nav-active="true"{% endif %} href="{{ link.url }}">
     {{ link.title | escape }}
   </a>
 {% endif %}
