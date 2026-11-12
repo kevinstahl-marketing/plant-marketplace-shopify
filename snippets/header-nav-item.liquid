@@ -3,6 +3,21 @@
   Supports ordinary links and nested navigation.
 {% endcomment %}
 
+{% liquid
+  assign matched_mega = blank
+  assign link_handle = link.title | handleize
+
+  for candidate in mega_blocks
+    if candidate.type == 'mega_menu'
+      assign configured_handle = candidate.settings.menu_handle | handleize
+      if configured_handle == link_handle
+        assign matched_mega = candidate
+        break
+      endif
+    endif
+  endfor
+%}
+
 {% if link.links.size > 0 %}
   <details class="header__dropdown{% if link.active or link.child_active %} is-active{% endif %}">
     <summary class="header__dropdown-trigger"{% if link.active or link.child_active %} data-nav-active="true"{% endif %}>
@@ -12,6 +27,7 @@
 
     {% render 'header-mega-menu',
       link: link,
+      mega_block: matched_mega,
       mega_image: mega_image,
       mega_heading: mega_heading
     %}
