@@ -1,137 +1,128 @@
-<script src="{{ 'marketplace-mega-menu.js' | asset_url }}" defer></script>
-{{ 'marketplace-mega-menu.css' | asset_url | stylesheet_tag }}
 {{ 'marketplace-header.css' | asset_url | stylesheet_tag }}
-{{ 'marketplace-header-layout.css' | asset_url | stylesheet_tag }}
-{{ 'marketplace-header-appearance.css' | asset_url | stylesheet_tag }}
-{{ 'marketplace-header-scroll.css' | asset_url | stylesheet_tag }}
-{{ 'marketplace-navigation.css' | asset_url | stylesheet_tag }}
-<script src="{{ 'marketplace-mobile-menu.js' | asset_url }}" defer></script>
-<script src="{{ 'marketplace-header-scroll.js' | asset_url }}" defer></script>
 
-
-
-<header
-  data-nav-hover="{{ section.settings.nav_hover }}"
-  data-nav-indicator="{{ section.settings.nav_indicator }}"
-  data-nav-style="{{ section.settings.nav_style }}"
-  data-scroll-reveal-on-hover="{{ section.settings.scroll_reveal_on_hover }}"
-  data-scroll-close-mobile-menu="{{ section.settings.scroll_close_mobile_menu }}"
-  data-scroll-travel="{{ section.settings.scroll_travel }}"
-  data-scroll-easing="{{ section.settings.scroll_easing }}"
-  data-scroll-visibility="{{ section.settings.scroll_visibility }}"
-  data-scroll-sizing="{{ section.settings.scroll_sizing }}"
-  data-scroll-animation="{{ section.settings.scroll_animation }}"
-  data-scroll-speed="{{ section.settings.scroll_speed }}"
-  data-scroll-threshold="{{ section.settings.scroll_threshold }}"
-  data-scroll-reveal-distance="{{ section.settings.scroll_reveal_distance }}"
-  data-scroll-hide-distance="{{ section.settings.scroll_hide_distance }}"
-  data-scroll-reveal-near-top="{{ section.settings.scroll_reveal_near_top }}"
-  data-scroll-protect-interactions="{{ section.settings.scroll_protect_interactions }}"
-
-  data-scroll-hide-categories="{{ section.settings.scroll_hide_categories }}"
-  class="marketplace-header marketplace-header--stacked float-material--{{ section.settings.float_material }} float-layout--{{ section.settings.float_layout }} float-shadow--{{ section.settings.float_shadow }} float-border--{{ section.settings.float_border }} color-{{ section.settings.color_scheme }} header-shadow--{{ section.settings.header_shadow }}{% unless section.settings.header_border %} header-no-border{% endunless %}"
-  style="
-    --float-blur: {{ section.settings.float_blur }}px;
-    --float-opacity: {{ section.settings.float_opacity | divided_by: 100.0 }};
-    --float-radius: {{ section.settings.float_radius }}px;
-    --float-gap: {{ section.settings.float_gap }}px;
-    --brand-logo-width: {{ section.settings.logo_width }}px;
-    --header-height: {{ section.settings.header_height }}px;
-    --header-padding: {{ section.settings.header_padding }}px;
-    --header-opacity: {{ section.settings.header_opacity | divided_by: 100.0 }};
-    --nav-font-size: {{ section.settings.nav_font_size }}px;
-    --nav-gap: {{ section.settings.nav_gap }}px;
-    --nav-radius: {{ section.settings.nav_radius }}px;
-    --nav-padding-y: {{ section.settings.nav_vertical_padding }}px;
-  "
->
-  <div class="marketplace-header__main-rail">
-    <div class="marketplace-header__main-inner">
-
-      {% render 'header-mobile-menu', menu: section.settings.menu %}
-
-      <div class="header__branding">
-        <a
-          href="{{ routes.root_url }}"
-          class="header__brand-link"
-          aria-label="{{ shop.name | escape }} — Home"
-        >
-          {% if section.settings.logo != blank %}
-            {{
-              section.settings.logo
-              | image_url: width: 500
-              | image_tag:
-                class: 'header__logo',
-                widths: '120, 180, 240, 360, 500',
-                loading: 'eager',
-                alt: shop.name
-            }}
-          {% else %}
-            <span class="header__brand-mark" aria-hidden="true">✳</span>
-            <span class="header__brand-name">{{ shop.name | escape }}</span>
-          {% endif %}
-        </a>
-      </div>
-
-      <div class="marketplace-header__search">
-        {% render 'marketplace-search',
-          context: 'header',
-          placeholder: section.settings.search_placeholder,
-          show_button: false
-        %}
-      </div>
-
-      <div class="header__icons">
-        {% if shop.customer_accounts_enabled %}
-          <a href="{{ routes.account_url }}" aria-label="Account">
-            {{ 'icon-account.svg' | inline_asset_content }}
-          </a>
-        {% endif %}
-
-        <a href="{{ routes.cart_url }}" aria-label="Cart">
-          {{ 'icon-cart.svg' | inline_asset_content }}
-          {% if cart.item_count > 0 %}
-            <sup>{{ cart.item_count }}</sup>
-          {% endif %}
-        </a>
-      </div>
-
-    </div>
+<header class="marketplace-header" style="--brand-logo-width: {{ section.settings.logo_width }}px;">
+  <div class="header__branding">
+    <a href="{{ routes.root_url }}" class="header__brand-link" aria-label="{{ shop.name | escape }} — Home">
+      {% if section.settings.logo != blank %}
+        {{
+          section.settings.logo
+          | image_url: width: 500
+          | image_tag:
+            class: 'header__logo',
+            widths: '120, 180, 240, 360, 500',
+            loading: 'eager',
+            alt: shop.name
+        }}
+      {% else %}
+        <span class="header__brand-mark" aria-hidden="true">✳</span>
+        <span class="header__brand-name">{{ shop.name | escape }}</span>
+      {% endif %}
+    </a>
   </div>
 
-  {% if section.settings.show_category_rail %}
-    <div class="marketplace-header__category-rail color-{{ section.settings.category_color_scheme }}">
-      <div class="marketplace-header__category-inner">
-        {% render 'header-primary-navigation',
-          menu: section.settings.menu,
-          mega_blocks: section.blocks,
-          mega_image: section.settings.mega_image,
-          mega_heading: section.settings.mega_heading
-        %}
-      </div>
-    </div>
-  {% endif %}
+  {% render 'header-mobile-menu', menu: section.settings.menu %}
 
-  <div class="marketplace-header__mobile-search">
-    {% render 'marketplace-search',
-      context: 'mobile-header',
-      placeholder: section.settings.search_placeholder,
-      show_button: false
-    %}
+  <nav class="header__menu" aria-label="Main navigation">
+    {% for link in section.settings.menu.links %}
+      {% if link.links.size > 0 %}
+        <details class="header__dropdown">
+          <summary class="header__dropdown-trigger">
+            <span>{{ link.title | escape }}</span>
+            <span class="header__chevron" aria-hidden="true"></span>
+          </summary>
+
+          <div class="header__dropdown-panel header__mega-menu">
+            <div class="header__mega-content">
+              <div class="header__mega-links">
+                <div class="header__mega-heading">
+                  <span class="header__mega-eyebrow">
+                    THE BOTANICAL DIRECTORY
+                  </span>
+                  <h2>{{ link.title | escape }}</h2>
+                  <a href="{{ link.url }}">Explore collection →</a>
+                </div>
+
+                <div class="header__mega-grid">
+                  {% for child in link.links %}
+                    <div class="header__mega-group">
+                      <a class="header__mega-group-title"
+                         href="{{ child.url }}">
+                        {{ child.title | escape }}
+                      </a>
+
+                      {% for grandchild in child.links %}
+                        <a class="header__mega-child"
+                           href="{{ grandchild.url }}">
+                          {{ grandchild.title | escape }}
+                        </a>
+                      {% endfor %}
+                    </div>
+                  {% endfor %}
+                </div>
+              </div>
+
+              {% if section.settings.mega_image != blank %}
+                <div class="header__mega-feature">
+                  {{
+                    section.settings.mega_image
+                    | image_url: width: 700
+                    | image_tag:
+                      loading: 'lazy',
+                      widths: '300, 500, 700',
+                      alt: 'Botanical discovery'
+                  }}
+                  <div class="header__mega-feature-copy">
+                    <span>EXPLORE THE COLLECTION</span>
+                    <strong>
+                      {{ section.settings.mega_heading | escape }}
+                    </strong>
+                  </div>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        </details>
+      {% else %}
+        <a class="header__nav-link" href="{{ link.url }}">
+          {{ link.title | escape }}
+        </a>
+      {% endif %}
+    {% endfor %}
+  </nav>
+
+  <div class="header__icons">
+    <a class="header__search-link"
+       href="{{ routes.search_url }}"
+       aria-label="Search marketplace">
+      <svg viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="1.8"
+           stroke-linecap="round" stroke-linejoin="round"
+           aria-hidden="true">
+        <circle cx="10.8" cy="10.8" r="7.3"></circle>
+        <path d="m16.2 16.2 5 5"></path>
+      </svg>
+    </a>
+
+    {% if shop.customer_accounts_enabled %}
+      {{ 'icon-account.svg' | inline_asset_content | link_to: routes.account_url }}
+    {% endif %}
+
+    <a href="{{ routes.cart_url }}">
+      {% if cart.item_count > 0 %}
+        <sup>{{ cart.item_count }}</sup>
+      {% endif %}
+
+      {{ 'icon-cart.svg' | inline_asset_content }}
+    </a>
   </div>
-
 </header>
+
+
 
 {% schema %}
 {
   "name": "t:general.header",
   "settings": [
-    {
-      "type": "color_scheme",
-      "id": "color_scheme",
-      "label": "Color scheme",
-      "default": "scheme-1"
-    },
     {
       "type": "image_picker",
       "id": "logo",
@@ -162,807 +153,7 @@
       "id": "mega_heading",
       "label": "Mega menu feature heading",
       "default": "Explore the botanical world"
-    },
-    {
-      "type": "header",
-      "content": "Header appearance"
-    },
-    {
-      "type": "select",
-      "id": "header_layout",
-      "label": "Header layout",
-      "options": [
-        {
-          "value": "balanced",
-          "label": "Balanced"
-        },
-        {
-          "value": "compact",
-          "label": "Compact"
-        }
-      ],
-      "default": "balanced"
-    },
-    {
-      "type": "range",
-      "id": "header_height",
-      "label": "Minimum header height",
-      "min": 60,
-      "max": 120,
-      "step": 2,
-      "unit": "px",
-      "default": 82
-    },
-    {
-      "type": "range",
-      "id": "header_padding",
-      "label": "Horizontal padding",
-      "min": 12,
-      "max": 80,
-      "step": 2,
-      "unit": "px",
-      "default": 32
-    },
-    {
-      "type": "checkbox",
-      "id": "sticky_header",
-      "label": "Sticky header",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "header_border",
-      "label": "Show bottom border",
-      "default": true
-    },
-    {
-      "type": "select",
-      "id": "header_shadow",
-      "label": "Header shadow",
-      "options": [
-        {
-          "value": "none",
-          "label": "None"
-        },
-        {
-          "value": "subtle",
-          "label": "Subtle"
-        },
-        {
-          "value": "strong",
-          "label": "Strong"
-        }
-      ],
-      "default": "subtle"
-    },
-    {
-      "type": "range",
-      "id": "header_opacity",
-      "label": "Background opacity",
-      "min": 60,
-      "max": 100,
-      "step": 5,
-      "unit": "%",
-      "default": 90
-    },
-    {
-      "type": "checkbox",
-      "id": "show_inline_search",
-      "label": "Show inline desktop search",
-      "default": false
-    },
-    {
-      "type": "header",
-      "content": "Main and category rails"
-    },
-    {
-      "type": "color_scheme",
-      "id": "category_color_scheme",
-      "label": "Category rail color scheme",
-      "default": "scheme-1"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_category_rail",
-      "label": "Show category navigation",
-      "default": true
-    },
-    {
-      "type": "text",
-      "id": "search_placeholder",
-      "label": "Search placeholder",
-      "default": "Search plants, seeds, cultivars..."
-    },
-    {
-      "type": "select",
-      "id": "float_material",
-      "label": "Surface material",
-      "options": [
-        {
-          "value": "solid",
-          "label": "Solid editorial"
-        },
-        {
-          "value": "frosted",
-          "label": "Frosted glass"
-        },
-        {
-          "value": "smoked",
-          "label": "Smoked glass"
-        },
-        {
-          "value": "liquid",
-          "label": "Liquid glass"
-        },
-        {
-          "value": "paper",
-          "label": "Soft paper"
-        },
-        {
-          "value": "ceramic",
-          "label": "Ceramic"
-        }
-      ],
-      "default": "frosted"
-    },
-    {
-      "type": "select",
-      "id": "float_layout",
-      "label": "Floating layout",
-      "options": [
-        {
-          "value": "unified",
-          "label": "Unified floating"
-        },
-        {
-          "value": "split",
-          "label": "Split floating rails"
-        },
-        {
-          "value": "capsule",
-          "label": "Rounded capsule"
-        },
-        {
-          "value": "full",
-          "label": "Full width"
-        }
-      ],
-      "default": "unified"
-    },
-    {
-      "type": "select",
-      "id": "float_shadow",
-      "label": "Shadow treatment",
-      "options": [
-        {
-          "value": "none",
-          "label": "None"
-        },
-        {
-          "value": "ambient",
-          "label": "Ambient"
-        },
-        {
-          "value": "elevated",
-          "label": "Elevated"
-        },
-        {
-          "value": "dramatic",
-          "label": "Dramatic"
-        },
-        {
-          "value": "inner",
-          "label": "Inner glow"
-        }
-      ],
-      "default": "ambient"
-    },
-    {
-      "type": "select",
-      "id": "float_border",
-      "label": "Border treatment",
-      "options": [
-        {
-          "value": "none",
-          "label": "None"
-        },
-        {
-          "value": "hairline",
-          "label": "Hairline"
-        },
-        {
-          "value": "highlight",
-          "label": "Glass highlight"
-        },
-        {
-          "value": "double",
-          "label": "Double edge"
-        }
-      ],
-      "default": "hairline"
-    },
-    {
-      "type": "range",
-      "id": "float_blur",
-      "label": "Backdrop blur",
-      "min": 0,
-      "max": 40,
-      "step": 2,
-      "unit": "px",
-      "default": 18
-    },
-    {
-      "type": "range",
-      "id": "float_opacity",
-      "label": "Surface opacity",
-      "min": 50,
-      "max": 100,
-      "step": 2,
-      "unit": "%",
-      "default": 86
-    },
-    {
-      "type": "range",
-      "id": "float_radius",
-      "label": "Corner radius",
-      "min": 0,
-      "max": 40,
-      "step": 2,
-      "unit": "px",
-      "default": 20
-    },
-    {
-      "type": "range",
-      "id": "float_gap",
-      "label": "Viewport edge gap",
-      "min": 0,
-      "max": 48,
-      "step": 2,
-      "unit": "px",
-      "default": 18
-    },
-    {
-      "type": "select",
-      "id": "scroll_visibility",
-      "label": "Scroll visibility",
-      "options": [
-        {
-          "value": "sticky",
-          "label": "Always sticky"
-        },
-        {
-          "value": "smart",
-          "label": "Smart reveal"
-        },
-        {
-          "value": "hide",
-          "label": "Hide after scrolling"
-        },
-        {
-          "value": "static",
-          "label": "Static"
-        }
-      ],
-      "default": "smart"
-    },
-    {
-      "type": "select",
-      "id": "scroll_sizing",
-      "label": "Header size",
-      "options": [
-        {
-          "value": "fixed",
-          "label": "Fixed size"
-        },
-        {
-          "value": "compact",
-          "label": "Compact on scroll"
-        },
-        {
-          "value": "morph",
-          "label": "Morph navigation"
-        }
-      ],
-      "default": "compact"
-    },
-    {
-      "type": "select",
-      "id": "scroll_animation",
-      "label": "Exit animation",
-      "options": [
-        {
-          "value": "fade",
-          "label": "Fade"
-        },
-        {
-          "value": "slide",
-          "label": "Slide"
-        },
-        {
-          "value": "scale",
-          "label": "Shrink away"
-        },
-        {
-          "value": "slide-fade",
-          "label": "Slide and fade"
-        },
-        {
-          "value": "collapse",
-          "label": "Collapse"
-        },
-        {
-          "value": "dock",
-          "label": "Dock capsule"
-        }
-      ],
-      "default": "slide-fade"
-    },
-    {
-      "type": "select",
-      "id": "scroll_speed",
-      "label": "Transition speed",
-      "options": [
-        {
-          "value": "instant",
-          "label": "Instant"
-        },
-        {
-          "value": "fast",
-          "label": "Fast"
-        },
-        {
-          "value": "smooth",
-          "label": "Smooth"
-        },
-        {
-          "value": "cinematic",
-          "label": "Cinematic"
-        }
-      ],
-      "default": "smooth"
-    },
-    {
-      "type": "range",
-      "id": "scroll_threshold",
-      "label": "Compact after scrolling",
-      "min": 20,
-      "max": 300,
-      "step": 10,
-      "unit": "px",
-      "default": 80
-    },
-    {
-      "type": "checkbox",
-      "id": "scroll_hide_categories",
-      "label": "Hide categories in compact mode",
-      "default": false
-    },
-    {
-      "type": "range",
-      "id": "scroll_reveal_distance",
-      "label": "Reveal after upward scroll",
-      "min": 10,
-      "max": 150,
-      "step": 5,
-      "unit": "px",
-      "default": 45
-    },
-    {
-      "type": "range",
-      "id": "scroll_hide_distance",
-      "label": "Hide after downward scroll",
-      "min": 10,
-      "max": 150,
-      "step": 5,
-      "unit": "px",
-      "default": 35
-    },
-    {
-      "type": "checkbox",
-      "id": "scroll_reveal_near_top",
-      "label": "Reveal near page top",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "scroll_protect_interactions",
-      "label": "Keep visible while interacting",
-      "default": true
-    },
-    {
-      "type": "header",
-      "content": "Advanced scroll motion"
-    },
-    {
-      "type": "select",
-      "id": "scroll_easing",
-      "label": "Motion curve",
-      "options": [
-        {
-          "value": "ease",
-          "label": "Smooth"
-        },
-        {
-          "value": "ease-out",
-          "label": "Ease out"
-        },
-        {
-          "value": "spring",
-          "label": "Spring-like"
-        }
-      ],
-      "default": "ease"
-    },
-    {
-      "type": "range",
-      "id": "scroll_travel",
-      "label": "Exit movement",
-      "min": 20,
-      "max": 120,
-      "step": 10,
-      "unit": "%",
-      "default": 100
-    },
-    {
-      "type": "checkbox",
-      "id": "scroll_close_mobile_menu",
-      "label": "Close mobile menu on scroll",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "scroll_reveal_on_hover",
-      "label": "Reveal header on mouse hover",
-      "default": false
-    },
-    {
-      "type": "select",
-      "id": "nav_style",
-      "label": "Navigation style",
-      "options": [
-        {
-          "value": "editorial",
-          "label": "Editorial"
-        },
-        {
-          "value": "pills",
-          "label": "Soft pills"
-        },
-        {
-          "value": "outlined",
-          "label": "Outlined capsules"
-        },
-        {
-          "value": "minimal",
-          "label": "Minimal"
-        }
-      ],
-      "default": "editorial"
-    },
-    {
-      "type": "select",
-      "id": "nav_indicator",
-      "label": "Active link indicator",
-      "options": [
-        {
-          "value": "underline",
-          "label": "Underline"
-        },
-        {
-          "value": "dot",
-          "label": "Dot"
-        },
-        {
-          "value": "background",
-          "label": "Background"
-        },
-        {
-          "value": "none",
-          "label": "None"
-        }
-      ],
-      "default": "underline"
-    },
-    {
-      "type": "select",
-      "id": "nav_hover",
-      "label": "Hover animation",
-      "options": [
-        {
-          "value": "underline",
-          "label": "Underline reveal"
-        },
-        {
-          "value": "lift",
-          "label": "Gentle lift"
-        },
-        {
-          "value": "fade",
-          "label": "Color fade"
-        },
-        {
-          "value": "none",
-          "label": "None"
-        }
-      ],
-      "default": "underline"
-    },
-    {
-      "type": "range",
-      "id": "nav_font_size",
-      "label": "Navigation font size",
-      "min": 12,
-      "max": 20,
-      "step": 1,
-      "unit": "px",
-      "default": 14
-    },
-    {
-      "type": "range",
-      "id": "nav_gap",
-      "label": "Space between links",
-      "min": 8,
-      "max": 48,
-      "step": 2,
-      "unit": "px",
-      "default": 22
-    },
-    {
-      "type": "range",
-      "id": "nav_radius",
-      "label": "Navigation corner radius",
-      "min": 0,
-      "max": 40,
-      "step": 2,
-      "unit": "px",
-      "default": 24
-    },
-    {
-      "type": "range",
-      "id": "nav_vertical_padding",
-      "label": "Vertical link padding",
-      "min": 6,
-      "max": 20,
-      "step": 1,
-      "unit": "px",
-      "default": 12
     }
-  ],
-  "blocks": [
-    {
-      "type": "mega_menu",
-      "name": "Mega menu",
-      "settings": [
-        {
-          "type": "text",
-          "id": "menu_handle",
-          "label": "Navigation item handle",
-          "info": "Example: tropical-plants"
-        },
-        {
-          "type": "select",
-          "id": "layout",
-          "label": "Layout",
-          "options": [
-            {
-              "value": "editorial",
-              "label": "Editorial Showcase"
-            },
-            {
-              "value": "visual",
-              "label": "Visual Collections"
-            },
-            {
-              "value": "directory",
-              "label": "Botanical Directory"
-            },
-            {
-              "value": "featured",
-              "label": "Featured Discovery"
-            }
-          ],
-          "default": "editorial"
-        },
-        {
-          "type": "text",
-          "id": "eyebrow",
-          "label": "Eyebrow",
-          "default": "THE BOTANICAL DIRECTORY"
-        },
-        {
-          "type": "text",
-          "id": "heading",
-          "label": "Heading"
-        },
-        {
-          "type": "textarea",
-          "id": "description",
-          "label": "Description"
-        },
-        {
-          "type": "text",
-          "id": "cta_label",
-          "label": "CTA label",
-          "default": "Explore collection"
-        },
-        {
-          "type": "url",
-          "id": "cta_url",
-          "label": "CTA destination"
-        },
-        {
-          "type": "image_picker",
-          "id": "image",
-          "label": "Featured image"
-        },
-        {
-          "type": "select",
-          "id": "image_position",
-          "label": "Image position",
-          "options": [
-            {
-              "value": "left",
-              "label": "Left"
-            },
-            {
-              "value": "right",
-              "label": "Right"
-            }
-          ],
-          "default": "right"
-        },
-        {
-          "type": "select",
-          "id": "image_ratio",
-          "label": "Image ratio",
-          "options": [
-            {
-              "value": "portrait",
-              "label": "Portrait"
-            },
-            {
-              "value": "square",
-              "label": "Square"
-            },
-            {
-              "value": "landscape",
-              "label": "Landscape"
-            }
-          ],
-          "default": "portrait"
-        },
-        {
-          "type": "range",
-          "id": "columns",
-          "label": "Link columns",
-          "min": 2,
-          "max": 5,
-          "step": 1,
-          "default": 3
-        },
-        {
-          "type": "color_scheme",
-          "id": "color_scheme",
-          "label": "Color scheme",
-          "default": "scheme-1"
-        },
-        {
-          "type": "select",
-          "id": "surface",
-          "label": "Surface",
-          "options": [
-            {
-              "value": "solid",
-              "label": "Solid"
-            },
-            {
-              "value": "frosted",
-              "label": "Frosted"
-            },
-            {
-              "value": "transparent",
-              "label": "Transparent"
-            }
-          ],
-          "default": "solid"
-        },
-        {
-          "type": "select",
-          "id": "border",
-          "label": "Border",
-          "options": [
-            {
-              "value": "none",
-              "label": "None"
-            },
-            {
-              "value": "hairline",
-              "label": "Hairline"
-            },
-            {
-              "value": "strong",
-              "label": "Pronounced"
-            }
-          ],
-          "default": "hairline"
-        },
-        {
-          "type": "range",
-          "id": "radius",
-          "label": "Corner radius",
-          "min": 0,
-          "max": 32,
-          "step": 2,
-          "unit": "px",
-          "default": 16
-        },
-        {
-          "type": "select",
-          "id": "shadow",
-          "label": "Shadow",
-          "options": [
-            {
-              "value": "none",
-              "label": "None"
-            },
-            {
-              "value": "soft",
-              "label": "Soft"
-            },
-            {
-              "value": "elevated",
-              "label": "Elevated"
-            }
-          ],
-          "default": "soft"
-        },
-        {
-          "type": "select",
-          "id": "animation",
-          "label": "Opening animation",
-          "options": [
-            {
-              "value": "none",
-              "label": "None"
-            },
-            {
-              "value": "fade",
-              "label": "Fade"
-            },
-            {
-              "value": "slide",
-              "label": "Slide"
-            },
-            {
-              "value": "scale",
-              "label": "Scale"
-            }
-          ],
-          "default": "fade"
-        },
-        {
-          "type": "select",
-          "id": "speed",
-          "label": "Animation speed",
-          "options": [
-            {
-              "value": "fast",
-              "label": "Fast"
-            },
-            {
-              "value": "smooth",
-              "label": "Smooth"
-            },
-            {
-              "value": "cinematic",
-              "label": "Cinematic"
-            }
-          ],
-          "default": "smooth"
-        }
-      ]
-    }
-  ],
-  "max_blocks": 20
+  ]
 }
 {% endschema %}
