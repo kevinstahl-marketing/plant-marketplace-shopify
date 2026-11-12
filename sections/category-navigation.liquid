@@ -1,0 +1,241 @@
+{{ 'category-navigation.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'category-navigation.js' | asset_url }}" defer></script>
+
+<category-navigation
+  class="category-navigation color-{{ section.settings.color_scheme }}{% if section.settings.glass %} category-navigation--glass{% endif %}"
+  style="
+    --category-nav-height: {{ section.settings.nav_height }}px;
+    --category-nav-gap: {{ section.settings.item_gap }}px;
+  "
+>
+  <nav class="category-navigation__rail" aria-label="Shop categories">
+    {% for link in section.settings.menu.links %}
+      {% if link.links.size > 0 %}
+        <details class="category-navigation__item">
+          <summary class="category-navigation__trigger">
+            <span>{{ link.title | escape }}</span>
+            <span class="category-navigation__chevron" aria-hidden="true">⌄</span>
+          </summary>
+
+          <div class="category-navigation__panel">
+            <div class="category-navigation__panel-inner">
+              <div class="category-navigation__content">
+                <span class="category-navigation__eyebrow">THE BOTANICAL DIRECTORY</span>
+                <h2>{{ link.title | escape }}</h2>
+                <a class="category-navigation__explore" href="{{ link.url }}">
+                  Explore {{ link.title | escape }} ↗
+                </a>
+
+                <div class="category-navigation__grid">
+                  {% for child in link.links %}
+                    <div class="category-navigation__group">
+                      <a class="category-navigation__group-title" href="{{ child.url }}">
+                        {{ child.title | escape }}
+                      </a>
+
+                      {% for grandchild in child.links %}
+                        <a class="category-navigation__child" href="{{ grandchild.url }}">
+                          {{ grandchild.title | escape }}
+                        </a>
+                      {% endfor %}
+                    </div>
+                  {% endfor %}
+                </div>
+              </div>
+
+              {% if section.settings.show_images %}
+                {% liquid
+                  assign feature_image = blank
+                  if link.type == 'collection_link'
+                    assign feature_image = link.object.image
+                  endif
+                  if feature_image == blank
+                    for child in link.links
+                      if child.type == 'collection_link' and child.object.image != blank
+                        assign feature_image = child.object.image
+                        break
+                      endif
+                    endfor
+                  endif
+                %}
+
+                {% if feature_image != blank %}
+                  <div class="category-navigation__feature">
+                    {{
+                      feature_image
+                      | image_url: width: 900
+                      | image_tag:
+                        loading: 'lazy',
+                        widths: '350, 550, 750, 900',
+                        alt: link.title
+                    }}
+                    <div class="category-navigation__feature-caption">
+                      <span>DISCOVER</span>
+                      <strong>{{ link.title | escape }}</strong>
+                    </div>
+                  </div>
+                {% endif %}
+              {% endif %}
+            </div>
+          </div>
+        </details>
+      {% else %}
+        <a class="category-navigation__link" href="{{ link.url }}">
+          {{ link.title | escape }}
+        </a>
+      {% endif %}
+    {% endfor %}
+  </nav>
+
+  <div class="category-navigation__overlay" data-category-overlay hidden></div>
+
+  <div
+    class="category-navigation__drawer"
+    id="category-mobile-drawer"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Browse categories"
+    aria-hidden="true"
+    inert
+    tabindex="-1"
+  >
+    <div class="category-navigation__drawer-head">
+      <span class="category-navigation__drawer-label">Explore</span>
+      <button type="button" class="category-navigation__close"
+              data-category-close aria-label="Close navigation">
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+
+    <div class="category-navigation__drawer-body">
+      <div class="category-navigation__view is-active" data-nav-view="root">
+        <span class="category-navigation__view-eyebrow">THE BOTANICAL DIRECTORY</span>
+
+        {% for link in section.settings.menu.links %}
+          <div class="category-navigation__drawer-row">
+            <a href="{{ link.url }}">{{ link.title | escape }}</a>
+            {% if link.links.size > 0 %}
+              <button type="button"
+                      data-nav-next="level1-{{ forloop.index }}"
+                      aria-label="Browse {{ link.title | escape }}">
+                <span aria-hidden="true">›</span>
+              </button>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+
+      {% for link in section.settings.menu.links %}
+        {% assign parent_index = forloop.index %}
+        {% if link.links.size > 0 %}
+          <div class="category-navigation__view"
+               data-nav-view="level1-{{ parent_index }}" hidden>
+            <button class="category-navigation__back" type="button"
+                    data-nav-back="root">← All categories</button>
+            <h2>{{ link.title | escape }}</h2>
+            <a class="category-navigation__shop-all" href="{{ link.url }}">
+              Shop all {{ link.title | escape }} ↗
+            </a>
+
+            {% for child in link.links %}
+              <div class="category-navigation__drawer-row">
+                <a href="{{ child.url }}">{{ child.title | escape }}</a>
+                {% if child.links.size > 0 %}
+                  <button type="button"
+                          data-nav-next="level2-{{ parent_index }}-{{ forloop.index }}"
+                          aria-label="Browse {{ child.title | escape }}">
+                    <span aria-hidden="true">›</span>
+                  </button>
+                {% endif %}
+              </div>
+            {% endfor %}
+          </div>
+
+          {% for child in link.links %}
+            {% if child.links.size > 0 %}
+              <div class="category-navigation__view"
+                   data-nav-view="level2-{{ parent_index }}-{{ forloop.index }}" hidden>
+                <button class="category-navigation__back" type="button"
+                        data-nav-back="level1-{{ parent_index }}">
+                  ← {{ link.title | escape }}
+                </button>
+                <h2>{{ child.title | escape }}</h2>
+                <a class="category-navigation__shop-all" href="{{ child.url }}">
+                  Shop all {{ child.title | escape }} ↗
+                </a>
+
+                {% for grandchild in child.links %}
+                  <div class="category-navigation__drawer-row">
+                    <a href="{{ grandchild.url }}">{{ grandchild.title | escape }}</a>
+                  </div>
+                {% endfor %}
+              </div>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    <div class="category-navigation__drawer-footer">
+      <a href="{{ routes.search_url }}">Search marketplace</a>
+      {% if shop.customer_accounts_enabled %}
+        <a href="{{ routes.account_url }}">My account</a>
+      {% endif %}
+    </div>
+  </div>
+</category-navigation>
+
+{% schema %}
+{
+  "name": "Category navigation",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Category menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_images",
+      "label": "Show collection images",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "glass",
+      "label": "Frosted glass navigation",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Appearance"
+    },
+    {
+      "type": "range",
+      "id": "nav_height",
+      "label": "Navigation height",
+      "min": 36,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "item_gap",
+      "label": "Category spacing",
+      "min": 12,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "default": 28
+    }
+  ]
+}
+{% endschema %}
