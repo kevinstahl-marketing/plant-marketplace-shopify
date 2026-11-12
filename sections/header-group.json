@@ -16,9 +16,14 @@
       "settings": {
         "show_inline_search": true
       }
+    },
+    "marketplace_utility_bar": {
+      "type": "utility-bar",
+      "settings": {}
     }
   },
   "order": [
+    "marketplace_utility_bar",
     "header"
   ]
 }
