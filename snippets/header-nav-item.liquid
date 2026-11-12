@@ -1,0 +1,23 @@
+{% comment %}
+  Reusable navigation item.
+  Supports ordinary links and nested navigation.
+{% endcomment %}
+
+{% if link.links.size > 0 %}
+  <details class="header__dropdown">
+    <summary class="header__dropdown-trigger">
+      <span>{{ link.title | escape }}</span>
+      <span class="header__chevron" aria-hidden="true"></span>
+    </summary>
+
+    {% render 'header-mega-menu',
+      link: link,
+      mega_image: mega_image,
+      mega_heading: mega_heading
+    %}
+  </details>
+{% else %}
+  <a class="header__nav-link" href="{{ link.url }}">
+    {{ link.title | escape }}
+  </a>
+{% endif %}

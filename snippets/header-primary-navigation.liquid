@@ -1,0 +1,14 @@
+{% comment %}
+  Primary navigation component.
+  Receives Shopify menu and optional editorial settings.
+{% endcomment %}
+
+<nav class="header__menu" aria-label="Main navigation">
+  {% for link in menu.links %}
+    {% render 'header-nav-item',
+      link: link,
+      mega_image: mega_image,
+      mega_heading: mega_heading
+    %}
+  {% endfor %}
+</nav>

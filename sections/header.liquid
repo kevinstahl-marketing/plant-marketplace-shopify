@@ -52,73 +52,11 @@
     </div>
   {% endif %}
 
-  <nav class="header__menu" aria-label="Main navigation">
-    {% for link in section.settings.menu.links %}
-      {% if link.links.size > 0 %}
-        <details class="header__dropdown">
-          <summary class="header__dropdown-trigger">
-            <span>{{ link.title | escape }}</span>
-            <span class="header__chevron" aria-hidden="true"></span>
-          </summary>
-
-          <div class="header__dropdown-panel header__mega-menu">
-            <div class="header__mega-content">
-              <div class="header__mega-links">
-                <div class="header__mega-heading">
-                  <span class="header__mega-eyebrow">
-                    THE BOTANICAL DIRECTORY
-                  </span>
-                  <h2>{{ link.title | escape }}</h2>
-                  <a href="{{ link.url }}">Explore collection →</a>
-                </div>
-
-                <div class="header__mega-grid">
-                  {% for child in link.links %}
-                    <div class="header__mega-group">
-                      <a class="header__mega-group-title"
-                         href="{{ child.url }}">
-                        {{ child.title | escape }}
-                      </a>
-
-                      {% for grandchild in child.links %}
-                        <a class="header__mega-child"
-                           href="{{ grandchild.url }}">
-                          {{ grandchild.title | escape }}
-                        </a>
-                      {% endfor %}
-                    </div>
-                  {% endfor %}
-                </div>
-              </div>
-
-              {% if section.settings.mega_image != blank %}
-                <div class="header__mega-feature">
-                  {{
-                    section.settings.mega_image
-                    | image_url: width: 700
-                    | image_tag:
-                      loading: 'lazy',
-                      widths: '300, 500, 700',
-                      alt: 'Botanical discovery'
-                  }}
-                  <div class="header__mega-feature-copy">
-                    <span>EXPLORE THE COLLECTION</span>
-                    <strong>
-                      {{ section.settings.mega_heading | escape }}
-                    </strong>
-                  </div>
-                </div>
-              {% endif %}
-            </div>
-          </div>
-        </details>
-      {% else %}
-        <a class="header__nav-link" href="{{ link.url }}">
-          {{ link.title | escape }}
-        </a>
-      {% endif %}
-    {% endfor %}
-  </nav>
+  {% render 'header-primary-navigation',
+    menu: section.settings.menu,
+    mega_image: section.settings.mega_image,
+    mega_heading: section.settings.mega_heading
+  %}
 
   <div class="header__icons">
     <a class="header__search-link"
