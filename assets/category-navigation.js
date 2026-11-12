@@ -12,6 +12,7 @@ if (!customElements.get('category-navigation')) {
       if (!this.drawer || !this.overlay) return;
 
       this.isOpen = false;
+      this.imageRequests = new WeakMap();
       this.previousOverflow = '';
       this.lastFocus = null;
 
@@ -48,6 +49,39 @@ if (!customElements.get('category-navigation')) {
       };
 
       this.handleOverlayClick = () => this.closeDrawer();
+
+      this.handleImageHover = event => {
+        const link = event.target.closest('[data-nav-image]');
+        if (!link || !this.contains(link)) return;
+
+        this.swapFeatureImage(link);
+      };
+
+      this.handleImageFocus = event => {
+        const link = event.target.closest('[data-nav-image]');
+        if (!link || !this.contains(link)) return;
+
+        this.swapFeatureImage(link);
+      };
+
+      this.handleImageLeave = event => {
+        const panel = event.target.closest('.category-navigation__panel');
+        if (
+          panel &&
+          !panel.contains(event.relatedTarget)
+        ) {
+          this.resetFeatureImage(panel);
+        }
+      };
+
+      this.handleImageFocusOut = event => {
+        const panel = event.target.closest('.category-navigation__panel');
+        if (!panel) return;
+
+        if (!panel.contains(event.relatedTarget)) {
+          this.resetFeatureImage(panel);
+        }
+      };
 
       this.handleKeydown = event => {
         if (event.key === 'Escape') {
@@ -117,6 +151,11 @@ if (!customElements.get('category-navigation')) {
       window.addEventListener('resize', this.handleResize);
       this.overlay.addEventListener('click', this.handleOverlayClick);
 
+      this.addEventListener('pointerover', this.handleImageHover);
+      this.addEventListener('focusin', this.handleImageFocus);
+      this.addEventListener('pointerout', this.handleImageLeave);
+      this.addEventListener('focusout', this.handleImageFocusOut);
+
       this.items.forEach(item => {
         item.addEventListener('toggle', this.handleDetailsToggle);
       });
@@ -137,6 +176,11 @@ if (!customElements.get('category-navigation')) {
       document.removeEventListener('shopify:section:load', this.handleSectionLoad);
       window.removeEventListener('resize', this.handleResize);
       this.overlay?.removeEventListener('click', this.handleOverlayClick);
+
+      this.removeEventListener('pointerover', this.handleImageHover);
+      this.removeEventListener('focusin', this.handleImageFocus);
+      this.removeEventListener('pointerout', this.handleImageLeave);
+      this.removeEventListener('focusout', this.handleImageFocusOut);
 
       this.items?.forEach(item => {
         item.removeEventListener('toggle', this.handleDetailsToggle);
@@ -186,6 +230,65 @@ if (!customElements.get('category-navigation')) {
         '--marketplace-sticky-header-height',
         `${height}px`
       );
+    }
+
+    swapFeatureImage(link) {
+      if (this.dataset.imageSwap !== 'true') return;
+
+      const panel = link.closest('.category-navigation__panel');
+      const feature = panel?.querySelector('[data-nav-feature]');
+      if (!feature || !link.dataset.navImage) return;
+
+      this.loadFeatureImage(
+        feature,
+        link.dataset.navImage,
+        link.dataset.navImageAlt || ''
+      );
+    }
+
+    resetFeatureImage(panel) {
+      const feature = panel.querySelector('[data-nav-feature]');
+      if (!feature) return;
+
+      this.loadFeatureImage(
+        feature,
+        feature.dataset.defaultImage,
+        feature.dataset.defaultAlt || ''
+      );
+    }
+
+    loadFeatureImage(feature, src, alt) {
+      const image = feature.querySelector('img');
+      if (!image || !src) return;
+
+      // A newer hover invalidates any pending image load.
+      const request = (this.imageRequests.get(feature) || 0) + 1;
+      this.imageRequests.set(feature, request);
+
+      if (image.dataset.activeImage === src) return;
+
+      const preload = new Image();
+
+      preload.onload = () => {
+        if (this.imageRequests.get(feature) !== request) return;
+        if (!feature.isConnected) return;
+
+        image.removeAttribute('srcset');
+        image.removeAttribute('sizes');
+        image.src = src;
+        image.alt = alt;
+        image.dataset.activeImage = src;
+
+        image.classList.remove('is-revealing');
+        void image.offsetWidth;
+        image.classList.add('is-revealing');
+      };
+
+      preload.onerror = () => {
+        // Keep the existing image if the replacement fails.
+      };
+
+      preload.src = src;
     }
 
     closeDesktopMenus() {

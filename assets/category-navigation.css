@@ -200,6 +200,21 @@
   border-radius: var(--radius-md, 12px);
 }
 
+@keyframes category-image-reveal {
+  from { opacity: .35; }
+  to { opacity: 1; }
+}
+
+.category-navigation__feature img.is-revealing {
+  animation: category-image-reveal .28s ease both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .category-navigation__feature img.is-revealing {
+    animation: none;
+  }
+}
+
 .category-navigation__feature-caption {
   margin-top: 12px;
   font-size: .8rem;

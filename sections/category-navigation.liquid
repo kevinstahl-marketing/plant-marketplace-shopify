@@ -2,6 +2,7 @@
 <script src="{{ 'category-navigation.js' | asset_url }}" defer></script>
 
 <category-navigation
+  data-image-swap="{{ section.settings.swap_images }}"
   class="category-navigation color-{{ section.settings.color_scheme }}{% if section.settings.glass %} category-navigation--glass{% endif %}"
   style="
     --category-nav-height: {{ section.settings.nav_height }}px;
@@ -29,7 +30,14 @@
                 <div class="category-navigation__grid">
                   {% for child in link.links %}
                     <div class="category-navigation__group">
-                      <a class="category-navigation__group-title" href="{{ child.url }}">
+                      <a
+                        class="category-navigation__group-title"
+                        href="{{ child.url }}"
+                        {% if child.type == 'collection_link' and child.object.image != blank %}
+                          data-nav-image="{{ child.object.image | image_url: width: 900 }}"
+                          data-nav-image-alt="{{ child.title | escape }}"
+                        {% endif %}
+                      >
                         {{ child.title | escape }}
                       </a>
 
@@ -60,7 +68,12 @@
                 %}
 
                 {% if feature_image != blank %}
-                  <div class="category-navigation__feature">
+                  <div
+                    class="category-navigation__feature"
+                    data-nav-feature
+                    data-default-image="{{ feature_image | image_url: width: 900 }}"
+                    data-default-alt="{{ link.title | escape }}"
+                  >
                     {{
                       feature_image
                       | image_url: width: 900
@@ -204,6 +217,12 @@
       "type": "checkbox",
       "id": "show_images",
       "label": "Show collection images",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "swap_images",
+      "label": "Swap images when browsing categories",
       "default": true
     },
     {
