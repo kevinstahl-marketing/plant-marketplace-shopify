@@ -23,10 +23,13 @@
   gap: 12px;
   min-height: var(--search-height);
   padding: 0 16px;
-  background: var(--search-background);
-  border: 1px solid var(--color-border);
   border-radius: var(--search-radius);
   transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.site-search__field:not(.glass-surface) {
+  background: var(--search-background);
+  border: 1px solid var(--color-border);
 }
 
 .site-search__field:focus-within {
@@ -191,6 +194,10 @@
 .site-search--hero {
   --search-height: 66px;
   --search-radius: var(--radius-md);
+}
+
+.site-search--hero .site-search__field {
+  box-shadow: var(--shadow-md);
 }
 
 .site-search--hero .site-search__input {

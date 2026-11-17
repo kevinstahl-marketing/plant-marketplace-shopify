@@ -6,6 +6,7 @@
     context: header | hero | page
     placeholder: input placeholder
     show_button: true | false
+    glass: none | default | clear | mist | cloudlight | canopy
 {% endcomment %}
 
 {{ 'search.css' | asset_url | stylesheet_tag }}
@@ -33,7 +34,7 @@
       Search the marketplace
     </label>
 
-    <div class="site-search__field">
+    <div class="site-search__field{% if glass != blank and glass != 'none' %} glass-surface glass-surface--{{ glass | escape }}{% endif %}">
       <svg
         class="site-search__icon"
         viewBox="0 0 24 24"

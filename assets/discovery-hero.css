@@ -88,10 +88,6 @@
   --search-radius: 6px;
 }
 
-.discovery-hero .site-search--hero .site-search__field {
-  box-shadow: 0 12px 32px color-mix(in srgb, var(--color-foreground) 6%, transparent);
-}
-
 .discovery-hero__discover {
   width: 100%;
   margin-top: 26px;
