@@ -1,0 +1,242 @@
+{{ 'featured-collections.css' | asset_url | stylesheet_tag }}
+
+<section
+  class="featured-collections color-{{ section.settings.color_scheme }}"
+  style="
+    --featured-columns: {{ section.settings.columns }};
+    --featured-gap: {{ section.settings.gap }}px;
+    --featured-image-ratio: {{ section.settings.image_ratio }};
+  "
+>
+  <div class="{% if section.settings.full_width %}container-fluid{% else %}container{% endif %}">
+
+    <div class="featured-collections__heading">
+      <div class="featured-collections__intro">
+        {% if section.settings.eyebrow != blank %}
+          <p class="featured-collections__eyebrow">
+            {{ section.settings.eyebrow | escape }}
+          </p>
+        {% endif %}
+
+        {% if section.settings.heading != blank %}
+          <h2 class="featured-collections__title">
+            {{ section.settings.heading | escape }}
+          </h2>
+        {% endif %}
+
+        {% if section.settings.description != blank %}
+          <div class="featured-collections__description">
+            {{ section.settings.description }}
+          </div>
+        {% endif %}
+      </div>
+
+      {% if section.settings.button_label != blank and section.settings.button_link != blank %}
+        <a class="featured-collections__view-all" href="{{ section.settings.button_link }}">
+          {{ section.settings.button_label | escape }}
+          <span aria-hidden="true">&rarr;</span>
+        </a>
+      {% endif %}
+    </div>
+
+    <div class="featured-collections__grid">
+      {% for block in section.blocks %}
+        {% liquid
+          assign collection = block.settings.collection
+          assign image = block.settings.image
+          if image == blank and collection != blank
+            assign image = collection.image
+          endif
+          if image == blank and collection != blank
+            assign image = collection.products.first.featured_image
+          endif
+        %}
+
+        <div class="featured-collections__item" {{ block.shopify_attributes }}>
+          {% render 'botanical-collection-card',
+            collection: collection,
+            image: image,
+            title_override: block.settings.title,
+            subtitle: block.settings.subtitle,
+            show_count: section.settings.show_count,
+            glass: section.settings.glass,
+            glass_material: section.settings.glass_material,
+            image_position: block.settings.image_position
+          %}
+        </div>
+      {% else %}
+        {% for i in (1..3) %}
+          <div class="featured-collections__item">
+            {% render 'botanical-collection-card',
+              glass: section.settings.glass,
+              glass_material: section.settings.glass_material
+            %}
+          </div>
+        {% endfor %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Featured collections",
+  "tag": "section",
+  "class": "featured-collections-section",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "EXPLORE THE GREENHOUSE"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Find your kind of green."
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>From rare tropicals to the seeds of your next adventure.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Optional link label",
+      "default": "Explore all"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Optional link destination"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full-width content",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "Desktop columns",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Card spacing",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image ratio",
+      "options": [
+        { "value": "1", "label": "Square" },
+        { "value": "0.8", "label": "Portrait" },
+        { "value": "1.4", "label": "Landscape" }
+      ],
+      "default": "0.8"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_count",
+      "label": "Show product count",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Card material"
+    },
+    {
+      "type": "checkbox",
+      "id": "glass",
+      "label": "Use glass cards",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "glass_material",
+      "label": "Glass material",
+      "options": [
+        { "value": "default", "label": "Global preset" },
+        { "value": "clear", "label": "Clear" },
+        { "value": "mist", "label": "Mist" },
+        { "value": "cloudlight", "label": "Cloudlight" },
+        { "value": "canopy", "label": "Canopy" }
+      ],
+      "default": "default"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection card",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Optional image override"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Optional title override"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Optional subtitle"
+        },
+        {
+          "type": "select",
+          "id": "image_position",
+          "label": "Image position",
+          "options": [
+            { "value": "center", "label": "Center" },
+            { "value": "top", "label": "Top" },
+            { "value": "bottom", "label": "Bottom" }
+          ],
+          "default": "center"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured collections",
+      "blocks": [
+        { "type": "collection" },
+        { "type": "collection" },
+        { "type": "collection" }
+      ]
+    }
+  ]
+}
+{% endschema %}

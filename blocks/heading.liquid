@@ -1,0 +1,81 @@
+<{{ block.settings.level }}
+  class="theme-heading"
+  style="
+    --heading-size: {{ block.settings.size }}px;
+    --heading-align: {{ block.settings.alignment }};
+    --heading-weight: {{ block.settings.weight }};
+  "
+  {{ block.shopify_attributes }}
+>
+  {{ block.settings.heading | escape }}
+</{{ block.settings.level }}>
+
+{% stylesheet %}
+.theme-heading {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(1.25rem, 5vw, var(--heading-size));
+  font-weight: var(--heading-weight);
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  text-align: var(--heading-align);
+  text-wrap: balance;
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Heading",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Grow something remarkable"
+    },
+    {
+      "type": "select",
+      "id": "level",
+      "label": "Heading level",
+      "options": [
+        {"value": "h1", "label": "H1"},
+        {"value": "h2", "label": "H2"},
+        {"value": "h3", "label": "H3"},
+        {"value": "h4", "label": "H4"},
+        {"value": "h5", "label": "H5"},
+        {"value": "h6", "label": "H6"}
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "range",
+      "id": "size",
+      "label": "Font size",
+      "min": 20,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "select",
+      "id": "weight",
+      "label": "Font weight",
+      "options": [
+        {"value": "400", "label": "Regular"},
+        {"value": "500", "label": "Medium"},
+        {"value": "600", "label": "Semibold"},
+        {"value": "700", "label": "Bold"}
+      ],
+      "default": "500"
+    },
+    {
+      "type": "text_alignment",
+      "id": "alignment",
+      "label": "Alignment",
+      "default": "left"
+    }
+  ],
+  "presets": [{"name": "Heading", "category": "Text"}]
+}
+{% endschema %}

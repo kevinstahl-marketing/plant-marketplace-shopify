@@ -16,6 +16,9 @@
   assign search_context = context | default: 'standard'
   assign search_placeholder = placeholder | default: 'Search plants, seeds, cultivars...'
   assign search_id = 'site-search-' | append: section.id | append: '-' | append: search_context
+  if instance_id != blank
+    assign search_id = search_id | append: '-' | append: instance_id
+  endif
 %}
 
 <site-search

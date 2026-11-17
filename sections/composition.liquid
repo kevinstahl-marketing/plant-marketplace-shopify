@@ -1,0 +1,46 @@
+{{ 'composition.css' | asset_url | stylesheet_tag }}
+
+<section
+  class="composition color-{{ section.settings.color_scheme }}"
+  style="
+    --composition-spacing: {{ section.settings.spacing }}px;
+  "
+>
+  <div class="{% if section.settings.full_width %}container-fluid{% else %}container{% endif %}">
+    {% content_for 'blocks' %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Composition",
+  "blocks": [{"type": "@theme"}],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full width",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "spacing",
+      "label": "Vertical spacing",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    }
+  ],
+  "presets": [
+    {"name": "Composition"}
+  ]
+}
+{% endschema %}

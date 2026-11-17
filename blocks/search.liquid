@@ -1,0 +1,67 @@
+<div
+  class="theme-search"
+  style="--theme-search-width: {{ block.settings.width }}px"
+  {{ block.shopify_attributes }}
+>
+  {% render 'search-form',
+    context: 'block',
+    instance_id: block.id,
+    placeholder: block.settings.placeholder,
+    show_button: block.settings.show_button,
+    glass: block.settings.glass
+  %}
+</div>
+
+{% stylesheet %}
+.theme-search {
+  width: 100%;
+  max-width: var(--theme-search-width);
+  position: relative;
+  z-index: 2;
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Search",
+  "settings": [
+    {
+      "type": "text",
+      "id": "placeholder",
+      "label": "Placeholder",
+      "default": "Search plants, seeds, cultivars..."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_button",
+      "label": "Show search button",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "width",
+      "label": "Maximum width",
+      "min": 300,
+      "max": 900,
+      "step": 20,
+      "unit": "px",
+      "default": 600
+    },
+    {
+      "type": "select",
+      "id": "glass",
+      "label": "Search material",
+      "options": [
+        {"value": "none", "label": "Solid"},
+        {"value": "default", "label": "Global glass"},
+        {"value": "clear", "label": "Clear"},
+        {"value": "mist", "label": "Mist"},
+        {"value": "cloudlight", "label": "Cloudlight"},
+        {"value": "canopy", "label": "Canopy"}
+      ],
+      "default": "default"
+    }
+  ],
+  "presets": [{"name": "Search", "category": "Actions"}]
+}
+{% endschema %}

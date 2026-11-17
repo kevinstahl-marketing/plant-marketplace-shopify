@@ -1,0 +1,11 @@
+.composition {
+  padding-block: var(--composition-spacing);
+  background: var(--color-background);
+  color: var(--color-foreground);
+}
+.composition > .container,
+.composition > .container-fluid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}

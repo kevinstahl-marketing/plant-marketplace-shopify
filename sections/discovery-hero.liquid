@@ -4,69 +4,17 @@
   class="discovery-hero color-{{ section.settings.color_scheme }} discovery-hero--{{ section.settings.hero_layout | default: 'immersive' }}"
   style="
     --hero-min-height: {{ section.settings.hero_height }}px;
+    --hero-mobile-height: {{ section.settings.mobile_height | default: 620 }}px;
+    --hero-content-width: {{ section.settings.content_width | default: 740 }}px;
+    --hero-content-align: {{ section.settings.content_alignment | default: 'flex-start' }};
+    --hero-mobile-image-position: {{ section.settings.mobile_image_position | default: 'center' }};
     --hero-image-position: {{ section.settings.image_position }};
     --hero-overlay-strength: {{ section.settings.hero_overlay | default: 15 }}%;
   "
 >
   <div class="discovery-hero__layout">
-    <div class="discovery-hero__content{% if section.settings.hero_layout == 'immersive' %} glass-surface glass-surface--{{ section.settings.hero_glass | default: 'default' }}{% endif %}">
-      {% if section.settings.eyebrow != blank %}
-        <p class="discovery-hero__eyebrow">
-          <span class="discovery-hero__eyebrow-mark" aria-hidden="true">✳</span>
-          {{ section.settings.eyebrow | escape }}
-        </p>
-      {% endif %}
-
-      {% if section.settings.heading != blank %}
-        <h1 class="discovery-hero__heading">
-          {{ section.settings.heading | escape }}
-        </h1>
-      {% endif %}
-
-      {% if section.settings.description != blank %}
-        <div class="discovery-hero__description">
-          {{ section.settings.description }}
-        </div>
-      {% endif %}
-
-      <div class="discovery-hero__search">
-        {% render 'search-form',
-          context: 'hero',
-          placeholder: section.settings.search_placeholder,
-          show_button: true,
-          glass: 'default'
-        %}
-      </div>
-
-      {% if section.blocks.size > 0 %}
-        <div class="discovery-hero__discover">
-          <span class="discovery-hero__discover-label">EXPLORE</span>
-          <div class="discovery-hero__links">
-            {% for block in section.blocks %}
-              {% if block.settings.label != blank and block.settings.link != blank %}
-                <a
-                  class="discovery-hero__link glass-surface glass-surface--default"
-                  href="{{ block.settings.link }}"
-                  {{ block.shopify_attributes }}
-                >
-                  {{ block.settings.label | escape }}
-                  <span aria-hidden="true">↗</span>
-                </a>
-              {% endif %}
-            {% endfor %}
-          </div>
-        </div>
-      {% endif %}
-
-      {% if section.settings.cta_label != blank %}
-        <a
-          class="discovery-hero__cta"
-          href="{{ section.settings.cta_link | default: routes.all_products_collection_url }}"
-        >
-          {{ section.settings.cta_label | escape }}
-          <span aria-hidden="true">↗</span>
-        </a>
-      {% endif %}
+    <div class="discovery-hero__content">
+      {% content_for 'blocks' %}
     </div>
 
     <div class="discovery-hero__visual">
@@ -87,7 +35,7 @@
         </div>
       {% endif %}
 
-      {% if section.settings.image_caption != blank %}
+      {% if section.settings.show_image_caption and section.settings.image_caption != blank %}
         <div class="discovery-hero__image-caption">
           <span class="discovery-hero__caption-line"></span>
           {{ section.settings.image_caption | escape }}
@@ -108,53 +56,6 @@
       "id": "color_scheme",
       "label": "Color scheme",
       "default": "scheme-1"
-    },
-    {
-      "type": "header",
-      "content": "Editorial content"
-    },
-    {
-      "type": "text",
-      "id": "eyebrow",
-      "label": "Eyebrow",
-      "default": "THE BOTANICAL MARKETPLACE"
-    },
-    {
-      "type": "text",
-      "id": "heading",
-      "label": "Heading",
-      "default": "Find your next obsession."
-    },
-    {
-      "type": "richtext",
-      "id": "description",
-      "label": "Description",
-      "default": "<p>Discover extraordinary plants, tropical fruit trees, rare seeds, and everything you need to grow something remarkable.</p>"
-    },
-    {
-      "type": "header",
-      "content": "Search"
-    },
-    {
-      "type": "text",
-      "id": "search_placeholder",
-      "label": "Search placeholder",
-      "default": "Search plants, seeds, cultivars..."
-    },
-    {
-      "type": "header",
-      "content": "Shopping"
-    },
-    {
-      "type": "text",
-      "id": "cta_label",
-      "label": "Shop button label",
-      "default": "Shop all plants & seeds"
-    },
-    {
-      "type": "url",
-      "id": "cta_link",
-      "label": "Shop button link"
     },
     {
       "type": "header",
@@ -230,34 +131,6 @@
       "default": "immersive"
     },
     {
-      "type": "select",
-      "id": "hero_glass",
-      "label": "Discovery panel glass",
-      "options": [
-        {
-          "value": "default",
-          "label": "Use global material"
-        },
-        {
-          "value": "clear",
-          "label": "Clear canopy"
-        },
-        {
-          "value": "mist",
-          "label": "Morning mist"
-        },
-        {
-          "value": "cloudlight",
-          "label": "Cloudlight"
-        },
-        {
-          "value": "canopy",
-          "label": "Deep canopy"
-        }
-      ],
-      "default": "cloudlight"
-    },
-    {
       "type": "range",
       "id": "hero_overlay",
       "label": "Photo overlay strength",
@@ -266,26 +139,85 @@
       "step": 5,
       "unit": "%",
       "default": 15
+    },
+    {
+      "type": "select",
+      "id": "content_alignment",
+      "label": "Content alignment",
+      "options": [
+        {
+          "value": "flex-start",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "flex-end",
+          "label": "Right"
+        }
+      ],
+      "default": "flex-start"
+    },
+    {
+      "type": "range",
+      "id": "content_width",
+      "label": "Content max width",
+      "min": 400,
+      "max": 1200,
+      "step": 20,
+      "unit": "px",
+      "default": 740
+    },
+    {
+      "type": "range",
+      "id": "mobile_height",
+      "label": "Mobile minimum height",
+      "min": 400,
+      "max": 900,
+      "step": 20,
+      "unit": "px",
+      "default": 620
+    },
+    {
+      "type": "select",
+      "id": "mobile_image_position",
+      "label": "Mobile image position",
+      "options": [
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_image_caption",
+      "label": "Show image caption",
+      "default": true
     }
   ],
   "blocks": [
     {
-      "type": "quick_link",
-      "name": "Discovery link",
-      "limit": 6,
-      "settings": [
-        {
-          "type": "text",
-          "id": "label",
-          "label": "Label",
-          "default": "Explore plants"
-        },
-        {
-          "type": "url",
-          "id": "link",
-          "label": "Destination"
-        }
-      ]
+      "type": "@theme"
     }
   ],
   "presets": [

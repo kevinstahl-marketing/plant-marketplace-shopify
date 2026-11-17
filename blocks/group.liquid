@@ -1,21 +1,27 @@
-{% doc %}
-  Renders a group of blocks with configurable layout direction, gap and
-  alignment.
-
-  All settings apply to only one dimension to reduce configuration complexity.
-
-  This component is a wrapper concerned only with rendering its children in
-  the specified layout direction with appropriate padding and alignment.
-
-  @example
-  {% content_for 'block', type: 'group', id: 'group' %}
-{% enddoc %}
-
 <div
-  class="group {{ block.settings.layout_direction }}"
+  class="theme-group{% if block.settings.material != 'none' %} glass-surface glass-surface--{{ block.settings.material }}{% endif %}"
   style="
-    --padding: {{ block.settings.padding }}px;
-    --alignment: {{ block.settings.alignment }};
+    --group-direction: {{ block.settings.direction }};
+    --group-mobile-direction: {{ block.settings.mobile_direction }};
+    --group-mobile-align: {{ block.settings.mobile_alignment }};
+    --group-gap: {{ block.settings.gap }}px;
+    --group-mobile-gap: {{ block.settings.mobile_gap }}px;
+    --group-wrap: {{ block.settings.wrap }};
+    --group-max-width: {{ block.settings.max_width }}px;
+    --group-min-height: {{ block.settings.min_height }}px;
+    --group-padding-x: {{ block.settings.padding_x }}px;
+    --group-padding-y: {{ block.settings.padding_y }}px;
+    --group-mobile-padding-x: {{ block.settings.mobile_padding_x }}px;
+    --group-mobile-padding-y: {{ block.settings.mobile_padding_y }}px;
+    --group-align: {{ block.settings.alignment }};
+    --group-justify: {{ block.settings.justify }};
+    --group-width: {{ block.settings.width }}%;
+    --group-radius: {{ block.settings.radius }}px;
+    --glass-radius-override: {{ block.settings.radius }}px;
+    {% if block.settings.custom_glass %}
+      --glass-opacity-override: {{ block.settings.opacity }}%;
+      --glass-blur-override: {{ block.settings.blur }}px;
+    {% endif %}
   "
   {{ block.shopify_attributes }}
 >
@@ -23,82 +29,339 @@
 </div>
 
 {% stylesheet %}
-  .group {
-    display: flex;
-    flex-wrap: nowrap;
-    overflow: hidden;
-    width: 100%;
-  }
+.theme-group {
+  display: flex;
+  flex-direction: var(--group-direction, column);
+  flex-wrap: var(--group-wrap, nowrap);
+  align-items: var(--group-align, stretch);
+  justify-content: var(--group-justify, flex-start);
+  gap: var(--group-gap, 16px);
+  width: var(--group-width, 100%);
+  max-width: min(100%, var(--group-max-width, 1200px));
+  min-width: 0;
+  min-height: var(--group-min-height, 0px);
+  padding:
+    var(--group-padding-y, 24px)
+    var(--group-padding-x, 24px);
+  border-radius: var(--group-radius, 12px);
+  box-sizing: border-box;
+}
 
-  .group--horizontal {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 var(--padding);
-  }
+.theme-group > * {
+  min-width: 0;
+}
 
-  .group--vertical {
-    flex-direction: column;
-    align-items: var(--alignment);
-    padding: var(--padding) 0;
+@media (max-width: 749px) {
+  .theme-group {
+    flex-direction: var(--group-mobile-direction, column);
+    align-items: var(--group-mobile-align, stretch);
+    gap: var(--group-mobile-gap, 16px);
+    padding:
+      var(--group-mobile-padding-y, 24px)
+      var(--group-mobile-padding-x, 20px);
   }
+}
 {% endstylesheet %}
 
 {% schema %}
 {
-  "name": "t:general.group",
-  "blocks": [{ "type": "@theme" }],
+  "name": "Group",
+  "blocks": [
+    {
+      "type": "@theme"
+    }
+  ],
   "settings": [
     {
       "type": "select",
-      "id": "layout_direction",
-      "label": "t:labels.layout_direction",
-      "default": "group--vertical",
+      "id": "direction",
+      "label": "Direction",
       "options": [
-        { "value": "group--horizontal", "label": "t:options.direction.horizontal" },
-        { "value": "group--vertical", "label": "t:options.direction.vertical" }
-      ]
+        {
+          "value": "column",
+          "label": "Vertical"
+        },
+        {
+          "value": "row",
+          "label": "Horizontal"
+        }
+      ],
+      "default": "column"
     },
     {
-      "visible_if": "{{ block.settings.layout_direction == 'group--vertical' }}",
       "type": "select",
       "id": "alignment",
-      "label": "t:labels.alignment",
-      "default": "flex-start",
+      "label": "Align items",
       "options": [
-        { "value": "flex-start", "label": "t:options.alignment.left" },
-        { "value": "center", "label": "t:options.alignment.center" },
-        { "value": "flex-end", "label": "t:options.alignment.right" }
-      ]
+        {
+          "value": "flex-start",
+          "label": "Start"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "flex-end",
+          "label": "End"
+        },
+        {
+          "value": "stretch",
+          "label": "Stretch"
+        }
+      ],
+      "default": "stretch"
+    },
+    {
+      "type": "select",
+      "id": "justify",
+      "label": "Distribute items",
+      "options": [
+        {
+          "value": "flex-start",
+          "label": "Start"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "space-between",
+          "label": "Space between"
+        },
+        {
+          "value": "space-around",
+          "label": "Space around"
+        }
+      ],
+      "default": "flex-start"
+    },
+    {
+      "type": "header",
+      "content": "Mobile layout"
+    },
+    {
+      "type": "select",
+      "id": "mobile_direction",
+      "label": "Mobile direction",
+      "options": [
+        {
+          "value": "column",
+          "label": "Vertical"
+        },
+        {
+          "value": "row",
+          "label": "Horizontal"
+        }
+      ],
+      "default": "column"
+    },
+    {
+      "type": "select",
+      "id": "mobile_alignment",
+      "label": "Mobile alignment",
+      "options": [
+        {
+          "value": "stretch",
+          "label": "Stretch"
+        },
+        {
+          "value": "flex-start",
+          "label": "Start"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "flex-end",
+          "label": "End"
+        }
+      ],
+      "default": "stretch"
     },
     {
       "type": "range",
-      "id": "padding",
-      "label": "t:labels.padding",
-      "default": 0,
+      "id": "width",
+      "label": "Width",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Gap",
       "min": 0,
-      "max": 200,
+      "max": 80,
       "step": 2,
-      "unit": "px"
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "radius",
+      "label": "Corner radius",
+      "min": 0,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "select",
+      "id": "material",
+      "label": "Material",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "default",
+          "label": "Global glass"
+        },
+        {
+          "value": "clear",
+          "label": "Clear"
+        },
+        {
+          "value": "mist",
+          "label": "Mist"
+        },
+        {
+          "value": "cloudlight",
+          "label": "Cloudlight"
+        },
+        {
+          "value": "canopy",
+          "label": "Canopy"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "checkbox",
+      "id": "custom_glass",
+      "label": "Override glass settings",
+      "default": false,
+      "visible_if": "{{ block.settings.material != 'none' }}"
+    },
+    {
+      "type": "range",
+      "id": "opacity",
+      "label": "Glass opacity",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 85,
+      "visible_if": "{{ block.settings.custom_glass }}"
+    },
+    {
+      "type": "range",
+      "id": "blur",
+      "label": "Glass blur",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "default": 16,
+      "visible_if": "{{ block.settings.custom_glass }}"
+    },
+    {
+      "type": "select",
+      "id": "wrap",
+      "label": "Wrapping",
+      "options": [
+        {
+          "value": "nowrap",
+          "label": "No wrap"
+        },
+        {
+          "value": "wrap",
+          "label": "Wrap"
+        }
+      ],
+      "default": "nowrap"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Maximum width",
+      "min": 300,
+      "max": 1500,
+      "step": 20,
+      "unit": "px",
+      "default": 1200
+    },
+    {
+      "type": "range",
+      "id": "min_height",
+      "label": "Minimum height",
+      "min": 0,
+      "max": 800,
+      "step": 20,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_x",
+      "label": "Horizontal padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_y",
+      "label": "Vertical padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "mobile_gap",
+      "label": "Mobile gap",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_x",
+      "label": "Mobile horizontal padding",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_y",
+      "label": "Mobile vertical padding",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 24
     }
   ],
   "presets": [
     {
-      "name": "t:general.column",
-      "category": "t:general.layout",
-      "settings": {
-        "layout_direction": "group--vertical",
-        "alignment": "flex-start",
-        "padding": 0
-      }
-    },
-    {
-      "name": "t:general.row",
-      "category": "t:general.layout",
-      "settings": {
-        "layout_direction": "group--horizontal",
-        "padding": 0
-      }
+      "name": "Group",
+      "category": "Layout"
     }
   ]
 }

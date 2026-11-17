@@ -11,10 +11,82 @@
   "sections": {
     "main": {
       "type": "discovery-hero",
+      "settings": {},
+      "blocks": {
+        "hero_group": {
+          "type": "group",
+          "settings": {
+            "direction": "column",
+            "alignment": "stretch",
+            "justify": "flex-start",
+            "width": 100,
+            "gap": 20,
+            "radius": 24,
+            "material": "cloudlight",
+            "wrap": "nowrap",
+            "max_width": 1200,
+            "min_height": 0,
+            "padding_x": 48,
+            "padding_y": 48,
+            "mobile_gap": 16,
+            "mobile_padding_x": 20,
+            "mobile_padding_y": 24
+          },
+          "blocks": {
+            "hero_heading": {
+              "type": "heading",
+              "settings": {
+                "heading": "Find your next obsession.",
+                "level": "h1",
+                "size": 80,
+                "weight": "500",
+                "alignment": "left"
+              }
+            },
+            "hero_text": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Discover extraordinary plants, tropical fruit trees, rare seeds, and everything you need to grow something remarkable.</p>",
+                "size": 18,
+                "alignment": "left"
+              }
+            },
+            "hero_search": {
+              "type": "search",
+              "settings": {
+                "placeholder": "Search plants, seeds, cultivars...",
+                "show_button": true,
+                "width": 600,
+                "glass": "default"
+              }
+            },
+            "hero_button": {
+              "type": "button",
+              "settings": {
+                "label": "Shop all plants & seeds",
+                "style": "link"
+              }
+            }
+          },
+          "block_order": [
+            "hero_heading",
+            "hero_text",
+            "hero_search",
+            "hero_button"
+          ]
+        }
+      },
+      "block_order": [
+        "hero_group"
+      ]
+    },
+    "featured_collections": {
+      "type": "featured-collections",
       "settings": {}
     }
   },
   "order": [
-    "main"
+    "main",
+    "featured_collections"
   ]
 }

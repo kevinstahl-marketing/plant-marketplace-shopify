@@ -1,0 +1,77 @@
+{% if block.settings.label != blank %}
+  <a
+    class="theme-button theme-button--{{ block.settings.style }}"
+    href="{{ block.settings.link | default: routes.all_products_collection_url }}"
+    {{ block.shopify_attributes }}
+  >
+    {{ block.settings.label | escape }}
+  </a>
+{% endif %}
+
+{% stylesheet %}
+.theme-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 24px;
+  border: 1px solid currentColor;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  font-weight: 600;
+  transition: opacity var(--transition-fast);
+}
+.theme-button:hover { opacity: .8; }
+.theme-button--primary {
+  background: var(--color-primary);
+  color: var(--color-background);
+  border-color: var(--color-primary);
+}
+.theme-button--secondary {
+  background: var(--color-surface);
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+.theme-button--outline {
+  background: transparent;
+  color: inherit;
+}
+.theme-button--link {
+  background: transparent;
+  border: 0;
+  padding-inline: 0;
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Button",
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label",
+      "default": "Explore collection"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link"
+    },
+    {
+      "type": "select",
+      "id": "style",
+      "label": "Style",
+      "options": [
+        {"value": "primary", "label": "Primary"},
+        {"value": "secondary", "label": "Secondary"},
+        {"value": "outline", "label": "Outline"},
+        {"value": "link", "label": "Text link"}
+      ],
+      "default": "primary"
+    }
+  ],
+  "presets": [{"name": "Button", "category": "Actions"}]
+}
+{% endschema %}
