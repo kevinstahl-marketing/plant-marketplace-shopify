@@ -35,4 +35,20 @@
       --color-primary-dark: {{ scheme.settings.primary | color_darken: 12 }};
     }
   {% endfor %}
+
+  /* Centrally configured glass materials */
+  :root {
+    --glass-clear-opacity: {{ settings.glass_clear_opacity | default: 22 }}%;
+    --glass-clear-blur: {{ settings.glass_clear_blur | default: 8 }}px;
+    --glass-clear-border: {{ settings.glass_clear_border | default: 12 }}%;
+    --glass-mist-opacity: {{ settings.glass_mist_opacity | default: 48 }}%;
+    --glass-mist-blur: {{ settings.glass_mist_blur | default: 18 }}px;
+    --glass-mist-border: {{ settings.glass_mist_border | default: 16 }}%;
+    --glass-cloudlight-opacity: {{ settings.glass_cloudlight_opacity | default: 78 }}%;
+    --glass-cloudlight-blur: {{ settings.glass_cloudlight_blur | default: 24 }}px;
+    --glass-cloudlight-border: {{ settings.glass_cloudlight_border | default: 18 }}%;
+    --glass-canopy-opacity: {{ settings.glass_canopy_opacity | default: 92 }}%;
+    --glass-canopy-blur: {{ settings.glass_canopy_blur | default: 24 }}px;
+    --glass-canopy-border: {{ settings.glass_canopy_border | default: 24 }}%;
+  }
 {% endstyle %}

@@ -1,0 +1,26 @@
+/* Greenhouse atmosphere.
+   Atmosphere and material are independent dimensions. */
+
+body {
+  --greenhouse-light: 1;
+  --greenhouse-mist: 0;
+  --greenhouse-condensation: 0;
+}
+
+body[data-atmosphere="cloudy"] {
+  --greenhouse-light: .82;
+  --greenhouse-mist: .35;
+  --greenhouse-condensation: .2;
+}
+
+body[data-atmosphere="rain"] {
+  --greenhouse-light: .65;
+  --greenhouse-mist: .7;
+  --greenhouse-condensation: .65;
+}
+
+body[data-atmosphere="evening"] {
+  --greenhouse-light: .35;
+  --greenhouse-mist: .3;
+  --greenhouse-condensation: .15;
+}

@@ -40,11 +40,6 @@
   --radius-lg: 1.5rem;
   --radius-full: 9999px;
 
-  /* GLASS */
-  --glass-background: color-mix(in srgb, var(--color-background) 72%, transparent);
-  --glass-border: color-mix(in srgb, var(--color-foreground) 10%, transparent);
-  --glass-blur: 16px;
-
   /* SHADOWS */
   --shadow-sm: 0 2px 8px color-mix(in srgb, var(--color-foreground) 5%, transparent);
   --shadow-md: 0 8px 24px color-mix(in srgb, var(--color-foreground) 8%, transparent);

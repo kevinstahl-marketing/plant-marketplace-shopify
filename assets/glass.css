@@ -1,0 +1,79 @@
+/* ==========================================================
+   GLASS MATERIAL SYSTEM
+   All material rendering belongs here.
+   Colors inherit from Shopify color schemes.
+   ========================================================== */
+
+.glass-surface {
+  --material-opacity: var(--glass-mist-opacity);
+  --material-blur: var(--glass-mist-blur);
+  --material-border: var(--glass-mist-border);
+  --material-tint: var(--color-background);
+  --material-ink: var(--color-foreground);
+
+  position: relative;
+  color: var(--material-ink);
+  background: var(--material-tint);
+  border: 1px solid color-mix(
+    in srgb,
+    var(--color-foreground) var(--material-border),
+    transparent
+  );
+  border-radius: var(--glass-radius-override, var(--radius-md));
+}
+
+.glass-surface--clear,
+body[data-glass="clear"] .glass-surface--default {
+  --material-opacity: var(--glass-clear-opacity);
+  --material-blur: var(--glass-clear-blur);
+  --material-border: var(--glass-clear-border);
+}
+
+.glass-surface--mist,
+body[data-glass="mist"] .glass-surface--default {
+  --material-opacity: var(--glass-mist-opacity);
+  --material-blur: var(--glass-mist-blur);
+  --material-border: var(--glass-mist-border);
+}
+
+.glass-surface--cloudlight,
+body[data-glass="cloudlight"] .glass-surface--default {
+  --material-opacity: var(--glass-cloudlight-opacity);
+  --material-blur: var(--glass-cloudlight-blur);
+  --material-border: var(--glass-cloudlight-border);
+}
+
+.glass-surface--canopy,
+body[data-glass="canopy"] .glass-surface--default {
+  --material-opacity: var(--glass-canopy-opacity);
+  --material-blur: var(--glass-canopy-blur);
+  --material-border: var(--glass-canopy-border);
+  --material-tint: var(--color-foreground);
+  --material-ink: var(--color-background);
+}
+
+@supports (
+  (-webkit-backdrop-filter: blur(1px)) or
+  (backdrop-filter: blur(1px))
+) {
+  .glass-surface {
+    background: color-mix(
+      in srgb,
+      var(--material-tint)
+      var(--glass-opacity-override, var(--material-opacity)),
+      transparent
+    );
+    -webkit-backdrop-filter:
+      blur(var(--glass-blur-override, var(--material-blur)));
+    backdrop-filter:
+      blur(var(--glass-blur-override, var(--material-blur)));
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass-surface {
+    background: var(--material-tint);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}

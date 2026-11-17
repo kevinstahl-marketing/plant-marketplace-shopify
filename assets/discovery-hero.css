@@ -1,0 +1,391 @@
+/* Marketplace Hero — editorial discovery */
+
+.discovery-hero {
+  overflow: clip;
+  --hero-ink: var(--color-text);
+  --hero-muted: var(--color-text-muted);
+  --hero-accent: var(--color-primary);
+
+  width: 100%;
+  background: var(--color-background);
+  color: var(--hero-ink);
+}
+
+.discovery-hero__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.06fr) minmax(0, .94fr);
+  min-height: var(--hero-min-height, 620px);
+}
+
+.discovery-hero__content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  min-width: 0;
+  padding: clamp(32px, 5vw, 88px);
+}
+
+.discovery-hero__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 26px;
+  font-size: .68rem;
+  font-weight: 600;
+  letter-spacing: .17em;
+  text-transform: uppercase;
+  color: var(--hero-accent);
+}
+
+.discovery-hero__eyebrow-mark {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.discovery-hero__heading {
+  max-width: 760px;
+  margin: 0;
+  font-family: var(--font-heading, Georgia, serif);
+  font-size: clamp(3rem, 5vw, 5.5rem);
+  font-weight: 500;
+  line-height: .99;
+  letter-spacing: -.035em;
+  text-wrap: balance;
+}
+
+.discovery-hero__description {
+  max-width: 510px;
+  margin-top: 27px;
+  font-size: clamp(.98rem, 1.15vw, 1.15rem);
+  line-height: 1.75;
+  color: var(--hero-muted);
+}
+
+.discovery-hero__description p {
+  margin: 0;
+}
+
+.discovery-hero__search {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  max-width: 610px;
+  margin-top: 38px;
+}
+
+.discovery-hero__discover-label {
+  display: block;
+  margin: 0 0 12px;
+  font-size: .65rem;
+  font-weight: 600;
+  letter-spacing: .16em;
+  color: var(--hero-muted);
+}
+
+.discovery-hero .site-search--hero {
+  --search-height: 66px;
+  --search-radius: 6px;
+}
+
+.discovery-hero .site-search--hero .site-search__field {
+  box-shadow: 0 12px 32px color-mix(in srgb, var(--color-foreground) 6%, transparent);
+}
+
+.discovery-hero__discover {
+  width: 100%;
+  margin-top: 26px;
+}
+
+.discovery-hero__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.discovery-hero__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 13px;
+  padding: 9px 13px;
+  border: 1px solid var(--color-border);
+  border-radius: 100px;
+  color: var(--hero-ink);
+  font-size: .77rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 180ms ease, transform 180ms ease;
+}
+
+.discovery-hero__link:hover {
+  background: var(--color-surface-muted);
+  transform: translateY(-2px);
+}
+
+.discovery-hero__link span {
+  color: var(--hero-accent);
+}
+
+.discovery-hero__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: 35px;
+  padding-bottom: 9px;
+  border-bottom: 1px solid currentColor;
+  color: var(--hero-ink);
+  font-size: .84rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.discovery-hero__cta:hover {
+  color: var(--hero-accent);
+}
+
+.discovery-hero__visual {
+  position: relative;
+  min-width: 0;
+  min-height: 420px;
+  overflow: hidden;
+  background: var(--color-surface);
+}
+
+.discovery-hero__image,
+.discovery-hero__image-placeholder,
+.discovery-hero__image-placeholder svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.discovery-hero__image {
+  position: absolute;
+  inset: 0;
+  object-fit: cover;
+  object-position: var(--hero-image-position, center);
+}
+
+.discovery-hero__image-placeholder svg {
+  position: absolute;
+  inset: 0;
+  object-fit: cover;
+}
+
+.discovery-hero__visual:has(.discovery-hero__image)::after {
+  content: '';
+  position: absolute;
+  inset: 50% 0 0;
+  pointer-events: none;
+  background: linear-gradient(transparent, color-mix(in srgb, var(--color-foreground) 55%, transparent));
+}
+
+.discovery-hero__image-caption {
+  position: absolute;
+  z-index: 1;
+  bottom: 60px;
+  left: clamp(24px, 4vw, 70px);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  color: var(--color-background);
+  font-size: .67rem;
+  font-weight: 700;
+  letter-spacing: .17em;
+}
+
+.discovery-hero__caption-line {
+  width: 34px;
+  height: 1px;
+  background: currentColor;
+}
+
+
+@media (max-width: 989px) {
+  .discovery-hero__content {
+    padding: 50px 34px;
+  }
+
+  .discovery-hero__heading {
+    font-size: clamp(3rem, 5.5vw, 4.6rem);
+  }
+}
+
+@media (max-width: 749px) {
+  .discovery-hero__layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .discovery-hero__content {
+    padding: 48px 22px 38px;
+  }
+
+  .discovery-hero__eyebrow {
+    margin-bottom: 20px;
+  }
+
+  .discovery-hero__heading {
+    font-size: clamp(3.15rem, 12vw, 5rem);
+  }
+
+  .discovery-hero__description {
+    margin-top: 20px;
+    line-height: 1.6;
+  }
+
+  .discovery-hero__search {
+    margin-top: 28px;
+  }
+
+  .discovery-hero .site-search--hero {
+    --search-height: 58px;
+  }
+
+  .discovery-hero__visual {
+    min-height: 280px;
+    aspect-ratio: 5 / 4;
+  }
+
+  .discovery-hero__image-caption {
+    bottom: 48px;
+  }
+
+  }
+
+@media (prefers-reduced-motion: reduce) {
+  .discovery-hero__link {
+    transition: none;
+  }
+}
+
+
+/* ==========================================================
+   GREENHOUSE HERO — PASS 3A
+   Immersive composition
+   ========================================================== */
+
+/* Background photograph fills the immersive hero. */
+
+.discovery-hero--immersive {
+  position: relative;
+  isolation: isolate;
+  background: var(--color-surface-muted);
+}
+
+.discovery-hero--immersive .discovery-hero__layout {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: var(--hero-min-height, 620px);
+  padding: clamp(24px, 5vw, 80px);
+}
+
+/* The existing visual becomes a background layer. */
+
+.discovery-hero--immersive .discovery-hero__visual {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  min-height: 0;
+  background: var(--color-surface-muted);
+}
+
+.discovery-hero--immersive .discovery-hero__visual::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: color-mix(
+    in srgb,
+    var(--color-foreground) var(--hero-overlay-strength),
+    transparent
+  );
+}
+
+/* Floating discovery panel. */
+
+.discovery-hero--immersive .discovery-hero__content {
+  width: min(100%, 740px);
+  min-width: 0;
+  padding: clamp(28px, 4vw, 64px);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+.discovery-hero--immersive .discovery-hero__heading {
+  font-size: clamp(2.8rem, 5vw, 5.25rem);
+}
+
+.discovery-hero--immersive .discovery-hero__search {
+  margin-top: 30px;
+}
+
+.discovery-hero--immersive .discovery-hero__image-caption {
+  bottom: 24px;
+  right: 30px;
+  left: auto;
+  color: white;
+  text-shadow: 0 1px 8px rgba(0,0,0,.5);
+}
+
+/* Keep the existing search suggestions above the panel. */
+
+.discovery-hero--immersive .discovery-hero__content {
+  z-index: 1;
+}
+
+.discovery-hero--immersive .discovery-hero__search {
+  z-index: 5;
+}
+
+/* Mobile greenhouse composition. */
+
+@media (max-width: 749px) {
+  .discovery-hero--immersive .discovery-hero__layout {
+    display: flex;
+    align-items: center;
+    min-height: max(620px, 78svh);
+    padding: 22px 16px;
+  }
+
+  .discovery-hero--immersive .discovery-hero__visual {
+    aspect-ratio: auto;
+    min-height: 0;
+  }
+
+  .discovery-hero--immersive .discovery-hero__content {
+    padding: 30px 22px;
+    border-radius: var(--radius-md);
+  }
+
+  .discovery-hero--immersive .discovery-hero__heading {
+    font-size: clamp(2.6rem, 10vw, 4rem);
+  }
+
+  .discovery-hero--immersive .discovery-hero__image-caption {
+    display: none;
+  }
+
+  .discovery-hero--immersive .discovery-hero__search {
+    margin-top: 24px;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .discovery-hero--immersive .discovery-hero__content {
+    background: var(--color-background);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+/* Discovery chip geometry */
+
+.discovery-hero__link.glass-surface {
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-sm);
+}
+
+.discovery-hero__link.glass-surface:hover {
+  box-shadow: var(--shadow-md);
+}

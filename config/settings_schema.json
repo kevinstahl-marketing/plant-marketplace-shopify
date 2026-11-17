@@ -159,5 +159,206 @@
         "default": 4
       }
     ]
+  },
+  {
+    "name": "Greenhouse atmosphere",
+    "settings": [
+      {
+        "type": "select",
+        "id": "greenhouse_atmosphere",
+        "label": "Atmosphere",
+        "options": [
+          {
+            "value": "day",
+            "label": "Bright day"
+          },
+          {
+            "value": "cloudy",
+            "label": "Cloudy"
+          },
+          {
+            "value": "rain",
+            "label": "Rainy"
+          },
+          {
+            "value": "evening",
+            "label": "Evening"
+          },
+          {
+            "value": "auto",
+            "label": "Automatic (visitor time)"
+          }
+        ],
+        "default": "day"
+      },
+      {
+        "type": "select",
+        "id": "greenhouse_glass",
+        "label": "Default glass material",
+        "options": [
+          {
+            "value": "clear",
+            "label": "Clear canopy"
+          },
+          {
+            "value": "mist",
+            "label": "Morning mist"
+          },
+          {
+            "value": "cloudlight",
+            "label": "Cloudlight"
+          },
+          {
+            "value": "canopy",
+            "label": "Deep canopy"
+          }
+        ],
+        "default": "mist"
+      },
+      {
+        "type": "header",
+        "content": "Glass material library"
+      },
+      {
+        "type": "paragraph",
+        "content": "Materials inherit colors from Shopify color schemes. Adjust opacity, blur and border strength globally."
+      },
+      {
+        "type": "header",
+        "content": "Clear canopy"
+      },
+      {
+        "type": "range",
+        "id": "glass_clear_opacity",
+        "label": "Clear canopy opacity",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "%",
+        "default": 22
+      },
+      {
+        "type": "range",
+        "id": "glass_clear_blur",
+        "label": "Clear canopy blur",
+        "min": 0,
+        "max": 40,
+        "step": 1,
+        "unit": "px",
+        "default": 8
+      },
+      {
+        "type": "range",
+        "id": "glass_clear_border",
+        "label": "Clear canopy border strength",
+        "min": 0,
+        "max": 40,
+        "step": 1,
+        "unit": "%",
+        "default": 12
+      },
+      {
+        "type": "header",
+        "content": "Morning mist"
+      },
+      {
+        "type": "range",
+        "id": "glass_mist_opacity",
+        "label": "Morning mist opacity",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "%",
+        "default": 48
+      },
+      {
+        "type": "range",
+        "id": "glass_mist_blur",
+        "label": "Morning mist blur",
+        "min": 0,
+        "max": 40,
+        "step": 1,
+        "unit": "px",
+        "default": 18
+      },
+      {
+        "type": "range",
+        "id": "glass_mist_border",
+        "label": "Morning mist border strength",
+        "min": 0,
+        "max": 40,
+        "step": 1,
+        "unit": "%",
+        "default": 16
+      },
+      {
+        "type": "header",
+        "content": "Cloudlight"
+      },
+      {
+        "type": "range",
+        "id": "glass_cloudlight_opacity",
+        "label": "Cloudlight opacity",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "%",
+        "default": 78
+      },
+      {
+        "type": "range",
+        "id": "glass_cloudlight_blur",
+        "label": "Cloudlight blur",
+        "min": 0,
+        "max": 40,
+        "step": 1,
+        "unit": "px",
+        "default": 24
+      },
+      {
+        "type": "range",
+        "id": "glass_cloudlight_border",
+        "label": "Cloudlight border strength",
+        "min": 0,
+        "max": 40,
+        "step": 1,
+        "unit": "%",
+        "default": 18
+      },
+      {
+        "type": "header",
+        "content": "Deep canopy"
+      },
+      {
+        "type": "range",
+        "id": "glass_canopy_opacity",
+        "label": "Deep canopy opacity",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "%",
+        "default": 92
+      },
+      {
+        "type": "range",
+        "id": "glass_canopy_blur",
+        "label": "Deep canopy blur",
+        "min": 0,
+        "max": 40,
+        "step": 1,
+        "unit": "px",
+        "default": 24
+      },
+      {
+        "type": "range",
+        "id": "glass_canopy_border",
+        "label": "Deep canopy border strength",
+        "min": 0,
+        "max": 40,
+        "step": 1,
+        "unit": "%",
+        "default": 24
+      }
+    ]
   }
 ]

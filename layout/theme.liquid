@@ -10,14 +10,21 @@
     {{ 'tokens.css' | asset_url | stylesheet_tag }}
     {{ 'base.css' | asset_url | stylesheet_tag }}
     {{ 'global.css' | asset_url | stylesheet_tag }}
+    {{ 'greenhouse.css' | asset_url | stylesheet_tag }}
+    {{ 'glass.css' | asset_url | stylesheet_tag }}
 
     {% # Social, title, etc. %}
     {% render 'meta-tags' %}
 
     {{ content_for_header }}
+    <script src="{{ 'greenhouse.js' | asset_url }}" defer></script>
   </head>
 
-  <body class="color-scheme-1">
+  <body
+    class="color-scheme-1"
+    data-atmosphere="{{ settings.greenhouse_atmosphere | default: 'day' }}"
+    data-glass="{{ settings.greenhouse_glass | default: 'mist' }}"
+  >
     {% sections 'header-group' %}
 
     {{ content_for_layout }}
