@@ -17,7 +17,6 @@
   min-height: var(--header-height);
   padding-block: 10px;
   padding-inline: var(--header-padding);
-  background: var(--color-background);
   color: var(--color-text);
 }
 
@@ -40,14 +39,13 @@
   box-shadow: var(--shadow-md);
 }
 
-.site-header--glass {
-  background: color-mix(
-    in srgb,
-    var(--color-background) var(--header-opacity),
-    transparent
-  );
-  -webkit-backdrop-filter: blur(var(--header-blur));
-  backdrop-filter: blur(var(--header-blur));
+.site-header {
+  width: 100%;
+  border-radius: 0;
+}
+
+.site-header:not(.glass-surface) {
+  background: var(--color-background);
 }
 
 .site-header a {

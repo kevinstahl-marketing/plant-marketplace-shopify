@@ -2,7 +2,7 @@
 <script src="{{ 'category-navigation.js' | asset_url }}" defer></script>
 
 <category-navigation
-  class="category-navigation color-{{ section.settings.color_scheme }}{% if section.settings.glass %} category-navigation--glass{% endif %}"
+  class="category-navigation category-navigation--width-{{ section.settings.content_width | default: 'page' }} color-{{ section.settings.color_scheme }}{% if section.settings.glass %} category-navigation--glass glass-surface glass-surface--{{ section.settings.glass_material | default: 'default' }}{% endif %}"
   style="
     --category-nav-height: {{ section.settings.nav_height }}px;
     --category-nav-gap: {{ section.settings.item_gap }}px;
@@ -178,8 +178,46 @@
       "default": true
     },
     {
+      "type": "select",
+      "id": "glass_material",
+      "label": "Glass material",
+      "options": [
+        {
+          "value": "default",
+          "label": "Global default"
+        },
+        {
+          "value": "clear",
+          "label": "Clear"
+        },
+        {
+          "value": "mist",
+          "label": "Mist"
+        },
+        {
+          "value": "cloudlight",
+          "label": "Cloudlight"
+        },
+        {
+          "value": "canopy",
+          "label": "Canopy"
+        }
+      ],
+      "default": "default"
+    },
+    {
       "type": "header",
       "content": "Appearance"
+    },
+    {
+      "type": "select",
+      "id": "content_width",
+      "label": "Navigation content width",
+      "options": [
+        { "value": "page", "label": "Page width" },
+        { "value": "full", "label": "Full width" }
+      ],
+      "default": "page"
     },
     {
       "type": "range",

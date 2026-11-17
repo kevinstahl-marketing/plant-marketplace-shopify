@@ -1,14 +1,14 @@
 {{ 'header.css' | asset_url | stylesheet_tag }}
 
 <header
-  class="site-header color-{{ section.settings.color_scheme }}{% if section.settings.glass %} site-header--glass{% endif %} site-header--width-{{ section.settings.content_width }}{% if section.settings.show_border %} site-header--border{% endif %} site-header--shadow-{{ section.settings.shadow }}"
+  class="site-header color-{{ section.settings.color_scheme }}{% if section.settings.glass %} site-header--glass glass-surface glass-surface--{{ section.settings.glass_material | default: 'default' }}{% endif %} site-header--width-{{ section.settings.content_width }}{% if section.settings.show_border %} site-header--border{% endif %} site-header--shadow-{{ section.settings.shadow }}"
   data-sticky="{{ section.settings.sticky }}"
   style="
     --header-height: {{ section.settings.header_height }}px;
     --brand-logo-width: {{ section.settings.logo_width }}px;
     --header-padding: {{ section.settings.horizontal_padding }}px;
-    --header-opacity: {{ section.settings.glass_opacity }}%;
-    --header-blur: {{ section.settings.glass_blur }}px;
+    --glass-opacity-override: {{ section.settings.glass_opacity }}%;
+    --glass-blur-override: {{ section.settings.glass_blur }}px;
   "
 >
   <button
@@ -112,6 +112,34 @@
       "id": "glass",
       "label": "Frosted glass header",
       "default": true
+    },
+    {
+      "type": "select",
+      "id": "glass_material",
+      "label": "Glass material",
+      "options": [
+        {
+          "value": "default",
+          "label": "Global default"
+        },
+        {
+          "value": "clear",
+          "label": "Clear"
+        },
+        {
+          "value": "mist",
+          "label": "Mist"
+        },
+        {
+          "value": "cloudlight",
+          "label": "Cloudlight"
+        },
+        {
+          "value": "canopy",
+          "label": "Canopy"
+        }
+      ],
+      "default": "default"
     },
     {
       "type": "range",
