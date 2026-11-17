@@ -47,6 +47,18 @@ if (!customElements.get('category-navigation')) {
         }
       };
 
+      this.handleDesktopClick = event => {
+        const button = event.target.closest('[data-desktop-next]');
+        if (!button || !this.contains(button)) return;
+
+        const panel = button.closest('.category-navigation__panel');
+        if (!panel) return;
+
+        this.showDesktopView(panel, button.dataset.desktopNext);
+      };
+
+      this.addEventListener('click', this.handleDesktopClick);
+
       this.handleOverlayClick = () => this.closeDrawer();
 
       this.handleKeydown = event => {
@@ -98,10 +110,16 @@ if (!customElements.get('category-navigation')) {
       };
 
       this.handleDetailsToggle = event => {
-        if (!event.target.open) return;
+        const item = event.target;
+        if (!this.items.includes(item)) return;
 
-        this.items.forEach(item => {
-          if (item !== event.target) item.open = false;
+        if (!item.open) {
+          this.resetDesktopView(item);
+          return;
+        }
+
+        this.items.forEach(other => {
+          if (other !== item) other.open = false;
         });
       };
 
@@ -130,6 +148,7 @@ if (!customElements.get('category-navigation')) {
 
     disconnectedCallback() {
       this.closeDrawer(false);
+      this.removeEventListener('click', this.handleDesktopClick);
 
       document.removeEventListener('click', this.handleDocumentClick);
       document.removeEventListener('keydown', this.handleKeydown);
@@ -180,7 +199,10 @@ if (!customElements.get('category-navigation')) {
     }
 
     updateHeaderHeight() {
-      const height = this.header?.getBoundingClientRect().height || 82;
+      const isSticky = this.header?.dataset.sticky === 'true';
+      const height = isSticky
+        ? this.header.getBoundingClientRect().height
+        : 0;
 
       document.documentElement.style.setProperty(
         '--marketplace-sticky-header-height',
@@ -188,9 +210,69 @@ if (!customElements.get('category-navigation')) {
       );
     }
 
+    showDesktopView(panel, name) {
+      const views = [...panel.querySelectorAll('[data-desktop-view]')];
+      const target = views.find(view => view.dataset.desktopView === name);
+      if (!target) return;
+
+      views.forEach(view => {
+        view.getAnimations({ subtree: true }).forEach(animation => animation.cancel());
+        const active = view === target;
+        view.hidden = !active;
+        view.classList.toggle('is-active', active);
+      });
+
+      panel.scrollTop = 0;
+
+      const reducedMotion = window.matchMedia(
+        '(prefers-reduced-motion: reduce)'
+      ).matches;
+
+      if (!reducedMotion) {
+        const duration = 240;
+        const easing = 'cubic-bezier(.22, 1, .36, 1)';
+
+        target.animate(
+          [
+            { opacity: 0, transform: 'translateX(14px)' },
+            { opacity: 1, transform: 'translateX(0)' }
+          ],
+          { duration, easing }
+        );
+
+        const image = target.querySelector('.category-navigation__feature');
+        image?.animate(
+          [
+            { opacity: 0, transform: 'translateX(20px)' },
+            { opacity: 1, transform: 'translateX(0)' }
+          ],
+          { duration: 320, easing }
+        );
+      }
+
+      target.querySelector('[data-desktop-next], a, button')?.focus({
+        preventScroll: true
+      });
+    }
+
+    resetDesktopView(item) {
+      const views = [...item.querySelectorAll('[data-desktop-view]')];
+
+      views.forEach((view, index) => {
+        view.getAnimations({ subtree: true }).forEach(animation => {
+          animation.cancel();
+        });
+
+        const active = index === 0;
+        view.hidden = !active;
+        view.classList.toggle('is-active', active);
+      });
+    }
+
     closeDesktopMenus() {
       this.items?.forEach(item => {
         item.open = false;
+        this.resetDesktopView(item);
       });
     }
 

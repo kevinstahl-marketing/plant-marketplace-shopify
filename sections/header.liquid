@@ -1,10 +1,14 @@
 {{ 'header.css' | asset_url | stylesheet_tag }}
 
 <header
-  class="site-header color-{{ section.settings.color_scheme }}{% if section.settings.glass %} site-header--glass{% endif %}"
+  class="site-header color-{{ section.settings.color_scheme }}{% if section.settings.glass %} site-header--glass{% endif %} site-header--width-{{ section.settings.content_width }}{% if section.settings.show_border %} site-header--border{% endif %} site-header--shadow-{{ section.settings.shadow }}"
+  data-sticky="{{ section.settings.sticky }}"
   style="
     --header-height: {{ section.settings.header_height }}px;
     --brand-logo-width: {{ section.settings.logo_width }}px;
+    --header-padding: {{ section.settings.horizontal_padding }}px;
+    --header-opacity: {{ section.settings.glass_opacity }}%;
+    --header-blur: {{ section.settings.glass_blur }}px;
   "
 >
   <button
@@ -118,6 +122,96 @@
       "step": 2,
       "unit": "px",
       "default": 82
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "content_width",
+      "label": "Content width",
+      "options": [
+        {
+          "value": "page",
+          "label": "Page width"
+        },
+        {
+          "value": "full",
+          "label": "Full width"
+        }
+      ],
+      "default": "page"
+    },
+    {
+      "type": "range",
+      "id": "horizontal_padding",
+      "label": "Horizontal padding",
+      "min": 12,
+      "max": 64,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Glass and effects"
+    },
+    {
+      "type": "range",
+      "id": "glass_opacity",
+      "label": "Glass opacity",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 85
+    },
+    {
+      "type": "range",
+      "id": "glass_blur",
+      "label": "Glass blur",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "checkbox",
+      "id": "show_border",
+      "label": "Bottom border",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "shadow",
+      "label": "Shadow",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "soft",
+          "label": "Soft"
+        },
+        {
+          "value": "strong",
+          "label": "Strong"
+        }
+      ],
+      "default": "soft"
+    },
+    {
+      "type": "header",
+      "content": "Scroll behavior"
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky",
+      "label": "Sticky header",
+      "default": true
     }
   ]
 }

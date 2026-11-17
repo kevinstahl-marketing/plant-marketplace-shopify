@@ -1,0 +1,134 @@
+{% liquid
+  assign current_collection = blank
+  if item.type == 'collection_link'
+    assign current_collection = item.object
+  endif
+
+  assign feature_image = blank
+  assign feature_url = item.url
+  assign feature_title = item.title
+  assign feature_description = blank
+
+  if current_collection != blank
+    assign feature_image = current_collection.image
+    if feature_image == blank
+      assign feature_image = current_collection.featured_image
+    endif
+    assign feature_title = current_collection.title
+    assign feature_description = current_collection.description | strip_html | truncate: 150
+  endif
+
+  if feature_image == blank
+    for child in item.links
+      if child.type == 'collection_link'
+        assign feature_image = child.object.image
+        if feature_image == blank
+          assign feature_image = child.object.featured_image
+        endif
+      endif
+      if feature_image != blank
+        assign feature_url = child.url
+        break
+      endif
+
+      for grandchild in child.links
+        if grandchild.type == 'collection_link'
+          assign feature_image = grandchild.object.image
+          if feature_image == blank
+            assign feature_image = grandchild.object.featured_image
+          endif
+        endif
+        if feature_image != blank
+          assign feature_url = grandchild.url
+          break
+        endif
+      endfor
+      if feature_image != blank
+        break
+      endif
+    endfor
+  endif
+%}
+
+<div
+  class="category-navigation__view{% if active %} is-active{% endif %}"
+  data-desktop-view="{{ view_id }}"
+  {% unless active %}hidden{% endunless %}
+>
+  <nav class="category-navigation__breadcrumbs" aria-label="Category breadcrumbs">
+    {% if parent_id != blank %}
+      <button
+        type="button"
+        data-desktop-next="{{ parent_id }}"
+      >
+        {{ parent_title | escape }}
+      </button>
+      <span aria-hidden="true">/</span>
+    {% endif %}
+    <span aria-current="page">{{ item.title | escape }}</span>
+  </nav>
+
+  <div class="category-navigation__panel-inner">
+    <div class="category-navigation__content">
+      <h2>{{ item.title | escape }}</h2>
+
+      {% if item.url != blank and item.url != '#' %}
+        <a class="category-navigation__explore" href="{{ item.url }}">
+          Shop {{ item.title | escape }}
+          
+        </a>
+      {% endif %}
+
+      <div class="category-navigation__grid">
+        {% for child in item.links %}
+          {% liquid
+            assign child_view_id = blank
+            if child.links.size > 0 and level < 2
+              assign child_view_id = view_id | append: '-' | append: forloop.index
+            endif
+          %}
+
+          <div class="category-navigation__group">
+            {% if child_view_id != blank %}
+              <button
+                type="button"
+                class="category-navigation__group-title category-navigation__drill"
+                data-desktop-next="{{ child_view_id }}"
+              >
+                <span>{{ child.title | escape }}</span>
+                <span aria-hidden="true">›</span>
+              </button>
+
+            {% else %}
+              <a class="category-navigation__group-title" href="{{ child.url }}">
+                {{ child.title | escape }}
+              </a>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    {% if show_images and feature_image != blank %}
+      <a class="category-navigation__feature" href="{{ feature_url }}">
+        {{
+          feature_image
+          | image_url: width: 1000
+          | image_tag:
+            loading: 'lazy',
+            widths: '400, 600, 800, 1000',
+            sizes: '(min-width: 990px) 35vw, 45vw',
+            alt: feature_title
+        }}
+
+        <div class="category-navigation__feature-caption">
+          <strong>{{ feature_title | escape }}</strong>
+
+          {% if feature_description != blank %}
+            <p>{{ feature_description | escape }}</p>
+          {% endif %}
+        </div>
+      </a>
+    {% endif %}
+  </div>
+</div>

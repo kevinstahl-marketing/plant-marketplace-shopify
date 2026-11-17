@@ -14,7 +14,7 @@
     "header": {
       "type": "header",
       "settings": {
-        "show_inline_search": true
+        "show_search": true
       }
     },
     "marketplace_utility_bar": {

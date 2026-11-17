@@ -18,65 +18,31 @@
           </summary>
 
           <div class="category-navigation__panel">
-            <div class="category-navigation__panel-inner">
-              <div class="category-navigation__content">
-                <span class="category-navigation__eyebrow">THE BOTANICAL DIRECTORY</span>
-                <h2>{{ link.title | escape }}</h2>
-                <a class="category-navigation__explore" href="{{ link.url }}">
-                  Explore {{ link.title | escape }} ↗
-                </a>
+            {% assign root_id = 'category-' | append: forloop.index %}
 
-                <div class="category-navigation__grid">
-                  {% for child in link.links %}
-                    <div class="category-navigation__group">
-                      <a class="category-navigation__group-title" href="{{ child.url }}">
-                        {{ child.title | escape }}
-                      </a>
+            {% render 'category-navigation-view',
+              item: link,
+              view_id: root_id,
+              level: 0,
+              active: true,
+              show_images: section.settings.show_images
+            %}
 
-                      {% for grandchild in child.links %}
-                        <a class="category-navigation__child" href="{{ grandchild.url }}">
-                          {{ grandchild.title | escape }}
-                        </a>
-                      {% endfor %}
-                    </div>
-                  {% endfor %}
-                </div>
-              </div>
+            {% for child in link.links %}
+              {% if child.links.size > 0 %}
+                {% assign child_id = root_id | append: '-' | append: forloop.index %}
 
-              {% if section.settings.show_images %}
-                {% liquid
-                  assign feature_image = blank
-                  if link.type == 'collection_link'
-                    assign feature_image = link.object.image
-                  endif
-                  if feature_image == blank
-                    for child in link.links
-                      if child.type == 'collection_link' and child.object.image != blank
-                        assign feature_image = child.object.image
-                        break
-                      endif
-                    endfor
-                  endif
+                {% render 'category-navigation-view',
+                  item: child,
+                  view_id: child_id,
+                  level: 1,
+                  active: false,
+                  parent_id: root_id,
+                  parent_title: link.title,
+                  show_images: section.settings.show_images
                 %}
-
-                {% if feature_image != blank %}
-                  <div class="category-navigation__feature">
-                    {{
-                      feature_image
-                      | image_url: width: 900
-                      | image_tag:
-                        loading: 'lazy',
-                        widths: '350, 550, 750, 900',
-                        alt: link.title
-                    }}
-                    <div class="category-navigation__feature-caption">
-                      <span>DISCOVER</span>
-                      <strong>{{ link.title | escape }}</strong>
-                    </div>
-                  </div>
-                {% endif %}
               {% endif %}
-            </div>
+            {% endfor %}
           </div>
         </details>
       {% else %}
@@ -90,7 +56,7 @@
   <div class="category-navigation__overlay" data-category-overlay hidden></div>
 
   <div
-    class="category-navigation__drawer"
+    class="category-navigation__drawer color-{{ section.settings.color_scheme }}"
     id="category-mobile-drawer"
     role="dialog"
     aria-modal="true"
@@ -109,7 +75,6 @@
 
     <div class="category-navigation__drawer-body">
       <div class="category-navigation__view is-active" data-nav-view="root">
-        <span class="category-navigation__view-eyebrow">THE BOTANICAL DIRECTORY</span>
 
         {% for link in section.settings.menu.links %}
           <div class="category-navigation__drawer-row">
