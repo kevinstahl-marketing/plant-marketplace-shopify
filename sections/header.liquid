@@ -7,8 +7,8 @@
     --header-height: {{ section.settings.header_height }}px;
     --brand-logo-width: {{ section.settings.logo_width }}px;
     --header-padding: {{ section.settings.horizontal_padding }}px;
-    --glass-opacity-override: {{ section.settings.glass_opacity }}%;
-    --glass-blur-override: {{ section.settings.glass_blur }}px;
+    {% if section.settings.custom_glass %}--glass-opacity-override: {{ section.settings.glass_opacity }}%;{% endif %}
+    {% if section.settings.custom_glass %}--glass-blur-override: {{ section.settings.glass_blur }}px;{% endif %}
   "
 >
   <button
@@ -184,6 +184,12 @@
     {
       "type": "header",
       "content": "Glass and effects"
+    },
+    {
+      "type": "checkbox",
+      "id": "custom_glass",
+      "label": "Use custom glass opacity and blur",
+      "default": false
     },
     {
       "type": "range",
