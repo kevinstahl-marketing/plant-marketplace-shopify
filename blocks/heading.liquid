@@ -1,7 +1,13 @@
 <{{ block.settings.level }}
-  class="theme-heading"
+  class="theme-heading theme-block"
   style="
     --heading-size: {{ block.settings.size }}px;
+    --text-block-max-width: {{ block.settings.max_width | default: 1200 }}px;
+    --block-width: {{ block.settings.block_width | default: '100%' }};
+    --block-position: {{ block.settings.block_position | default: 'auto' }};
+    --block-mobile-width: {{ block.settings.mobile_block_width | default: '100%' }};
+    --block-mobile-position: {{ block.settings.mobile_block_position | default: 'auto' }};
+
     --heading-align: {{ block.settings.alignment }};
     --heading-weight: {{ block.settings.weight }};
   "
@@ -14,10 +20,9 @@
 .theme-heading {
   margin: 0;
   font-family: var(--font-heading);
-  font-size: clamp(1.25rem, 5vw, var(--heading-size));
+  font-size: var(--heading-size);
   font-weight: var(--heading-weight);
   line-height: 1.1;
-  letter-spacing: -0.025em;
   text-align: var(--heading-align);
   text-wrap: balance;
 }
@@ -38,12 +43,30 @@
       "id": "level",
       "label": "Heading level",
       "options": [
-        {"value": "h1", "label": "H1"},
-        {"value": "h2", "label": "H2"},
-        {"value": "h3", "label": "H3"},
-        {"value": "h4", "label": "H4"},
-        {"value": "h5", "label": "H5"},
-        {"value": "h6", "label": "H6"}
+        {
+          "value": "h1",
+          "label": "H1"
+        },
+        {
+          "value": "h2",
+          "label": "H2"
+        },
+        {
+          "value": "h3",
+          "label": "H3"
+        },
+        {
+          "value": "h4",
+          "label": "H4"
+        },
+        {
+          "value": "h5",
+          "label": "H5"
+        },
+        {
+          "value": "h6",
+          "label": "H6"
+        }
       ],
       "default": "h2"
     },
@@ -62,20 +85,135 @@
       "id": "weight",
       "label": "Font weight",
       "options": [
-        {"value": "400", "label": "Regular"},
-        {"value": "500", "label": "Medium"},
-        {"value": "600", "label": "Semibold"},
-        {"value": "700", "label": "Bold"}
+        {
+          "value": "400",
+          "label": "Regular"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semibold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        }
       ],
       "default": "500"
     },
     {
       "type": "text_alignment",
       "id": "alignment",
-      "label": "Alignment",
+      "label": "Text alignment",
       "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "Block layout"
+    },
+    {
+      "type": "select",
+      "id": "block_width",
+      "label": "Width",
+      "options": [
+        {
+          "value": "100%",
+          "label": "Fill available width"
+        },
+        {
+          "value": "fit-content",
+          "label": "Fit content"
+        }
+      ],
+      "default": "100%"
+    },
+    {
+      "type": "select",
+      "id": "block_position",
+      "label": "Block alignment",
+      "options": [
+        {
+          "value": "auto",
+          "label": "Use parent"
+        },
+        {
+          "value": "flex-start",
+          "label": "Start"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "flex-end",
+          "label": "End"
+        }
+      ],
+      "default": "auto"
+    },
+    {
+      "type": "header",
+      "content": "Mobile layout"
+    },
+    {
+      "type": "select",
+      "id": "mobile_block_width",
+      "label": "Mobile width",
+      "options": [
+        {
+          "value": "100%",
+          "label": "Fill available width"
+        },
+        {
+          "value": "fit-content",
+          "label": "Fit content"
+        }
+      ],
+      "default": "100%"
+    },
+    {
+      "type": "select",
+      "id": "mobile_block_position",
+      "label": "Mobile block alignment",
+      "options": [
+        {
+          "value": "auto",
+          "label": "Use parent"
+        },
+        {
+          "value": "flex-start",
+          "label": "Start"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "flex-end",
+          "label": "End"
+        }
+      ],
+      "default": "auto"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Maximum text width",
+      "min": 200,
+      "max": 1200,
+      "step": 20,
+      "unit": "px",
+      "default": 1200
     }
   ],
-  "presets": [{"name": "Heading", "category": "Text"}]
+  "presets": [
+    {
+      "name": "Heading",
+      "category": "Text"
+    }
+  ]
 }
 {% endschema %}

@@ -49,6 +49,7 @@
 
 .theme-group > * {
   min-width: 0;
+  max-width: 100%;
 }
 
 @media (max-width: 749px) {
@@ -73,6 +74,10 @@
   ],
   "settings": [
     {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
       "type": "select",
       "id": "direction",
       "label": "Direction",
@@ -91,7 +96,7 @@
     {
       "type": "select",
       "id": "alignment",
-      "label": "Align items",
+      "label": "Align children",
       "options": [
         {
           "value": "flex-start",
@@ -115,7 +120,7 @@
     {
       "type": "select",
       "id": "justify",
-      "label": "Distribute items",
+      "label": "Distribute children",
       "options": [
         {
           "value": "flex-start",
@@ -124,6 +129,10 @@
         {
           "value": "center",
           "label": "Center"
+        },
+        {
+          "value": "flex-end",
+          "label": "End"
         },
         {
           "value": "space-between",
@@ -135,6 +144,90 @@
         }
       ],
       "default": "flex-start"
+    },
+    {
+      "type": "select",
+      "id": "wrap",
+      "label": "Wrapping",
+      "options": [
+        {
+          "value": "nowrap",
+          "label": "No wrap"
+        },
+        {
+          "value": "wrap",
+          "label": "Wrap"
+        }
+      ],
+      "default": "nowrap"
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Gap",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Size"
+    },
+    {
+      "type": "range",
+      "id": "width",
+      "label": "Width",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Maximum width",
+      "min": 300,
+      "max": 1500,
+      "step": 20,
+      "unit": "px",
+      "default": 1200
+    },
+    {
+      "type": "range",
+      "id": "min_height",
+      "label": "Minimum height",
+      "min": 0,
+      "max": 800,
+      "step": 20,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_x",
+      "label": "Horizontal padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_y",
+      "label": "Vertical padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 24
     },
     {
       "type": "header",
@@ -159,7 +252,7 @@
     {
       "type": "select",
       "id": "mobile_alignment",
-      "label": "Mobile alignment",
+      "label": "Mobile align children",
       "options": [
         {
           "value": "stretch",
@@ -182,23 +275,37 @@
     },
     {
       "type": "range",
-      "id": "width",
-      "label": "Width",
-      "min": 20,
-      "max": 100,
-      "step": 5,
-      "unit": "%",
-      "default": 100
-    },
-    {
-      "type": "range",
-      "id": "gap",
-      "label": "Gap",
+      "id": "mobile_gap",
+      "label": "Mobile gap",
       "min": 0,
       "max": 80,
       "step": 2,
       "unit": "px",
       "default": 16
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_x",
+      "label": "Mobile horizontal padding",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_y",
+      "label": "Mobile vertical padding",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Appearance"
     },
     {
       "type": "range",
@@ -270,92 +377,6 @@
       "unit": "px",
       "default": 16,
       "visible_if": "{{ block.settings.custom_glass }}"
-    },
-    {
-      "type": "select",
-      "id": "wrap",
-      "label": "Wrapping",
-      "options": [
-        {
-          "value": "nowrap",
-          "label": "No wrap"
-        },
-        {
-          "value": "wrap",
-          "label": "Wrap"
-        }
-      ],
-      "default": "nowrap"
-    },
-    {
-      "type": "range",
-      "id": "max_width",
-      "label": "Maximum width",
-      "min": 300,
-      "max": 1500,
-      "step": 20,
-      "unit": "px",
-      "default": 1200
-    },
-    {
-      "type": "range",
-      "id": "min_height",
-      "label": "Minimum height",
-      "min": 0,
-      "max": 800,
-      "step": 20,
-      "unit": "px",
-      "default": 0
-    },
-    {
-      "type": "range",
-      "id": "padding_x",
-      "label": "Horizontal padding",
-      "min": 0,
-      "max": 120,
-      "step": 4,
-      "unit": "px",
-      "default": 24
-    },
-    {
-      "type": "range",
-      "id": "padding_y",
-      "label": "Vertical padding",
-      "min": 0,
-      "max": 120,
-      "step": 4,
-      "unit": "px",
-      "default": 24
-    },
-    {
-      "type": "range",
-      "id": "mobile_gap",
-      "label": "Mobile gap",
-      "min": 0,
-      "max": 80,
-      "step": 2,
-      "unit": "px",
-      "default": 16
-    },
-    {
-      "type": "range",
-      "id": "mobile_padding_x",
-      "label": "Mobile horizontal padding",
-      "min": 0,
-      "max": 80,
-      "step": 2,
-      "unit": "px",
-      "default": 20
-    },
-    {
-      "type": "range",
-      "id": "mobile_padding_y",
-      "label": "Mobile vertical padding",
-      "min": 0,
-      "max": 80,
-      "step": 2,
-      "unit": "px",
-      "default": 24
     }
   ],
   "presets": [

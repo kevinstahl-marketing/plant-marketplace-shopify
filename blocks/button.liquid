@@ -1,7 +1,13 @@
 {% if block.settings.label != blank %}
   <a
-    class="theme-button theme-button--{{ block.settings.style }}"
+    class="theme-button theme-block theme-button--{{ block.settings.style }}"
     href="{{ block.settings.link | default: routes.all_products_collection_url }}"
+    style="
+    --block-width: {{ block.settings.block_width | default: 'fit-content' }};
+    --block-position: {{ block.settings.block_position | default: 'auto' }};
+    --block-mobile-width: {{ block.settings.mobile_block_width | default: 'fit-content' }};
+    --block-mobile-position: {{ block.settings.mobile_block_position | default: 'auto' }};
+"
     {{ block.shopify_attributes }}
   >
     {{ block.settings.label | escape }}
@@ -64,14 +70,119 @@
       "id": "style",
       "label": "Style",
       "options": [
-        {"value": "primary", "label": "Primary"},
-        {"value": "secondary", "label": "Secondary"},
-        {"value": "outline", "label": "Outline"},
-        {"value": "link", "label": "Text link"}
+        {
+          "value": "primary",
+          "label": "Primary"
+        },
+        {
+          "value": "secondary",
+          "label": "Secondary"
+        },
+        {
+          "value": "outline",
+          "label": "Outline"
+        },
+        {
+          "value": "link",
+          "label": "Text link"
+        }
       ],
       "default": "primary"
+    },
+    {
+      "type": "header",
+      "content": "Block layout"
+    },
+    {
+      "type": "select",
+      "id": "block_width",
+      "label": "Width",
+      "options": [
+        {
+          "value": "100%",
+          "label": "Fill available width"
+        },
+        {
+          "value": "fit-content",
+          "label": "Fit content"
+        }
+      ],
+      "default": "fit-content"
+    },
+    {
+      "type": "select",
+      "id": "block_position",
+      "label": "Block alignment",
+      "options": [
+        {
+          "value": "auto",
+          "label": "Use parent"
+        },
+        {
+          "value": "flex-start",
+          "label": "Start"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "flex-end",
+          "label": "End"
+        }
+      ],
+      "default": "auto"
+    },
+    {
+      "type": "header",
+      "content": "Mobile layout"
+    },
+    {
+      "type": "select",
+      "id": "mobile_block_width",
+      "label": "Mobile width",
+      "options": [
+        {
+          "value": "100%",
+          "label": "Fill available width"
+        },
+        {
+          "value": "fit-content",
+          "label": "Fit content"
+        }
+      ],
+      "default": "fit-content"
+    },
+    {
+      "type": "select",
+      "id": "mobile_block_position",
+      "label": "Mobile block alignment",
+      "options": [
+        {
+          "value": "auto",
+          "label": "Use parent"
+        },
+        {
+          "value": "flex-start",
+          "label": "Start"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "flex-end",
+          "label": "End"
+        }
+      ],
+      "default": "auto"
     }
   ],
-  "presets": [{"name": "Button", "category": "Actions"}]
+  "presets": [
+    {
+      "name": "Button",
+      "category": "Actions"
+    }
+  ]
 }
 {% endschema %}

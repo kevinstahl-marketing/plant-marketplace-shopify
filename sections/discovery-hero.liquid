@@ -1,7 +1,7 @@
 {{ 'discovery-hero.css' | asset_url | stylesheet_tag }}
 
 <section
-  class="discovery-hero color-{{ section.settings.color_scheme }} discovery-hero--{{ section.settings.hero_layout | default: 'immersive' }}"
+  class="discovery-hero full-width color-{{ section.settings.color_scheme }} discovery-hero--{{ section.settings.hero_layout | default: 'immersive' }}"
   style="
     --hero-min-height: {{ section.settings.hero_height }}px;
     --hero-mobile-height: {{ section.settings.mobile_height | default: 620 }}px;

@@ -1,7 +1,12 @@
 <div
-  class="theme-image"
+  class="theme-image theme-block"
   style="
     --image-ratio: {{ block.settings.ratio }};
+    --block-width: {{ block.settings.block_width | default: '100%' }};
+    --block-position: {{ block.settings.block_position | default: 'auto' }};
+    --block-mobile-width: {{ block.settings.mobile_block_width | default: '100%' }};
+    --block-mobile-position: {{ block.settings.mobile_block_position | default: 'auto' }};
+
     --image-radius: {{ block.settings.radius }}px;
     --image-position: {{ block.settings.position }};
   "
@@ -31,7 +36,6 @@
 
 {% stylesheet %}
 .theme-image {
-  width: 100%;
   aspect-ratio: var(--image-ratio);
   border-radius: var(--image-radius);
   overflow: hidden;
@@ -65,10 +69,22 @@
       "id": "ratio",
       "label": "Aspect ratio",
       "options": [
-        {"value": "1", "label": "Square"},
-        {"value": "0.8", "label": "Portrait"},
-        {"value": "1.5", "label": "Landscape"},
-        {"value": "1.777", "label": "Wide"}
+        {
+          "value": "1",
+          "label": "Square"
+        },
+        {
+          "value": "0.8",
+          "label": "Portrait"
+        },
+        {
+          "value": "1.5",
+          "label": "Landscape"
+        },
+        {
+          "value": "1.777",
+          "label": "Wide"
+        }
       ],
       "default": "1.5"
     },
@@ -77,11 +93,26 @@
       "id": "position",
       "label": "Focal point",
       "options": [
-        {"value": "center", "label": "Center"},
-        {"value": "top", "label": "Top"},
-        {"value": "bottom", "label": "Bottom"},
-        {"value": "left", "label": "Left"},
-        {"value": "right", "label": "Right"}
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
       ],
       "default": "center"
     },
@@ -94,8 +125,101 @@
       "step": 2,
       "unit": "px",
       "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Block layout"
+    },
+    {
+      "type": "select",
+      "id": "block_width",
+      "label": "Width",
+      "options": [
+        {
+          "value": "100%",
+          "label": "Fill available width"
+        },
+        {
+          "value": "fit-content",
+          "label": "Fit content"
+        }
+      ],
+      "default": "100%"
+    },
+    {
+      "type": "select",
+      "id": "block_position",
+      "label": "Block alignment",
+      "options": [
+        {
+          "value": "auto",
+          "label": "Use parent"
+        },
+        {
+          "value": "flex-start",
+          "label": "Start"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "flex-end",
+          "label": "End"
+        }
+      ],
+      "default": "auto"
+    },
+    {
+      "type": "header",
+      "content": "Mobile layout"
+    },
+    {
+      "type": "select",
+      "id": "mobile_block_width",
+      "label": "Mobile width",
+      "options": [
+        {
+          "value": "100%",
+          "label": "Fill available width"
+        },
+        {
+          "value": "fit-content",
+          "label": "Fit content"
+        }
+      ],
+      "default": "100%"
+    },
+    {
+      "type": "select",
+      "id": "mobile_block_position",
+      "label": "Mobile block alignment",
+      "options": [
+        {
+          "value": "auto",
+          "label": "Use parent"
+        },
+        {
+          "value": "flex-start",
+          "label": "Start"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "flex-end",
+          "label": "End"
+        }
+      ],
+      "default": "auto"
     }
   ],
-  "presets": [{"name": "Image", "category": "Media"}]
+  "presets": [
+    {
+      "name": "Image",
+      "category": "Media"
+    }
+  ]
 }
 {% endschema %}

@@ -1,7 +1,13 @@
 <div
-  class="theme-text"
+  class="theme-text theme-block"
   style="
     --text-size: {{ block.settings.size }}px;
+    --text-block-max-width: {{ block.settings.max_width | default: 1200 }}px;
+    --block-width: {{ block.settings.block_width | default: '100%' }};
+    --block-position: {{ block.settings.block_position | default: 'auto' }};
+    --block-mobile-width: {{ block.settings.mobile_block_width | default: '100%' }};
+    --block-mobile-position: {{ block.settings.mobile_block_position | default: 'auto' }};
+
     --text-align: {{ block.settings.alignment }};
   "
   {{ block.shopify_attributes }}
@@ -44,10 +50,113 @@
     {
       "type": "text_alignment",
       "id": "alignment",
-      "label": "Alignment",
+      "label": "Text alignment",
       "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "Block layout"
+    },
+    {
+      "type": "select",
+      "id": "block_width",
+      "label": "Width",
+      "options": [
+        {
+          "value": "100%",
+          "label": "Fill available width"
+        },
+        {
+          "value": "fit-content",
+          "label": "Fit content"
+        }
+      ],
+      "default": "100%"
+    },
+    {
+      "type": "select",
+      "id": "block_position",
+      "label": "Block alignment",
+      "options": [
+        {
+          "value": "auto",
+          "label": "Use parent"
+        },
+        {
+          "value": "flex-start",
+          "label": "Start"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "flex-end",
+          "label": "End"
+        }
+      ],
+      "default": "auto"
+    },
+    {
+      "type": "header",
+      "content": "Mobile layout"
+    },
+    {
+      "type": "select",
+      "id": "mobile_block_width",
+      "label": "Mobile width",
+      "options": [
+        {
+          "value": "100%",
+          "label": "Fill available width"
+        },
+        {
+          "value": "fit-content",
+          "label": "Fit content"
+        }
+      ],
+      "default": "100%"
+    },
+    {
+      "type": "select",
+      "id": "mobile_block_position",
+      "label": "Mobile block alignment",
+      "options": [
+        {
+          "value": "auto",
+          "label": "Use parent"
+        },
+        {
+          "value": "flex-start",
+          "label": "Start"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "flex-end",
+          "label": "End"
+        }
+      ],
+      "default": "auto"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Maximum text width",
+      "min": 200,
+      "max": 1200,
+      "step": 20,
+      "unit": "px",
+      "default": 1200
     }
   ],
-  "presets": [{"name": "Text", "category": "Text"}]
+  "presets": [
+    {
+      "name": "Text",
+      "category": "Text"
+    }
+  ]
 }
 {% endschema %}

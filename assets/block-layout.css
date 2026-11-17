@@ -1,0 +1,33 @@
+/*
+ * Shared theme-block layout contract.
+ *
+ * Parent containers own direction, gap, and distribution.
+ * Children own width and optional cross-axis placement.
+ * Text alignment is independent from block positioning.
+ */
+
+.theme-block {
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
+  width: var(--block-width, 100%);
+  align-self: var(--block-position, auto);
+}
+
+@media (max-width: 749px) {
+  .theme-block {
+    width: var(--block-mobile-width, var(--block-width, 100%));
+    align-self: var(--block-mobile-position, var(--block-position, auto));
+  }
+
+  .theme-heading {
+    overflow-wrap: anywhere;
+  }
+}
+
+
+/* Editorial text column sizing */
+.theme-heading,
+.theme-text {
+  max-width: min(100%, var(--text-block-max-width, 1200px));
+}

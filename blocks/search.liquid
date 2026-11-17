@@ -1,6 +1,13 @@
 <div
-  class="theme-search"
-  style="--theme-search-width: {{ block.settings.width }}px"
+  class="theme-search theme-block"
+  style="
+      --theme-search-width: {{ block.settings.width }}px;
+
+    --block-width: {{ block.settings.block_width | default: '100%' }};
+    --block-position: {{ block.settings.block_position | default: 'auto' }};
+    --block-mobile-width: {{ block.settings.mobile_block_width | default: '100%' }};
+    --block-mobile-position: {{ block.settings.mobile_block_position | default: 'auto' }};
+    "
   {{ block.shopify_attributes }}
 >
   {% render 'search-form',
@@ -14,7 +21,6 @@
 
 {% stylesheet %}
 .theme-search {
-  width: 100%;
   max-width: var(--theme-search-width);
   position: relative;
   z-index: 2;
@@ -52,16 +58,127 @@
       "id": "glass",
       "label": "Search material",
       "options": [
-        {"value": "none", "label": "Solid"},
-        {"value": "default", "label": "Global glass"},
-        {"value": "clear", "label": "Clear"},
-        {"value": "mist", "label": "Mist"},
-        {"value": "cloudlight", "label": "Cloudlight"},
-        {"value": "canopy", "label": "Canopy"}
+        {
+          "value": "none",
+          "label": "Solid"
+        },
+        {
+          "value": "default",
+          "label": "Global glass"
+        },
+        {
+          "value": "clear",
+          "label": "Clear"
+        },
+        {
+          "value": "mist",
+          "label": "Mist"
+        },
+        {
+          "value": "cloudlight",
+          "label": "Cloudlight"
+        },
+        {
+          "value": "canopy",
+          "label": "Canopy"
+        }
       ],
       "default": "default"
+    },
+    {
+      "type": "header",
+      "content": "Block layout"
+    },
+    {
+      "type": "select",
+      "id": "block_width",
+      "label": "Width",
+      "options": [
+        {
+          "value": "100%",
+          "label": "Fill available width"
+        },
+        {
+          "value": "fit-content",
+          "label": "Fit content"
+        }
+      ],
+      "default": "100%"
+    },
+    {
+      "type": "select",
+      "id": "block_position",
+      "label": "Block alignment",
+      "options": [
+        {
+          "value": "auto",
+          "label": "Use parent"
+        },
+        {
+          "value": "flex-start",
+          "label": "Start"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "flex-end",
+          "label": "End"
+        }
+      ],
+      "default": "auto"
+    },
+    {
+      "type": "header",
+      "content": "Mobile layout"
+    },
+    {
+      "type": "select",
+      "id": "mobile_block_width",
+      "label": "Mobile width",
+      "options": [
+        {
+          "value": "100%",
+          "label": "Fill available width"
+        },
+        {
+          "value": "fit-content",
+          "label": "Fit content"
+        }
+      ],
+      "default": "100%"
+    },
+    {
+      "type": "select",
+      "id": "mobile_block_position",
+      "label": "Mobile block alignment",
+      "options": [
+        {
+          "value": "auto",
+          "label": "Use parent"
+        },
+        {
+          "value": "flex-start",
+          "label": "Start"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "flex-end",
+          "label": "End"
+        }
+      ],
+      "default": "auto"
     }
   ],
-  "presets": [{"name": "Search", "category": "Actions"}]
+  "presets": [
+    {
+      "name": "Search",
+      "category": "Actions"
+    }
+  ]
 }
 {% endschema %}
