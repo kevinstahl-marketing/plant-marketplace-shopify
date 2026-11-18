@@ -1,23 +1,43 @@
+{% liquid
+  assign group_width = block.settings.width | append: '%'
+  if block.settings.width_mode == 'fit'
+    assign group_width = 'fit-content'
+  endif
+
+  assign mobile_width = block.settings.mobile_width | default: 100 | append: '%'
+  if block.settings.mobile_width_mode == 'fit'
+    assign mobile_width = 'fit-content'
+  endif
+%}
+
 <div
-  class="theme-group{% if block.settings.material != 'none' %} glass-surface glass-surface--{{ block.settings.material }}{% endif %}"
+  class="theme-group theme-block{% if block.settings.material != 'none' %} glass-surface glass-surface--{{ block.settings.material }}{% endif %}"
   style="
-    --group-direction: {{ block.settings.direction }};
-    --group-mobile-direction: {{ block.settings.mobile_direction }};
-    --group-mobile-align: {{ block.settings.mobile_alignment }};
-    --group-gap: {{ block.settings.gap }}px;
-    --group-mobile-gap: {{ block.settings.mobile_gap }}px;
-    --group-wrap: {{ block.settings.wrap }};
+    --block-width: {{ group_width }};
+    --block-mobile-width: {{ mobile_width }};
     --group-max-width: {{ block.settings.max_width }}px;
     --group-min-height: {{ block.settings.min_height }}px;
+
+    --group-direction: {{ block.settings.direction }};
+    --group-align: {{ block.settings.alignment }};
+    --group-justify: {{ block.settings.justify }};
+    --group-wrap: {{ block.settings.wrap }};
+    --group-gap: {{ block.settings.gap }}px;
+
+    --group-mobile-direction: {{ block.settings.mobile_direction }};
+    --group-mobile-align: {{ block.settings.mobile_alignment }};
+    --group-mobile-justify: {{ block.settings.mobile_justify | default: 'flex-start' }};
+    --group-mobile-wrap: {{ block.settings.mobile_wrap | default: 'wrap' }};
+    --group-mobile-gap: {{ block.settings.mobile_gap }}px;
+
     --group-padding-x: {{ block.settings.padding_x }}px;
     --group-padding-y: {{ block.settings.padding_y }}px;
     --group-mobile-padding-x: {{ block.settings.mobile_padding_x }}px;
     --group-mobile-padding-y: {{ block.settings.mobile_padding_y }}px;
-    --group-align: {{ block.settings.alignment }};
-    --group-justify: {{ block.settings.justify }};
-    --group-width: {{ block.settings.width }}%;
+
     --group-radius: {{ block.settings.radius }}px;
     --glass-radius-override: {{ block.settings.radius }}px;
+
     {% if block.settings.custom_glass %}
       --glass-opacity-override: {{ block.settings.opacity }}%;
       --glass-blur-override: {{ block.settings.blur }}px;
@@ -36,27 +56,38 @@
   align-items: var(--group-align, stretch);
   justify-content: var(--group-justify, flex-start);
   gap: var(--group-gap, 16px);
-  width: var(--group-width, 100%);
-  max-width: min(100%, var(--group-max-width, 1200px));
+
   min-width: 0;
   min-height: var(--group-min-height, 0px);
+  max-width: min(100%, var(--group-max-width, 1200px));
+
   padding:
     var(--group-padding-y, 24px)
     var(--group-padding-x, 24px);
+
   border-radius: var(--group-radius, 12px);
   box-sizing: border-box;
 }
 
+/* Children follow the shared theme-block sizing contract. */
 .theme-group > * {
   min-width: 0;
   max-width: 100%;
 }
 
+/* Nested Groups use the same layout rules as top-level Groups. */
+.theme-group > .theme-group {
+  min-width: 0;
+}
+
 @media (max-width: 749px) {
   .theme-group {
     flex-direction: var(--group-mobile-direction, column);
+    flex-wrap: var(--group-mobile-wrap, wrap);
     align-items: var(--group-mobile-align, stretch);
+    justify-content: var(--group-mobile-justify, flex-start);
     gap: var(--group-mobile-gap, 16px);
+
     padding:
       var(--group-mobile-padding-y, 24px)
       var(--group-mobile-padding-x, 20px);
@@ -176,6 +207,22 @@
       "content": "Size"
     },
     {
+      "type": "select",
+      "id": "width_mode",
+      "label": "Width behavior",
+      "options": [
+        {
+          "value": "fill",
+          "label": "Fill available width"
+        },
+        {
+          "value": "fit",
+          "label": "Fit content"
+        }
+      ],
+      "default": "fill"
+    },
+    {
       "type": "range",
       "id": "width",
       "label": "Width",
@@ -274,6 +321,76 @@
       "default": "stretch"
     },
     {
+      "type": "select",
+      "id": "mobile_wrap",
+      "label": "Mobile wrapping",
+      "options": [
+        {
+          "value": "wrap",
+          "label": "Wrap"
+        },
+        {
+          "value": "nowrap",
+          "label": "No wrap"
+        }
+      ],
+      "default": "wrap"
+    },
+    {
+      "type": "range",
+      "id": "mobile_width",
+      "label": "Mobile width",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "select",
+      "id": "mobile_width_mode",
+      "label": "Mobile width behavior",
+      "options": [
+        {
+          "value": "fill",
+          "label": "Fill available width"
+        },
+        {
+          "value": "fit",
+          "label": "Fit content"
+        }
+      ],
+      "default": "fill"
+    },
+    {
+      "type": "select",
+      "id": "mobile_justify",
+      "label": "Mobile distribute children",
+      "options": [
+        {
+          "value": "flex-start",
+          "label": "Start"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "flex-end",
+          "label": "End"
+        },
+        {
+          "value": "space-between",
+          "label": "Space between"
+        },
+        {
+          "value": "space-around",
+          "label": "Space around"
+        }
+      ],
+      "default": "flex-start"
+    },
+    {
       "type": "range",
       "id": "mobile_gap",
       "label": "Mobile gap",
@@ -345,6 +462,10 @@
         {
           "value": "canopy",
           "label": "Canopy"
+        },
+        {
+          "value": "shelter",
+          "label": "Shelter"
         }
       ],
       "default": "none"
