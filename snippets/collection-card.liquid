@@ -1,0 +1,45 @@
+{% comment %}
+  Reusable Shopify collection card.
+  Required: collection, settings.
+  The parent section controls size, radius, and spacing.
+{% endcomment %}
+
+<a
+  href="{{ collection.url }}"
+  class="collection-list__card color-{{ settings.card_color_scheme }}{% if settings.material != 'none' %} glass-surface glass-surface--{{ settings.material }}{% endif %}"
+>
+  <div class="collection-list__media">
+    {% if collection.featured_image != blank %}
+      {{
+        collection.featured_image
+        | image_url: width: 1000
+        | image_tag:
+          loading: 'lazy',
+          widths: '240, 360, 480, 640, 750, 900, 1000',
+          sizes: '(max-width: 749px) 75vw, (max-width: 989px) 45vw, 25vw',
+          class: 'collection-list__image'
+      }}
+    {% else %}
+      <div class="collection-list__placeholder">
+        {{ 'collection-1' | placeholder_svg_tag }}
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="collection-list__card-content">
+    <h3 class="collection-list__card-title">
+      {{ collection.title | escape }}
+    </h3>
+
+    {% if settings.show_count %}
+      <span class="collection-list__count">
+        {{ collection.all_products_count }}
+        {% if collection.all_products_count == 1 %}
+          product
+        {% else %}
+          products
+        {% endif %}
+      </span>
+    {% endif %}
+  </div>
+</a>

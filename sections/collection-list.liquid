@@ -1,0 +1,440 @@
+{{ 'collection-list.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'collection-list.js' | asset_url }}" defer="defer"></script>
+
+{% liquid
+  assign selected_collections = section.settings.collections
+%}
+
+<section
+  id="CollectionList-{{ section.id }}"
+  class="collection-list color-{{ section.settings.color_scheme }}"
+  data-collection-list
+  data-desktop-layout="{{ section.settings.desktop_layout }}"
+  data-mobile-layout="{{ section.settings.mobile_layout }}"
+  data-card-style="{{ section.settings.card_style }}"
+  data-hover="{{ section.settings.hover_effect }}"
+  style="
+    --cl-max-width: {{ section.settings.max_width }}px;
+    --cl-columns: {{ section.settings.columns }};
+    --cl-tablet-columns: {{ section.settings.tablet_columns }};
+    --cl-mobile-columns: {{ section.settings.mobile_columns }};
+    --cl-gap: {{ section.settings.gap }}px;
+    --cl-mobile-gap: {{ section.settings.mobile_gap }}px;
+    --cl-padding-top: {{ section.settings.padding_top }}px;
+    --cl-padding-bottom: {{ section.settings.padding_bottom }}px;
+    --cl-card-radius: {{ section.settings.card_radius }}px;
+    --cl-image-ratio: {{ section.settings.image_ratio }};
+    --cl-desktop-visible: {{ section.settings.carousel_columns }};
+    --cl-mobile-visible: {{ section.settings.mobile_carousel_columns }};
+    --cl-peek: {{ section.settings.peek }}px;
+    --cl-mobile-peek: {{ section.settings.mobile_peek }}px;
+    --cl-card-alignment: {{ section.settings.card_alignment }};
+  "
+>
+  <div class="collection-list__container">
+    <div class="collection-list__header">
+      <div class="collection-list__intro">
+        {% content_for 'blocks' %}
+      </div>
+
+      {% if section.settings.show_arrows %}
+        <div class="collection-list__controls" data-carousel-controls>
+          <button
+            type="button"
+            class="collection-list__arrow"
+            data-carousel-prev
+            aria-label="Previous collections"
+            aria-controls="CollectionTrack-{{ section.id }}"
+            disabled
+          >
+            <span aria-hidden="true">&#8592;</span>
+          </button>
+          <button
+            type="button"
+            class="collection-list__arrow"
+            data-carousel-next
+            aria-label="Next collections"
+            aria-controls="CollectionTrack-{{ section.id }}"
+            disabled
+          >
+            <span aria-hidden="true">&#8594;</span>
+          </button>
+        </div>
+      {% endif %}
+    </div>
+
+    <div
+      id="CollectionTrack-{{ section.id }}"
+      class="collection-list__track"
+      data-carousel-track
+      tabindex="0"
+      aria-label="Browse collections"
+    >
+      {% for collection in selected_collections %}
+        {% render 'collection-card',
+          collection: collection,
+          settings: section.settings
+        %}
+      {% else %}
+        {% if request.design_mode %}
+          <div class="collection-list__empty">
+            Select collections in the section settings to display them here.
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collection list",
+  "tag": "div",
+  "class": "section-collection-list",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "collection_list",
+      "id": "collections",
+      "label": "Collections",
+      "limit": 24
+    },
+    {
+      "type": "checkbox",
+      "id": "show_count",
+      "label": "Show product count",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Desktop layout"
+    },
+    {
+      "type": "select",
+      "id": "desktop_layout",
+      "label": "Layout",
+      "options": [
+        {
+          "value": "grid",
+          "label": "Grid"
+        },
+        {
+          "value": "carousel",
+          "label": "Carousel"
+        }
+      ],
+      "default": "carousel"
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "Grid columns",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "tablet_columns",
+      "label": "Tablet grid columns",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "carousel_columns",
+      "label": "Visible carousel cards",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Card spacing",
+      "min": 0,
+      "max": 64,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "peek",
+      "label": "Next card preview",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrows",
+      "label": "Show carousel arrows",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Mobile layout"
+    },
+    {
+      "type": "select",
+      "id": "mobile_layout",
+      "label": "Mobile layout",
+      "options": [
+        {
+          "value": "grid",
+          "label": "Grid"
+        },
+        {
+          "value": "carousel",
+          "label": "Carousel"
+        }
+      ],
+      "default": "carousel"
+    },
+    {
+      "type": "range",
+      "id": "mobile_columns",
+      "label": "Mobile grid columns",
+      "min": 1,
+      "max": 2,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "mobile_carousel_columns",
+      "label": "Mobile visible cards",
+      "min": 1,
+      "max": 2,
+      "step": 1,
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "mobile_gap",
+      "label": "Mobile card spacing",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "mobile_peek",
+      "label": "Mobile next card preview",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "header",
+      "content": "Card appearance"
+    },
+    {
+      "type": "select",
+      "id": "card_style",
+      "label": "Card style",
+      "options": [
+        {
+          "value": "minimal",
+          "label": "Minimal"
+        },
+        {
+          "value": "contained",
+          "label": "Contained"
+        },
+        {
+          "value": "overlay",
+          "label": "Image overlay"
+        }
+      ],
+      "default": "minimal"
+    },
+    {
+      "type": "text_alignment",
+      "id": "card_alignment",
+      "label": "Card text alignment",
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "hover_effect",
+      "label": "Hover effect",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "zoom",
+          "label": "Image zoom"
+        },
+        {
+          "value": "lift",
+          "label": "Card lift"
+        }
+      ],
+      "default": "zoom"
+    },
+    {
+      "type": "color_scheme",
+      "id": "card_color_scheme",
+      "label": "Card color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image ratio",
+      "options": [
+        {
+          "value": "1 / 1",
+          "label": "Square"
+        },
+        {
+          "value": "4 / 5",
+          "label": "Portrait"
+        },
+        {
+          "value": "3 / 4",
+          "label": "Tall portrait"
+        },
+        {
+          "value": "4 / 3",
+          "label": "Landscape"
+        },
+        {
+          "value": "16 / 9",
+          "label": "Wide"
+        }
+      ],
+      "default": "4 / 5"
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "label": "Card corner radius",
+      "min": 0,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "select",
+      "id": "material",
+      "label": "Card material",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "default",
+          "label": "Global glass"
+        },
+        {
+          "value": "clear",
+          "label": "Clear"
+        },
+        {
+          "value": "mist",
+          "label": "Mist"
+        },
+        {
+          "value": "cloudlight",
+          "label": "Cloudlight"
+        },
+        {
+          "value": "canopy",
+          "label": "Canopy"
+        },
+        {
+          "value": "shelter",
+          "label": "Shelter"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "header",
+      "content": "Section appearance"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Maximum content width",
+      "min": 600,
+      "max": 1800,
+      "step": 20,
+      "unit": "px",
+      "default": 1200
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection list",
+      "category": "Collections",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "heading": "Explore collections",
+            "level": "h2"
+          }
+        },
+        {
+          "type": "text",
+          "settings": {
+            "text": "<p>Discover something worth growing.</p>"
+          }
+        }
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@theme"
+    }
+  ]
+}
+{% endschema %}
