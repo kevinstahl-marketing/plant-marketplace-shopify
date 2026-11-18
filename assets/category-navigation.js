@@ -42,8 +42,8 @@ if (!customElements.get('category-navigation')) {
           const next = event.target.closest('[data-nav-next]');
           const back = event.target.closest('[data-nav-back]');
 
-          if (next) this.showView(next.dataset.navNext);
-          if (back) this.showView(back.dataset.navBack);
+          if (next) this.showView(next.dataset.navNext, true, false);
+          if (back) this.showView(back.dataset.navBack, true, true);
         }
       };
 
@@ -332,16 +332,12 @@ if (!customElements.get('category-navigation')) {
       document.documentElement.style.overflow = this.previousOverflow;
     }
 
-    showView(name, focus = true) {
+    showView(name, focus = true, backwards = false) {
       const views = [...this.drawer.querySelectorAll('[data-nav-view]')];
       const target = views.find(view => view.dataset.navView === name);
       if (!target) return;
 
       const previous = views.find(view => !view.hidden);
-      const backwards = !!previous &&
-        previous.querySelector(`[data-nav-next="${name}"]`) === null &&
-        name !== previous.dataset.navView;
-
       views.forEach(view => {
         view.getAnimations().forEach(animation => animation.cancel());
         const active = view === target;
