@@ -196,3 +196,31 @@
     display: none;
   }
 }
+
+/* Keep editable hero content inside narrow viewports. */
+.discovery-hero__content > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
+@media (max-width: 749px) {
+  .discovery-hero--immersive .discovery-hero__content {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+/* Mobile panel alignment independent of desktop. */
+@media (max-width: 749px) {
+  .discovery-hero--immersive .discovery-hero__layout {
+    justify-content: var(--hero-mobile-content-align, center);
+  }
+
+  .discovery-hero--immersive .discovery-hero__content {
+    width: min(100%, var(--hero-content-width, 740px));
+  }
+
+  .discovery-hero--immersive .theme-group {
+    max-width: 100%;
+  }
+}

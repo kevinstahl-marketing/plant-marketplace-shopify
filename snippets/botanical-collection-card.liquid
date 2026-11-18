@@ -7,23 +7,35 @@
     assign card_title = 'Choose a collection'
   endif
 
-  assign card_url = ''
+  assign card_url = blank
   if collection != blank
     assign card_url = collection.url
   endif
 
   assign position = image_position | default: 'center'
+  assign appearance = appearance | default: 'editorial'
+  assign material = glass_material | default: 'default'
 %}
 
 {% capture card_classes %}
   botanical-collection-card
-  {% if glass %}glass-surface glass-surface--{{ glass_material | default: 'default' }}{% endif %}
+  botanical-collection-card--{{ appearance }}
+  {% if appearance == 'editorial' and glass %}
+    glass-surface glass-surface--{{ material }}
+  {% endif %}
 {% endcapture %}
 
 {% if card_url != blank %}
-  <a href="{{ card_url }}" class="{{ card_classes | strip }}" style="--card-image-position: {{ position }};">
+  <a
+    href="{{ card_url }}"
+    class="{{ card_classes | strip }}"
+    style="--card-image-position: {{ position }};"
+  >
 {% else %}
-  <div class="{{ card_classes | strip }}" style="--card-image-position: {{ position }};">
+  <div
+    class="{{ card_classes | strip }}"
+    style="--card-image-position: {{ position }};"
+  >
 {% endif %}
 
   <div class="botanical-collection-card__media">
@@ -42,8 +54,12 @@
     {% endif %}
   </div>
 
-  <div class="botanical-collection-card__content">
-    <div>
+  {% if appearance != 'editorial' %}
+    <div class="botanical-collection-card__shade" aria-hidden="true"></div>
+  {% endif %}
+
+  <div class="botanical-collection-card__content{% if appearance == 'glass' %} glass-surface glass-surface--{{ material }}{% endif %}">
+    <div class="botanical-collection-card__copy">
       <h3 class="botanical-collection-card__title">
         {{ card_title | escape }}
       </h3>
@@ -67,7 +83,9 @@
     </div>
 
     {% if card_url != blank %}
-      <span class="botanical-collection-card__arrow" aria-hidden="true">&rarr;</span>
+      <span class="botanical-collection-card__arrow" aria-hidden="true">
+        &rarr;
+      </span>
     {% endif %}
   </div>
 

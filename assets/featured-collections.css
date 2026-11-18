@@ -64,113 +64,192 @@
   min-width: 0;
 }
 
-.botanical-collection-card {
-  display: block;
-  height: 100%;
-  overflow: hidden;
-  color: inherit;
-  background: var(--color-surface, var(--color-background));
-  text-decoration: none;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  transition: transform 220ms ease, box-shadow 220ms ease;
-}
+/* Featured Collections: optional carousel layout */
 
-.botanical-collection-card.glass-surface {
-  background: var(--material-tint);
-  color: var(--material-ink);
-  border-color: color-mix(
-    in srgb,
-    var(--color-foreground) var(--material-border),
-    transparent
-  );
-}
-
-@supports (backdrop-filter: blur(1px)) {
-  .botanical-collection-card.glass-surface {
-    background: color-mix(
-      in srgb,
-      var(--material-tint) var(--material-opacity),
-      transparent
-    );
-  }
-}
-
-@media (hover: hover) {
-  a.botanical-collection-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-md);
-  }
-}
-
-.botanical-collection-card__media {
-  aspect-ratio: var(--featured-image-ratio, 0.8);
-  overflow: hidden;
-  background: var(--color-surface-muted, var(--color-background));
-}
-
-.botanical-collection-card__image,
-.botanical-collection-card__placeholder {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.botanical-collection-card__content {
+.featured-collections__controls {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  padding: clamp(16px, 2vw, 26px);
+  justify-content: flex-end;
+  gap: 8px;
+  margin-bottom: 16px;
 }
 
-.botanical-collection-card__title {
-  margin: 0;
-  font-size: clamp(1.1rem, 1.6vw, 1.5rem);
-  line-height: 1.2;
+.featured-collections__controls[hidden] {
+  display: none;
 }
 
-.botanical-collection-card__subtitle,
-.botanical-collection-card__count {
-  margin: 8px 0 0;
-  font-size: 0.875rem;
-  color: var(--color-text-muted);
+.featured-collections__arrow {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
 }
 
-.botanical-collection-card__arrow {
-  font-size: 1.5rem;
-  transition: transform 220ms ease;
+.featured-collections__arrow:disabled {
+  opacity: 0.3;
+  cursor: default;
 }
 
-a.botanical-collection-card:hover .botanical-collection-card__arrow {
-  transform: translateX(4px);
+.featured-collections__arrow:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
 }
 
-@media (max-width: 989px) {
+@media (min-width: 990px) {
+  .featured-collections[data-desktop-layout="carousel"]
   .featured-collections__grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-inline: contain;
+    scrollbar-width: none;
+
+  }
+
+  .featured-collections[data-desktop-layout="carousel"]
+  .featured-collections__item {
+    flex: 0 0 max(
+      0px,
+      calc(
+        (100% - var(--featured-desktop-peek) -
+        (var(--featured-columns) - 1) * var(--featured-gap))
+        / var(--featured-columns)
+      )
+    );
+    scroll-snap-align: start;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 989px) {
+  .featured-collections[data-desktop-layout="carousel"]
+  .featured-collections__grid {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-inline: contain;
+    scrollbar-width: none;
+
+  }
+
+  .featured-collections[data-desktop-layout="carousel"]
+  .featured-collections__item {
+    flex: 0 0 calc((100% - var(--featured-gap)) / 2.2);
+    scroll-snap-align: start;
   }
 }
 
 @media (max-width: 599px) {
-  .featured-collections__heading {
-    align-items: start;
-    flex-direction: column;
-  }
-
+  .featured-collections[data-mobile-layout="grid"]
   .featured-collections__grid {
-    grid-template-columns: 1fr;
+    display: grid;
+    grid-template-columns:
+      repeat(var(--featured-mobile-columns), minmax(0, 1fr));
+  }
+
+  .featured-collections[data-mobile-layout="carousel"]
+  .featured-collections__grid {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-inline: contain;
+    scrollbar-width: none;
+
+  }
+
+  .featured-collections[data-mobile-layout="carousel"]
+  .featured-collections__item {
+    flex: 0 0 max(
+      0px,
+      calc(
+        (100% - var(--featured-mobile-peek) -
+        (var(--featured-mobile-visible) - 1) * var(--featured-gap))
+        / var(--featured-mobile-visible)
+      )
+    );
+    scroll-snap-align: start;
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .botanical-collection-card,
-  .botanical-collection-card__arrow {
-    transition: none;
+.featured-collections[data-desktop-layout="carousel"]
+.featured-collections__grid::-webkit-scrollbar,
+.featured-collections[data-mobile-layout="carousel"]
+.featured-collections__grid::-webkit-scrollbar {
+  display: none;
+}
+
+@media (min-width: 600px) {
+  .featured-collections[data-desktop-layout="grid"]
+  .featured-collections__controls {
+    display: none;
   }
 }
 
-.botanical-collection-card__image {
-  object-position: var(--card-image-position, center);
+@media (max-width: 599px) {
+  .featured-collections[data-mobile-layout="grid"]
+  .featured-collections__controls {
+    display: none;
+  }
+}
+
+
+/* Featured Collections: independent content scheme and alignment */
+
+.featured-collections__heading--separate-scheme {
+  padding: clamp(20px, 3vw, 40px);
+  background: var(--color-background);
+  color: var(--color-foreground);
+  border-radius: var(--radius-md, 16px);
+}
+
+.featured-collections__heading--center {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.featured-collections__heading--right {
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+}
+
+.featured-collections__heading--center .featured-collections__intro,
+.featured-collections__heading--right .featured-collections__intro {
+  width: 100%;
+}
+
+.featured-collections__heading--center .featured-collections__description,
+.featured-collections__heading--right .featured-collections__description {
+  max-width: none;
+}
+
+.featured-collections__heading--center .featured-collections__view-all {
+  align-self: center;
+}
+
+.featured-collections__heading--right .featured-collections__view-all {
+  align-self: flex-end;
+}
+
+.featured-collections__heading--separate-scheme
+.featured-collections__eyebrow,
+.featured-collections__heading--separate-scheme
+.featured-collections__description {
+  color: var(--color-text-muted);
+}
+
+@media (max-width: 599px) {
+  .featured-collections__heading--center {
+    align-items: center;
+  }
+
+  .featured-collections__heading--right {
+    align-items: flex-end;
+  }
 }

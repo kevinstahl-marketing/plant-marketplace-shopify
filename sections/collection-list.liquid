@@ -202,22 +202,36 @@
       "default": "carousel"
     },
     {
-      "type": "range",
+      "type": "select",
       "id": "mobile_columns",
       "label": "Mobile grid columns",
-      "min": 1,
-      "max": 2,
-      "step": 1,
-      "default": 2
+      "options": [
+        {
+          "value": "1",
+          "label": "1 column"
+        },
+        {
+          "value": "2",
+          "label": "2 columns"
+        }
+      ],
+      "default": "2"
     },
     {
-      "type": "range",
+      "type": "select",
       "id": "mobile_carousel_columns",
       "label": "Mobile visible cards",
-      "min": 1,
-      "max": 2,
-      "step": 1,
-      "default": 1
+      "default": "1",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
+      ]
     },
     {
       "type": "range",

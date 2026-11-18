@@ -394,5 +394,106 @@
         "default": 18
       }
     ]
+  },
+  {
+    "name": "Cards",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Appearance"
+      },
+      {
+        "type": "select",
+        "id": "card_default_style",
+        "label": "Default card style",
+        "options": [
+          {
+            "value": "editorial",
+            "label": "Editorial"
+          },
+          {
+            "value": "cinematic",
+            "label": "Cinematic"
+          },
+          {
+            "value": "glass",
+            "label": "Glass overlay"
+          }
+        ],
+        "default": "editorial"
+      },
+      {
+        "type": "range",
+        "id": "card_radius",
+        "label": "Corner radius",
+        "min": 0,
+        "max": 40,
+        "step": 2,
+        "unit": "px",
+        "default": 16
+      },
+      {
+        "type": "header",
+        "content": "Image treatments"
+      },
+      {
+        "type": "range",
+        "id": "card_overlay_darkness",
+        "label": "Overlay darkness",
+        "min": 20,
+        "max": 90,
+        "step": 5,
+        "unit": "%",
+        "default": 65
+      },
+      {
+        "type": "select",
+        "id": "card_vignette",
+        "label": "Vignette",
+        "options": [
+          {
+            "value": "none",
+            "label": "None"
+          },
+          {
+            "value": "soft",
+            "label": "Soft"
+          },
+          {
+            "value": "dramatic",
+            "label": "Dramatic"
+          }
+        ],
+        "default": "soft"
+      },
+      {
+        "type": "select",
+        "id": "card_hover",
+        "label": "Hover animation",
+        "options": [
+          {
+            "value": "none",
+            "label": "None"
+          },
+          {
+            "value": "lift",
+            "label": "Lift"
+          },
+          {
+            "value": "zoom",
+            "label": "Image zoom"
+          }
+        ],
+        "default": "zoom"
+      },
+      {
+        "type": "header",
+        "content": "Glass"
+      },
+      {
+        "type": "paragraph",
+        "content": "Glass materials are managed globally under Greenhouse atmosphere. Cards inherit those materials."
+      }
+    ]
   }
 ]

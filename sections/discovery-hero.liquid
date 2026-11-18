@@ -7,6 +7,7 @@
     --hero-mobile-height: {{ section.settings.mobile_height | default: 620 }}px;
     --hero-content-width: {{ section.settings.content_width | default: 740 }}px;
     --hero-content-align: {{ section.settings.content_alignment | default: 'flex-start' }};
+    --hero-mobile-content-align: {{ section.settings.mobile_content_alignment | default: 'center' }};
     --hero-mobile-image-position: {{ section.settings.mobile_image_position | default: 'center' }};
     --hero-image-position: {{ section.settings.image_position }};
     --hero-overlay-strength: {{ section.settings.hero_overlay | default: 15 }}%;
@@ -19,6 +20,10 @@
 
     <div class="discovery-hero__visual">
       {% if section.settings.image != blank %}
+        {% assign hero_image_sizes = '(max-width: 749px) 100vw, 50vw' %}
+        {% if section.settings.hero_layout == 'immersive' %}
+          {% assign hero_image_sizes = '100vw' %}
+        {% endif %}
         {{
           section.settings.image
           | image_url: width: 1800
@@ -27,7 +32,7 @@
             loading: 'eager',
             fetchpriority: 'high',
             widths: '500, 750, 1000, 1400, 1800',
-            sizes: '(max-width: 749px) 100vw, 50vw'
+            sizes: hero_image_sizes
         }}
       {% else %}
         <div class="discovery-hero__image-placeholder">
@@ -213,6 +218,26 @@
       "id": "show_image_caption",
       "label": "Show image caption",
       "default": true
+    },
+    {
+      "type": "select",
+      "id": "mobile_content_alignment",
+      "label": "Mobile panel alignment",
+      "options": [
+        {
+          "value": "flex-start",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "flex-end",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
     }
   ],
   "blocks": [
