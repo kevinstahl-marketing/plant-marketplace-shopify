@@ -52,6 +52,14 @@ body[data-glass="canopy"] .glass-surface--default {
   --material-ink: var(--color-background);
 }
 
+.glass-surface--shelter {
+  --material-opacity: var(--glass-shelter-opacity);
+  --material-blur: var(--glass-shelter-blur);
+  --material-border: var(--glass-shelter-border);
+  --material-tint: var(--color-background);
+  --material-ink: var(--color-foreground);
+}
+
 @supports (
   (-webkit-backdrop-filter: blur(1px)) or
   (backdrop-filter: blur(1px))

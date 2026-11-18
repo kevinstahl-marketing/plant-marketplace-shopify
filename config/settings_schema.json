@@ -358,6 +358,40 @@
         "step": 1,
         "unit": "%",
         "default": 24
+      },
+      {
+        "type": "header",
+        "content": "Shelter glass"
+      },
+      {
+        "type": "range",
+        "id": "glass_shelter_opacity",
+        "label": "Shelter opacity",
+        "min": 70,
+        "max": 100,
+        "step": 1,
+        "unit": "%",
+        "default": 96
+      },
+      {
+        "type": "range",
+        "id": "glass_shelter_blur",
+        "label": "Shelter blur",
+        "min": 0,
+        "max": 40,
+        "step": 1,
+        "unit": "px",
+        "default": 20
+      },
+      {
+        "type": "range",
+        "id": "glass_shelter_border",
+        "label": "Shelter border strength",
+        "min": 0,
+        "max": 40,
+        "step": 1,
+        "unit": "%",
+        "default": 18
       }
     ]
   }

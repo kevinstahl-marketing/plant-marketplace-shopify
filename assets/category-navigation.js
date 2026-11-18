@@ -337,11 +337,33 @@ if (!customElements.get('category-navigation')) {
       const target = views.find(view => view.dataset.navView === name);
       if (!target) return;
 
+      const previous = views.find(view => !view.hidden);
+      const backwards = !!previous &&
+        previous.querySelector(`[data-nav-next="${name}"]`) === null &&
+        name !== previous.dataset.navView;
+
       views.forEach(view => {
+        view.getAnimations().forEach(animation => animation.cancel());
         const active = view === target;
         view.hidden = !active;
         view.classList.toggle('is-active', active);
       });
+
+      if (
+        previous !== target &&
+        !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      ) {
+        target.animate(
+          [
+            { opacity: 0, transform: `translateX(${backwards ? '-22px' : '22px'})` },
+            { opacity: 1, transform: 'translateX(0)' }
+          ],
+          {
+            duration: 260,
+            easing: 'cubic-bezier(.22, 1, .36, 1)'
+          }
+        );
+      }
 
       const body = this.drawer.querySelector('.category-navigation__drawer-body');
       if (body) body.scrollTop = 0;

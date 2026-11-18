@@ -2,7 +2,7 @@
 <script src="{{ 'category-navigation.js' | asset_url }}" defer></script>
 
 <category-navigation
-  class="category-navigation category-navigation--width-{{ section.settings.content_width | default: 'page' }} color-{{ section.settings.color_scheme }}{% if section.settings.glass %} category-navigation--glass glass-surface glass-surface--{{ section.settings.glass_material | default: 'default' }}{% endif %}"
+  class="category-navigation full-width category-navigation--width-{{ section.settings.content_width | default: 'page' }} color-{{ section.settings.color_scheme }}{% if section.settings.glass %} category-navigation--glass glass-surface glass-surface--{{ section.settings.glass_material | default: 'default' }}{% endif %}"
   style="
     --category-nav-height: {{ section.settings.nav_height }}px;
     --category-nav-gap: {{ section.settings.item_gap }}px;
@@ -17,7 +17,7 @@
             <span class="category-navigation__chevron" aria-hidden="true">⌄</span>
           </summary>
 
-          <div class="category-navigation__panel">
+          <div class="category-navigation__panel glass-surface glass-surface--{{ section.settings.dropdown_material | default: 'shelter' }}">
             {% assign root_id = 'category-' | append: forloop.index %}
 
             {% render 'category-navigation-view',
@@ -56,7 +56,7 @@
   <div class="category-navigation__overlay" data-category-overlay hidden></div>
 
   <div
-    class="category-navigation__drawer color-{{ section.settings.color_scheme }}"
+    class="category-navigation__drawer color-{{ section.settings.color_scheme }} glass-surface glass-surface--{{ section.settings.drawer_material | default: 'shelter' }}"
     id="category-mobile-drawer"
     role="dialog"
     aria-modal="true"
@@ -201,6 +201,10 @@
         {
           "value": "canopy",
           "label": "Canopy"
+        },
+        {
+          "value": "shelter",
+          "label": "Shelter"
         }
       ],
       "default": "default"
@@ -214,8 +218,14 @@
       "id": "content_width",
       "label": "Navigation content width",
       "options": [
-        { "value": "page", "label": "Page width" },
-        { "value": "full", "label": "Full width" }
+        {
+          "value": "page",
+          "label": "Page width"
+        },
+        {
+          "value": "full",
+          "label": "Full width"
+        }
       ],
       "default": "page"
     },
@@ -238,6 +248,70 @@
       "step": 4,
       "unit": "px",
       "default": 28
+    },
+    {
+      "type": "select",
+      "id": "dropdown_material",
+      "label": "Mega menu material",
+      "options": [
+        {
+          "value": "default",
+          "label": "Global default"
+        },
+        {
+          "value": "clear",
+          "label": "Clear"
+        },
+        {
+          "value": "mist",
+          "label": "Mist"
+        },
+        {
+          "value": "cloudlight",
+          "label": "Cloudlight"
+        },
+        {
+          "value": "canopy",
+          "label": "Canopy"
+        },
+        {
+          "value": "shelter",
+          "label": "Shelter"
+        }
+      ],
+      "default": "shelter"
+    },
+    {
+      "type": "select",
+      "id": "drawer_material",
+      "label": "Mobile drawer material",
+      "options": [
+        {
+          "value": "default",
+          "label": "Global default"
+        },
+        {
+          "value": "clear",
+          "label": "Clear"
+        },
+        {
+          "value": "mist",
+          "label": "Mist"
+        },
+        {
+          "value": "cloudlight",
+          "label": "Cloudlight"
+        },
+        {
+          "value": "canopy",
+          "label": "Canopy"
+        },
+        {
+          "value": "shelter",
+          "label": "Shelter"
+        }
+      ],
+      "default": "shelter"
     }
   ]
 }
