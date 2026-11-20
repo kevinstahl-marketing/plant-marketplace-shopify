@@ -12,25 +12,97 @@
     const viewport = gallery?.querySelector('[data-gallery-viewport]');
 
     if (gallery && viewport) {
-      const thumbnails = gallery.querySelectorAll('[data-gallery-thumbnail]');
+      const slides = Array.from(gallery.querySelectorAll('[data-gallery-slide]'));
+      const thumbnails = Array.from(gallery.querySelectorAll('[data-gallery-thumbnail]'));
+      const dots = Array.from(gallery.querySelectorAll('[data-gallery-dot]'));
+      const previous = gallery.querySelector('[data-gallery-prev]');
+      const next = gallery.querySelector('[data-gallery-next]');
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-      thumbnails.forEach(button => {
-        button.addEventListener('click', () => {
-          const target = document.getElementById(button.dataset.target);
-          if (!target) return;
+      let activeIndex = 0;
+      let targetIndex = null;
+      let scrollTimer = null;
 
-          viewport.scrollTo({
-            left: target.offsetLeft - viewport.offsetLeft,
-            behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
-              ? 'auto'
-              : 'smooth'
-          });
+      const setActive = index => {
+        activeIndex = Math.max(0, Math.min(index, slides.length - 1));
 
-          thumbnails.forEach(item => {
-            item.setAttribute('aria-current', String(item === button));
-          });
+        thumbnails.forEach((item, i) => {
+          item.setAttribute('aria-current', String(i === activeIndex));
         });
+
+        dots.forEach((item, i) => {
+          item.setAttribute('aria-current', String(i === activeIndex));
+        });
+
+        if (previous) previous.disabled = activeIndex === 0;
+        if (next) next.disabled = activeIndex === slides.length - 1;
+      };
+
+      const nearestIndex = () => {
+        let nearest = 0;
+        let distance = Infinity;
+
+        slides.forEach((slide, index) => {
+          const offset = slide.offsetLeft - viewport.offsetLeft;
+          const difference = Math.abs(offset - viewport.scrollLeft);
+
+          if (difference < distance) {
+            distance = difference;
+            nearest = index;
+          }
+        });
+
+        return nearest;
+      };
+
+      const settle = () => {
+        clearTimeout(scrollTimer);
+        scrollTimer = null;
+        targetIndex = null;
+        if (slides.length) setActive(nearestIndex());
+      };
+
+      const goTo = index => {
+        if (index < 0 || index >= slides.length) return;
+
+        targetIndex = index;
+        setActive(index);
+
+        viewport.scrollTo({
+          left: slides[index].offsetLeft - viewport.offsetLeft,
+          behavior: reducedMotion.matches ? 'instant' : 'smooth'
+        });
+
+        clearTimeout(scrollTimer);
+        scrollTimer = setTimeout(settle, reducedMotion.matches ? 0 : 500);
+      };
+
+      thumbnails.forEach((item, index) => {
+        item.addEventListener('click', () => goTo(index));
       });
+
+      dots.forEach((item, index) => {
+        item.addEventListener('click', () => goTo(index));
+      });
+
+      previous?.addEventListener('click', () => {
+        goTo((targetIndex ?? activeIndex) - 1);
+      });
+
+      next?.addEventListener('click', () => {
+        goTo((targetIndex ?? activeIndex) + 1);
+      });
+
+      viewport.addEventListener('scroll', () => {
+        clearTimeout(scrollTimer);
+        scrollTimer = setTimeout(settle, 130);
+      }, { passive: true });
+
+      if ('onscrollend' in viewport) {
+        viewport.addEventListener('scrollend', settle);
+      }
+
+      if (slides.length) setActive(0);
     }
 
     const select = root.querySelector('[data-product-variant-select]');
@@ -40,6 +112,7 @@
     const comparePrice = root.querySelector('[data-product-compare-price]');
     const addButton = root.querySelector('[data-product-add]');
     const addLabel = root.querySelector('[data-product-add-label]');
+    const inventory = root.querySelector('[data-product-inventory]');
 
     if (!variantsJson || !hiddenId) return;
 
@@ -81,6 +154,10 @@
 
       if (addLabel) {
         addLabel.textContent = variant.available ? 'Add to cart' : 'Sold out';
+      }
+
+      if (inventory) {
+        inventory.textContent = variant.available ? 'In stock' : 'Sold out';
       }
 
       const url = new URL(window.location.href);

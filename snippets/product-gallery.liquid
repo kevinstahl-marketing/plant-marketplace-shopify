@@ -2,39 +2,96 @@
   assign gallery_id = 'ProductGallery-' | append: section.id
 %}
 
-<div class="product-gallery product-gallery--{{ section.settings.thumbnail_position | default: 'bottom' }}" id="{{ gallery_id }}" data-product-gallery>
+<div
+  class="product-gallery product-gallery--{{ section.settings.thumbnail_position | default: 'bottom' }}"
+  id="{{ gallery_id }}"
+  data-product-gallery
+>
   {% if product.media.size > 0 %}
-    <div class="product-gallery__viewport" data-gallery-viewport>
-      {% for media in product.media %}
-        <div
-          class="product-gallery__slide"
-          id="{{ gallery_id }}-{{ media.id }}"
-          data-gallery-slide
-          data-media-id="{{ media.id }}"
-        >
-          {% case media.media_type %}
-            {% when 'image' %}
-              {{
-                media.preview_image
-                | image_url: width: 1600
-                | image_tag:
-                  loading: 'lazy',
-                  widths: '360, 540, 750, 990, 1200, 1600',
-                  sizes: '(min-width: 990px) 50vw, 100vw',
-                  class: 'product-gallery__image'
-              }}
-            {% when 'video' %}
-              {{ media | video_tag: controls: true, image_size: '1200x' }}
-            {% when 'external_video' %}
-              {{ media | external_video_tag }}
-            {% when 'model' %}
-              {{ media | model_viewer_tag: reveal: 'interaction', toggleable: true }}
-          {% endcase %}
+    <div class="product-gallery__stage">
+      <div class="product-gallery__viewport" data-gallery-viewport>
+        {% for media in product.media %}
+          <div
+            class="product-gallery__slide"
+            id="{{ gallery_id }}-{{ media.id }}"
+            data-gallery-slide
+            data-media-id="{{ media.id }}"
+          >
+            {% case media.media_type %}
+              {% when 'image' %}
+                {% if forloop.first %}
+                  {{
+                    media.preview_image
+                    | image_url: width: 1600
+                    | image_tag:
+                      loading: 'eager',
+                      widths: '360, 540, 750, 990, 1200, 1600',
+                      sizes: '(min-width: 990px) 50vw, 100vw',
+                      class: 'product-gallery__image'
+                  }}
+                {% else %}
+                  {{
+                    media.preview_image
+                    | image_url: width: 1600
+                    | image_tag:
+                      loading: 'lazy',
+                      widths: '360, 540, 750, 990, 1200, 1600',
+                      sizes: '(min-width: 990px) 50vw, 100vw',
+                      class: 'product-gallery__image'
+                  }}
+                {% endif %}
+              {% when 'video' %}
+                {{ media | video_tag: controls: true, image_size: '1200x' }}
+              {% when 'external_video' %}
+                {{ media | external_video_tag }}
+              {% when 'model' %}
+                {{ media | model_viewer_tag: reveal: 'interaction', toggleable: true }}
+            {% endcase %}
+          </div>
+        {% endfor %}
+      </div>
+
+      {% if product.media.size > 1 %}
+        <div class="product-gallery__arrows product-gallery__arrows--{{ section.settings.gallery_arrow_visibility | default: 'hover' }}"
+          {% unless section.settings.gallery_show_arrows %}hidden{% endunless %}>
+          <button
+            type="button"
+            class="product-gallery__arrow"
+            data-gallery-prev
+            aria-label="Previous product media"
+            disabled
+          >
+            <span aria-hidden="true">&#8249;</span>
+          </button>
+
+          <button
+            type="button"
+            class="product-gallery__arrow"
+            data-gallery-next
+            aria-label="Next product media"
+          >
+            <span aria-hidden="true">&#8250;</span>
+          </button>
         </div>
-      {% endfor %}
+      {% endif %}
     </div>
 
     {% if product.media.size > 1 %}
+      <div class="product-gallery__dots"
+        aria-label="Product media navigation"
+        {% unless section.settings.gallery_show_dots %}hidden{% endunless %}>
+        {% for media in product.media %}
+          <button
+            type="button"
+            class="product-gallery__dot"
+            data-gallery-dot
+            data-gallery-index="{{ forloop.index0 }}"
+            aria-label="View media {{ forloop.index }}"
+            aria-current="{% if forloop.first %}true{% else %}false{% endif %}"
+          ></button>
+        {% endfor %}
+      </div>
+
       <div class="product-gallery__thumbnails" aria-label="Product media">
         {% for media in product.media %}
           <button
