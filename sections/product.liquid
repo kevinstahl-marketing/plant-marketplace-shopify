@@ -18,9 +18,10 @@
 %}
 
 <section
-  class="product-page color-{{ section.settings.color_scheme }}"
+  class="product-page color-{{ section.settings.color_scheme }} product-page--gallery-{{ section.settings.gallery_position }} product-page--mobile-{{ section.settings.mobile_order }}"
   style="
     --product-page-gap: {{ section.settings.column_gap }}px;
+    --product-info-max-width: {{ section.settings.info_max_width }}px;
     --product-block-gap: {{ section.settings.block_gap }}px;
     --product-arrow-size: {{ section.settings.gallery_arrow_size }}px;
     --product-dot-size: {{ section.settings.gallery_dot_size }}px;
@@ -125,6 +126,19 @@
                   {% if current_variant.available %}In stock{% else %}Sold out{% endif %}
                 </span>
               </div>
+            {% when 'product-text' %}
+              {% if block.settings.text != blank %}
+                <div class="product-page__custom-text rte" {{ block.shopify_attributes }}>
+                  {{ block.settings.text }}
+                </div>
+              {% endif %}
+            {% when 'product-collapsible' %}
+              <details class="product-page__details" {{ block.shopify_attributes }}>
+                <summary>{{ block.settings.heading | escape }}</summary>
+                <div class="product-page__details-content rte">
+                  {{ block.settings.content }}
+                </div>
+              </details>
             {% when 'product-buy' %}
               <div class="product-page__buy-buttons" {{ block.shopify_attributes }}>
                 <button
@@ -166,6 +180,22 @@
       "content": "Product layout"
     },
     {
+      "type": "select",
+      "id": "gallery_position",
+      "label": "Gallery position",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
       "type": "range",
       "id": "gallery_width",
       "label": "Gallery column width",
@@ -174,6 +204,16 @@
       "step": 5,
       "unit": "%",
       "default": 50
+    },
+    {
+      "type": "range",
+      "id": "info_max_width",
+      "label": "Maximum information width",
+      "min": 320,
+      "max": 800,
+      "step": 20,
+      "unit": "px",
+      "default": 560
     },
     {
       "type": "range",
@@ -200,6 +240,22 @@
       "id": "sticky_info",
       "label": "Sticky product information",
       "default": false
+    },
+    {
+      "type": "select",
+      "id": "mobile_order",
+      "label": "Mobile content order",
+      "options": [
+        {
+          "value": "media",
+          "label": "Gallery first"
+        },
+        {
+          "value": "info",
+          "label": "Information first"
+        }
+      ],
+      "default": "media"
     },
     {
       "type": "header",
@@ -471,6 +527,36 @@
       "name": "Buy",
       "limit": 1,
       "settings": []
+    },
+    {
+      "type": "product-text",
+      "name": "Rich text",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Add product information here.</p>"
+        }
+      ]
+    },
+    {
+      "type": "product-collapsible",
+      "name": "Collapsible information",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "More information"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Content",
+          "default": "<p>Add details here.</p>"
+        }
+      ]
     }
   ]
 }
