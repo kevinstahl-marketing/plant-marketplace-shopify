@@ -1,12 +1,11 @@
-/*
- * Shopify product template.
- */
 {
   "sections": {
     "main": {
       "type": "product",
       "settings": {
-        "show_dynamic_checkout": true
+        "show_dynamic_checkout": true,
+        "gallery_width": 50,
+        "gallery_max_width": 720
       },
       "blocks": {
         "vendor": {

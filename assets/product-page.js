@@ -70,11 +70,11 @@
 
         viewport.scrollTo({
           left: slides[index].offsetLeft - viewport.offsetLeft,
-          behavior: reducedMotion.matches ? 'instant' : 'smooth'
+          behavior: reducedMotion.matches ? 'auto' : 'smooth'
         });
 
         clearTimeout(scrollTimer);
-        scrollTimer = setTimeout(settle, reducedMotion.matches ? 0 : 500);
+        scrollTimer = setTimeout(settle, reducedMotion.matches ? 0 : 650);
       };
 
       thumbnails.forEach((item, index) => {
@@ -94,6 +94,8 @@
       });
 
       viewport.addEventListener('scroll', () => {
+        if (targetIndex !== null) return;
+
         clearTimeout(scrollTimer);
         scrollTimer = setTimeout(settle, 130);
       }, { passive: true });

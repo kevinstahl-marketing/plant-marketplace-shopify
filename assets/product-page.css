@@ -9,7 +9,7 @@
 .product-page__layout {
   display: grid;
   grid-template-columns:
-    minmax(0, var(--product-gallery-share, 40%))
+    minmax(0, var(--product-gallery-share, 50%))
     minmax(0, 1fr);
   gap: var(--product-page-gap, 64px);
   align-items: start;
@@ -22,7 +22,12 @@
 
 .product-page__gallery-frame {
   width: 100%;
-  max-width: var(--product-gallery-max-width, 540px);
+  max-width: var(--product-gallery-max-width, 720px);
+}
+
+.product-page__information {
+  width: 100%;
+  max-width: 560px;
 }
 
 .product-page__information--sticky {
