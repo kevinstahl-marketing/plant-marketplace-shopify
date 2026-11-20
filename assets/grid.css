@@ -14,8 +14,8 @@
   gap: var(--grid-gap, 24px);
 
   width: min(
-    calc(100% - 40px),
-    var(--grid-section-width, 1200px)
+    calc(100% - 2 * var(--page-gutter)),
+    var(--grid-section-width, var(--container-width))
   );
   margin-inline: auto;
   align-items: stretch;
