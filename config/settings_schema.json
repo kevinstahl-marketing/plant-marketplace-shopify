@@ -157,6 +157,70 @@
         "unit": "px",
         "label": "Input corner radius",
         "default": 4
+      },
+      {
+        "type": "header",
+        "content": "Global controls"
+      },
+      {
+        "type": "select",
+        "id": "button_shape",
+        "label": "Button shape",
+        "options": [
+          {
+            "value": "square",
+            "label": "Square"
+          },
+          {
+            "value": "soft",
+            "label": "Soft"
+          },
+          {
+            "value": "rounded",
+            "label": "Rounded"
+          },
+          {
+            "value": "pill",
+            "label": "Pill"
+          }
+        ],
+        "default": "soft"
+      },
+      {
+        "type": "select",
+        "id": "button_height",
+        "label": "Button height",
+        "options": [
+          {
+            "value": "compact",
+            "label": "Compact"
+          },
+          {
+            "value": "standard",
+            "label": "Standard"
+          },
+          {
+            "value": "large",
+            "label": "Large"
+          }
+        ],
+        "default": "standard"
+      },
+      {
+        "type": "select",
+        "id": "button_border",
+        "label": "Button border",
+        "options": [
+          {
+            "value": "subtle",
+            "label": "Subtle"
+          },
+          {
+            "value": "standard",
+            "label": "Standard"
+          }
+        ],
+        "default": "standard"
       }
     ]
   },

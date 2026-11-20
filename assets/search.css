@@ -2,7 +2,7 @@
 
 .site-search {
   --search-height: 54px;
-  --search-radius: var(--radius-sm);
+  --search-radius: var(--control-input-radius, 4px);
   --search-background: var(--color-surface);
 
   display: block;
@@ -76,9 +76,10 @@
 
 .site-search__submit {
   flex: 0 0 auto;
-  padding: 9px 16px;
-  border: 0;
-  border-radius: 4px;
+  min-height: min(36px, var(--control-button-height, 44px));
+  padding: 7px 16px;
+  border: var(--control-button-border-width, 2px) solid transparent;
+  border-radius: var(--control-button-radius, 6px);
   background: var(--color-primary);
   color: var(--color-background);
   font-size: .78rem;
@@ -193,7 +194,7 @@
 
 .site-search--hero {
   --search-height: 66px;
-  --search-radius: var(--radius-md);
+  --search-radius: var(--control-input-radius, 4px);
 }
 
 .site-search--hero .site-search__field {

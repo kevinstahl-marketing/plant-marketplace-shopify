@@ -1,6 +1,6 @@
 {% if block.settings.label != blank %}
   <a
-    class="theme-button theme-block theme-button--{{ block.settings.style }}"
+    class="ui-button ui-button--{{ block.settings.style }} theme-block"
     href="{{ block.settings.link | default: routes.all_products_collection_url }}"
     style="
     --block-width: {{ block.settings.block_width | default: 'fit-content' }};
@@ -14,41 +14,7 @@
   </a>
 {% endif %}
 
-{% stylesheet %}
-.theme-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 12px 24px;
-  border: 1px solid currentColor;
-  border-radius: var(--radius-sm);
-  text-decoration: none;
-  font-weight: 600;
-  transition: opacity var(--transition-fast);
-}
-.theme-button:hover { opacity: .8; }
-.theme-button--primary {
-  background: var(--color-primary);
-  color: var(--color-background);
-  border-color: var(--color-primary);
-}
-.theme-button--secondary {
-  background: var(--color-surface);
-  color: var(--color-text);
-  border-color: var(--color-border);
-}
-.theme-button--outline {
-  background: transparent;
-  color: inherit;
-}
-.theme-button--link {
-  background: transparent;
-  border: 0;
-  padding-inline: 0;
-  text-decoration: underline;
-  text-underline-offset: 5px;
-}
-{% endstylesheet %}
+
 
 {% schema %}
 {

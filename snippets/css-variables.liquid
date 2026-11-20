@@ -19,6 +19,20 @@
     --page-width: {{ settings.max_page_width }};
     --page-margin: {{ settings.min_page_margin }}px;
     --style-border-radius-inputs: {{ settings.input_corner_radius }}px;
+    --control-button-radius: {% case settings.button_shape %}
+      {% when 'square' %}0px
+      {% when 'rounded' %}14px
+      {% when 'pill' %}9999px
+      {% else %}6px
+    {% endcase %};
+    --control-button-height: {% case settings.button_height %}
+      {% when 'compact' %}36px
+      {% when 'large' %}52px
+      {% else %}44px
+    {% endcase %};
+    --control-button-border-width: {% if settings.button_border == 'subtle' %}1px{% else %}2px{% endif %};
+    --control-input-radius: {{ settings.input_corner_radius }}px;
+
   }
 
   {% for scheme in settings.color_schemes %}
