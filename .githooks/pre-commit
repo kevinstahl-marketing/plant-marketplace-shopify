@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if ! git diff --cached --check; then
+  echo "ERROR: Git whitespace validation failed."
+  exit 1
+fi
+
+while IFS=$'\t' read -r added deleted file; do
+  [[ "$file" == *.css ]] || continue
+  [[ "$deleted" =~ ^[0-9]+$ ]] || continue
+
+  if (( deleted >= 100 )); then
+    echo "BLOCKED: $file deletes $deleted lines."
+    echo "Review the staged CSS diff before committing."
+    echo "To intentionally approve, run with SKIP_CSS_GUARD=1."
+    [[ "${SKIP_CSS_GUARD:-0}" == 1 ]] || exit 1
+  fi
+done < <(git diff --cached --numstat)
+
+echo "Pre-commit checks passed."

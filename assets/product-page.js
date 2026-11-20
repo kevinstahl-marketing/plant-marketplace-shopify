@@ -184,7 +184,9 @@
     );
     if (!info) return;
 
-    const header = document.querySelector('header');
+    const header = document.querySelector(
+      '.shopify-section:has(> .site-header[data-sticky="true"])'
+    );
     const margin = 16;
     let frame = 0;
 

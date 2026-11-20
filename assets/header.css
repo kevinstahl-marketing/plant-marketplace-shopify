@@ -11,6 +11,8 @@
 }
 
 .site-header {
+  width: 100%;
+  border-radius: 0;
   display: flex;
   align-items: center;
   gap: clamp(16px, 2.5vw, 36px);
@@ -37,11 +39,6 @@
 
 .site-header--shadow-strong {
   box-shadow: var(--shadow-md);
-}
-
-.site-header {
-  width: 100%;
-  border-radius: 0;
 }
 
 .site-header:not(.glass-surface) {
