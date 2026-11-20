@@ -33,13 +33,7 @@
       --color-text-muted: {{ scheme.settings.text_muted }};
       --color-border: {{ scheme.settings.border }};
       --color-primary-dark: {{ scheme.settings.primary | color_darken: 12 }};
-      {% assign background_brightness = scheme.settings.background | color_brightness %}
-      {% assign foreground_brightness = scheme.settings.foreground | color_brightness %}
-      {% if background_brightness >= foreground_brightness %}
-        --card-photo-ink: {{ scheme.settings.background }};
-      {% else %}
-        --card-photo-ink: {{ scheme.settings.foreground }};
-      {% endif %}
+
     }
   {% endfor %}
 

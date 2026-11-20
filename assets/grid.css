@@ -3,8 +3,8 @@
 .theme-grid-section {
   width: 100%;
   padding-block: var(--grid-section-padding, 48px);
-  background: rgb(var(--color-background));
-  color: rgb(var(--color-foreground));
+  background: var(--color-background);
+  color: var(--color-foreground);
 }
 
 .theme-grid {

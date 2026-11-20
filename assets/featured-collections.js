@@ -16,7 +16,7 @@
     const controls = root.querySelector('[data-featured-controls]');
 
     const isCarousel = () => {
-      const mobile = window.matchMedia('(max-width: 599px)').matches;
+      const mobile = window.matchMedia('(max-width: 749px)').matches;
       return mobile
         ? root.dataset.mobileLayout === 'carousel'
         : root.dataset.desktopLayout === 'carousel';
