@@ -1,7 +1,8 @@
 /* Featured botanical collections */
 
 .featured-collections {
-  padding-block: clamp(48px, 7vw, 112px);
+  padding-top: var(--featured-padding-top, 80px);
+  padding-bottom: var(--featured-padding-bottom, 80px);
   background: var(--color-background);
   color: var(--color-foreground);
 }
@@ -77,29 +78,6 @@
   display: none;
 }
 
-.featured-collections__arrow {
-  display: grid;
-  place-items: center;
-  width: 42px;
-  height: 42px;
-  padding: 0;
-  border: 1px solid currentColor;
-  border-radius: 50%;
-  background: transparent;
-  color: inherit;
-  font: inherit;
-  cursor: pointer;
-}
-
-.featured-collections__arrow:disabled {
-  opacity: 0.3;
-  cursor: default;
-}
-
-.featured-collections__arrow:focus-visible {
-  outline: 2px solid currentColor;
-  outline-offset: 3px;
-}
 
 @media (min-width: 990px) {
   .featured-collections[data-desktop-layout="carousel"]

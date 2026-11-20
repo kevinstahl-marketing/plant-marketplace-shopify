@@ -1,7 +1,8 @@
 /* Featured Products: section layout only. */
 
 .featured-products {
-  padding-block: var(--products-padding, var(--section-spacing));
+  padding-top: var(--products-padding-top, 80px);
+  padding-bottom: var(--products-padding-bottom, 80px);
   background: var(--color-background);
   color: var(--color-foreground);
 }

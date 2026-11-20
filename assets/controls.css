@@ -1,0 +1,37 @@
+/* Shared carousel/navigation arrow control. */
+.control-arrow {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  transition: background-color 180ms ease, opacity 180ms ease;
+}
+
+@media (hover: hover) {
+  .control-arrow:not(:disabled):hover {
+    background: var(--color-surface-muted, var(--color-background));
+  }
+}
+
+.control-arrow:disabled {
+  opacity: .3;
+  cursor: default;
+}
+
+.control-arrow:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .control-arrow {
+    transition: none;
+  }
+}
