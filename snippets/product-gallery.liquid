@@ -1,0 +1,65 @@
+{% liquid
+  assign gallery_id = 'ProductGallery-' | append: section.id
+%}
+
+<div class="product-gallery product-gallery--{{ section.settings.thumbnail_position | default: 'bottom' }}" id="{{ gallery_id }}" data-product-gallery>
+  {% if product.media.size > 0 %}
+    <div class="product-gallery__viewport" data-gallery-viewport>
+      {% for media in product.media %}
+        <div
+          class="product-gallery__slide"
+          id="{{ gallery_id }}-{{ media.id }}"
+          data-gallery-slide
+          data-media-id="{{ media.id }}"
+        >
+          {% case media.media_type %}
+            {% when 'image' %}
+              {{
+                media.preview_image
+                | image_url: width: 1600
+                | image_tag:
+                  loading: 'lazy',
+                  widths: '360, 540, 750, 990, 1200, 1600',
+                  sizes: '(min-width: 990px) 50vw, 100vw',
+                  class: 'product-gallery__image'
+              }}
+            {% when 'video' %}
+              {{ media | video_tag: controls: true, image_size: '1200x' }}
+            {% when 'external_video' %}
+              {{ media | external_video_tag }}
+            {% when 'model' %}
+              {{ media | model_viewer_tag: reveal: 'interaction', toggleable: true }}
+          {% endcase %}
+        </div>
+      {% endfor %}
+    </div>
+
+    {% if product.media.size > 1 %}
+      <div class="product-gallery__thumbnails" aria-label="Product media">
+        {% for media in product.media %}
+          <button
+            type="button"
+            class="product-gallery__thumbnail"
+            data-gallery-thumbnail
+            data-target="{{ gallery_id }}-{{ media.id }}"
+            aria-label="View media {{ forloop.index }}"
+            aria-current="{% if forloop.first %}true{% else %}false{% endif %}"
+          >
+            {{
+              media.preview_image
+              | image_url: width: 180
+              | image_tag:
+                loading: 'lazy',
+                widths: '90, 180',
+                class: 'product-gallery__thumbnail-image'
+            }}
+          </button>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% else %}
+    <div class="product-gallery__empty">
+      {{ 'product-1' | placeholder_svg_tag }}
+    </div>
+  {% endif %}
+</div>
