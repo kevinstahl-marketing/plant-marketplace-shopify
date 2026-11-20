@@ -86,6 +86,13 @@
     roots.forEach(root => instances.get(root)?.());
   }
 
+  window.MarketplaceCarousel = {
+    refresh(scope = document) {
+      destroyAll(scope);
+      initializeAll(scope);
+    }
+  };
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => initializeAll());
   } else {

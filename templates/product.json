@@ -54,9 +54,14 @@
         "inventory",
         "buy"
       ]
+    },
+    "related_products": {
+      "type": "related-products",
+      "settings": {}
     }
   },
   "order": [
-    "main"
+    "main",
+    "related_products"
   ]
 }
