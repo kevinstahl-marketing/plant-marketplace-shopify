@@ -12,22 +12,23 @@
 %}
 
 {{ 'controls.css' | asset_url | stylesheet_tag }}
+{{ 'carousel.css' | asset_url | stylesheet_tag }}
 {{ 'featured-collections.css' | asset_url | stylesheet_tag }}
-<script src="{{ 'featured-collections.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'carousel.js' | asset_url }}" defer="defer"></script>
 
 <section
   id="FeaturedCollections-{{ section.id }}"
   class="featured-collections full-width color-{{ section.settings.color_scheme }} featured-collections--hover-{{ resolved_hover }}"
-  data-featured-carousel
+  data-carousel
   data-desktop-layout="{{ section.settings.desktop_layout }}"
   data-mobile-layout="{{ section.settings.mobile_layout }}"
   style="
-    --featured-mobile-columns: {{ section.settings.mobile_columns }};
-    --featured-mobile-visible: {{ section.settings.mobile_visible }};
-    --featured-desktop-peek: {{ section.settings.desktop_peek }}px;
-    --featured-mobile-peek: {{ section.settings.mobile_peek }}px;
-    --featured-columns: {{ section.settings.columns }};
-    --featured-gap: {{ section.settings.gap }}px;
+    --carousel-mobile-columns: {{ section.settings.mobile_columns }};
+    --carousel-mobile-visible: {{ section.settings.mobile_visible }};
+    --carousel-desktop-peek: {{ section.settings.desktop_peek }}px;
+    --carousel-mobile-peek: {{ section.settings.mobile_peek }}px;
+    --carousel-columns: {{ section.settings.columns }};
+    --carousel-gap: {{ section.settings.gap }}px;
     --featured-padding-top: {{ section.settings.padding_top }}px;
     --featured-padding-bottom: {{ section.settings.padding_bottom }}px;
     --featured-image-ratio: {{ section.settings.image_ratio }};
@@ -68,31 +69,25 @@
       {% endif %}
     </div>
 
-    {% if section.settings.show_arrows %}
-      <div class="featured-collections__controls" data-featured-controls>
-        <button
-          type="button"
-          class="control-arrow featured-collections__arrow"
-          data-featured-prev
-          aria-label="Previous collections"
-          aria-controls="FeaturedTrack-{{ section.id }}"
-          disabled
-        >&larr;</button>
-        <button
-          type="button"
-          class="control-arrow featured-collections__arrow"
-          data-featured-next
-          aria-label="Next collections"
-          aria-controls="FeaturedTrack-{{ section.id }}"
-          disabled
-        >&rarr;</button>
-      </div>
+{% assign carousel_track_id = 'FeaturedTrack-' | append: section.id %}
+{% capture carousel_navigation %}
+  {% render 'carousel-controls',
+        track_id: carousel_track_id,
+        label: 'collections',
+        style: section.settings.arrow_style,
+        shape: section.settings.arrow_shape,
+        size: section.settings.arrow_size
+      %}
+{% endcapture %}
+
+{% if section.settings.show_arrows and section.settings.arrow_placement == 'above' %}
+      {{ carousel_navigation }}
     {% endif %}
 
-    <div
+        <div
       id="FeaturedTrack-{{ section.id }}"
       class="featured-collections__grid"
-      data-featured-track
+      data-carousel-track
       aria-label="Featured collections"
     >
       {% for collection in section.settings.collections %}
@@ -103,7 +98,7 @@
           endif
         %}
 
-        <div class="featured-collections__item{% if section.settings.use_card_color_scheme %} color-{{ section.settings.card_color_scheme }}{% endif %}">
+        <div data-carousel-item class="featured-collections__item{% if section.settings.use_card_color_scheme %} color-{{ section.settings.card_color_scheme }}{% endif %}">
           {% render 'botanical-collection-card',
             collection: collection,
             image: card_image,
@@ -116,7 +111,7 @@
       {% else %}
         {% if request.design_mode %}
           {% for i in (1..3) %}
-            <div class="featured-collections__item{% if section.settings.use_card_color_scheme %} color-{{ section.settings.card_color_scheme }}{% endif %}">
+            <div data-carousel-item class="featured-collections__item{% if section.settings.use_card_color_scheme %} color-{{ section.settings.card_color_scheme }}{% endif %}">
               {% render 'botanical-collection-card',
                 glass: section.settings.glass,
                 glass_material: section.settings.glass_material,
@@ -127,6 +122,10 @@
         {% endif %}
       {% endfor %}
     </div>
+    {% if section.settings.show_arrows and section.settings.arrow_placement == 'below' %}
+      {{ carousel_navigation }}
+    {% endif %}
+
   </div>
 </section>
 
@@ -312,6 +311,78 @@
       "id": "show_arrows",
       "label": "Show carousel arrows",
       "default": true
+    },
+    {
+      "type": "select",
+      "id": "arrow_style",
+      "label": "Arrow style",
+      "options": [
+        {
+          "value": "outline",
+          "label": "Outline"
+        },
+        {
+          "value": "filled",
+          "label": "Filled"
+        },
+        {
+          "value": "glass",
+          "label": "Glass"
+        }
+      ],
+      "default": "outline"
+    },
+    {
+      "type": "select",
+      "id": "arrow_shape",
+      "label": "Arrow shape",
+      "options": [
+        {
+          "value": "circle",
+          "label": "Circle"
+        },
+        {
+          "value": "rounded",
+          "label": "Rounded"
+        }
+      ],
+      "default": "circle"
+    },
+    {
+      "type": "select",
+      "id": "arrow_size",
+      "label": "Arrow size",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "arrow_placement",
+      "label": "Arrow placement",
+      "options": [
+        {
+          "value": "above",
+          "label": "Above cards"
+        },
+        {
+          "value": "below",
+          "label": "Below cards"
+        }
+      ],
+      "default": "above"
     },
     {
       "type": "header",

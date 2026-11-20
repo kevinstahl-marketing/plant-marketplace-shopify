@@ -35,3 +35,31 @@
     transition: none;
   }
 }
+
+
+/* Shared carousel arrow variants */
+.carousel-controls[data-control-size="small"] .control-arrow {
+  width: 34px;
+  height: 34px;
+}
+
+.carousel-controls[data-control-size="large"] .control-arrow {
+  width: 52px;
+  height: 52px;
+}
+
+.carousel-controls[data-control-shape="rounded"] .control-arrow {
+  border-radius: 12px;
+}
+
+.carousel-controls[data-control-style="filled"] .control-arrow {
+  background: var(--color-foreground);
+  color: var(--color-background);
+  border-color: transparent;
+}
+
+.carousel-controls[data-control-style="glass"] .control-arrow {
+  background: var(--color-surface-muted, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}

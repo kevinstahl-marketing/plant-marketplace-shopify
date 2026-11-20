@@ -6,25 +6,37 @@
 
   Optional:
     image_ratio: square | portrait | landscape
+    appearance: editorial | glasshouse | reveal
     show_vendor: boolean
     show_badges: boolean
 
-  Appearance inherits the active color scheme and
-  global card design settings.
+  Appearance uses the section-selected presentation and
+  inherits the active Shopify color scheme.
 {% endcomment %}
 
 {% liquid
   assign ratio = image_ratio | default: 'portrait'
+  assign card_appearance = appearance | default: 'editorial'
+  assign card_material = glass_material | default: 'default'
+  assign card_presentation = presentation | default: 'shop'
+  unless card_presentation == 'shop' or card_presentation == 'discover' or card_presentation == 'minimal'
+    assign card_presentation = 'shop'
+  endunless
+  assign card_excerpt = product.metafields.custom.card_excerpt.value
+  if card_excerpt == blank
+    assign card_excerpt = product.description
+  endif
+
+  unless card_appearance == 'editorial' or card_appearance == 'glasshouse' or card_appearance == 'reveal'
+    assign card_appearance = 'editorial'
+  endunless
+
   assign card_image = product.featured_image
   assign current_variant = product.selected_or_first_available_variant
 %}
 
-<article class="product-card product-card--{{ ratio }}">
-  <a
-    class="product-card__link"
-    href="{{ product.url }}"
-    aria-label="{{ product.title | escape }}"
-  >
+<article class="{% if glass and card_appearance == 'editorial' %}glass-surface glass-surface--{{ card_material }} {% endif %}product-card product-card--{{ ratio }} product-card--{{ card_appearance }} product-card--{{ card_presentation }}" style="--card-title-lines: {{ title_lines | default: 2 | plus: 0 | at_least: 1 | at_most: 4 }}; --card-description-lines: {{ description_lines | default: 3 | plus: 0 | at_least: 1 | at_most: 5 }};">
+  <a class="product-card__link" href="{{ product.url }}">
     <div class="product-card__media">
       {% if card_image != blank %}
         {{
@@ -40,7 +52,7 @@
         {{ 'product-1' | placeholder_svg_tag: 'product-card__placeholder' }}
       {% endif %}
 
-      {% if show_badges %}
+      {% if show_badges and card_presentation != 'minimal' %}
         <div class="product-card__badges">
           {% unless product.available %}
             <span class="product-card__badge">Sold out</span>
@@ -53,16 +65,18 @@
       {% endif %}
     </div>
 
-    <div class="product-card__content">
-      {% if show_vendor and product.vendor != blank %}
-        <p class="product-card__vendor">
-          {{ product.vendor | escape }}
-        </p>
+    <div class="product-card__content{% if glass and card_appearance != 'editorial' %} glass-surface glass-surface--{{ card_material }}{% endif %}">
+      {% if show_vendor and card_presentation != 'minimal' and product.vendor != blank %}
+        <p class="product-card__vendor">{{ product.vendor | escape }}</p>
       {% endif %}
 
-      <h3 class="product-card__title">
-        {{ product.title | escape }}
-      </h3>
+      <h3 class="product-card__title">{{ product.title | escape }}</h3>
+
+      {% if card_presentation == 'discover' and card_excerpt != blank %}
+        <p class="product-card__description">
+          {{ card_excerpt | strip_html | strip | truncate: 115 }}
+        </p>
+      {% endif %}
 
       <div class="product-card__pricing">
         {% if product.price_varies %}
@@ -83,4 +97,63 @@
       </div>
     </div>
   </a>
+
+  <div class="product-card__actions">
+    {% unless product.available %}
+      <button class="product-card__action" type="button" disabled>
+        <svg viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="1.7"
+          stroke-linecap="round" stroke-linejoin="round"
+          aria-hidden="true">
+          <path d="M5 8h14l-1 12H6L5 8Z"/>
+          <path d="M9 9V6a3 3 0 0 1 6 0v3"/>
+          <path d="M5 19 19 5"/>
+        </svg>
+        <span class="product-card__action-label">Sold out</span>
+      </button>
+    {% else %}
+      {% if product.variants.size == 1 and product.requires_selling_plan == false %}
+        <form
+          action="{{ routes.cart_add_url }}"
+          method="post"
+          data-product-quick-add
+        >
+          <input
+            type="hidden"
+            name="id"
+            value="{{ current_variant.id }}"
+          >
+          <input type="hidden" name="quantity" value="1">
+          <button class="product-card__action" type="submit">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.7" stroke-linecap="round"
+      stroke-linejoin="round" aria-hidden="true">
+      <path d="M5 8h14l-1 12H6L5 8Z"/>
+      <path d="M9 9V6a3 3 0 0 1 6 0v3"/>
+      <path d="M12 12v5M9.5 14.5h5"/>
+    </svg>
+    <span class="product-card__action-label" data-quick-add-label>Add to cart</span>
+          </button>
+          <p
+            class="product-card__feedback"
+            data-quick-add-feedback
+            role="status"
+            aria-live="polite"
+            hidden
+          ></p>
+        </form>
+      {% else %}
+        <a class="product-card__action product-card__action--secondary"
+          href="{{ product.url }}" aria-label="Choose options for {{ product.title | escape }}">
+          <svg viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="1.7"
+            stroke-linecap="round" stroke-linejoin="round"
+            aria-hidden="true">
+            <path d="M5 12h14m-7-7 7 7-7 7"/>
+          </svg>
+          <span class="product-card__action-label">Choose options</span>
+        </a>
+      {% endif %}
+    {% endunless %}
+  </div>
 </article>

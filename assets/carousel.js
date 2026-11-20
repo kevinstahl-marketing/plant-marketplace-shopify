@@ -1,19 +1,19 @@
 (() => {
-  if (window.__featuredCollectionsCarousel) return;
-  window.__featuredCollectionsCarousel = true;
+  if (window.__marketplaceCarousel) return;
+  window.__marketplaceCarousel = true;
 
   const instances = new WeakMap();
-  const selector = '[data-featured-carousel]';
+  const selector = '[data-carousel]';
 
   function initialize(root) {
     if (instances.has(root)) return;
 
-    const track = root.querySelector('[data-featured-track]');
+    const track = root.querySelector('[data-carousel-track]');
     if (!track) return;
 
-    const prev = root.querySelector('[data-featured-prev]');
-    const next = root.querySelector('[data-featured-next]');
-    const controls = root.querySelector('[data-featured-controls]');
+    const prev = root.querySelector('[data-carousel-prev]');
+    const next = root.querySelector('[data-carousel-next]');
+    const controls = root.querySelector('[data-carousel-controls]');
 
     const isCarousel = () => {
       const mobile = window.matchMedia('(max-width: 749px)').matches;
@@ -36,7 +36,7 @@
     const move = (direction) => {
       if (!isCarousel()) return;
 
-      const card = track.querySelector('.featured-collections__item');
+      const card = track.querySelector('[data-carousel-item]');
       if (!card) return;
 
       const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
