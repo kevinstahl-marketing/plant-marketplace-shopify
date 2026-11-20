@@ -1,21 +1,14 @@
 {% liquid
-  assign resolved_style = settings.card_default_style
-  assign resolved_darkness = settings.card_overlay_darkness
-  assign resolved_radius = settings.card_radius
-  assign resolved_hover = settings.card_hover
-  assign resolved_vignette = settings.card_vignette
+  assign resolved_style = section.settings.card_appearance
+  assign resolved_darkness = section.settings.overlay_darkness
+  assign resolved_radius = section.settings.card_radius
+  assign resolved_vignette = section.settings.card_vignette
 
-  unless section.settings.use_global_card_settings
-    assign resolved_style = section.settings.card_appearance
-    assign resolved_darkness = section.settings.overlay_darkness
-    assign resolved_radius = section.settings.card_radius
-
-    if section.settings.image_zoom
-      assign resolved_hover = 'zoom'
-    else
-      assign resolved_hover = 'none'
-    endif
-  endunless
+  if section.settings.image_zoom
+    assign resolved_hover = 'zoom'
+  else
+    assign resolved_hover = 'none'
+  endif
 %}
 
 {{ 'featured-collections.css' | asset_url | stylesheet_tag }}
@@ -481,15 +474,29 @@
       "default": 16
     },
     {
-      "type": "checkbox",
-      "id": "image_zoom",
-      "label": "Zoom image on hover",
-      "default": true
+      "type": "select",
+      "id": "card_vignette",
+      "label": "Card vignette",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "soft",
+          "label": "Soft"
+        },
+        {
+          "value": "dramatic",
+          "label": "Dramatic"
+        }
+      ],
+      "default": "soft"
     },
     {
       "type": "checkbox",
-      "id": "use_global_card_settings",
-      "label": "Use global card appearance",
+      "id": "image_zoom",
+      "label": "Zoom image on hover",
       "default": true
     }
   ],

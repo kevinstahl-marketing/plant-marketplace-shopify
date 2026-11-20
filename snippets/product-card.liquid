@@ -1,0 +1,86 @@
+{% comment %}
+  Reusable Shopify product card.
+
+  Required:
+    product
+
+  Optional:
+    image_ratio: square | portrait | landscape
+    show_vendor: boolean
+    show_badges: boolean
+
+  Appearance inherits the active color scheme and
+  global card design settings.
+{% endcomment %}
+
+{% liquid
+  assign ratio = image_ratio | default: 'portrait'
+  assign card_image = product.featured_image
+  assign current_variant = product.selected_or_first_available_variant
+%}
+
+<article class="product-card product-card--{{ ratio }}">
+  <a
+    class="product-card__link"
+    href="{{ product.url }}"
+    aria-label="{{ product.title | escape }}"
+  >
+    <div class="product-card__media">
+      {% if card_image != blank %}
+        {{
+          card_image
+          | image_url: width: 1000
+          | image_tag:
+            class: 'product-card__image',
+            loading: 'lazy',
+            widths: '240, 360, 480, 640, 800, 1000',
+            sizes: '(min-width: 990px) 25vw, (min-width: 750px) 33vw, 50vw'
+        }}
+      {% else %}
+        {{ 'product-1' | placeholder_svg_tag: 'product-card__placeholder' }}
+      {% endif %}
+
+      {% if show_badges %}
+        <div class="product-card__badges">
+          {% unless product.available %}
+            <span class="product-card__badge">Sold out</span>
+          {% else %}
+            {% if product.compare_at_price > product.price %}
+              <span class="product-card__badge">Sale</span>
+            {% endif %}
+          {% endunless %}
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="product-card__content">
+      {% if show_vendor and product.vendor != blank %}
+        <p class="product-card__vendor">
+          {{ product.vendor | escape }}
+        </p>
+      {% endif %}
+
+      <h3 class="product-card__title">
+        {{ product.title | escape }}
+      </h3>
+
+      <div class="product-card__pricing">
+        {% if product.price_varies %}
+          <span>From {{ product.price_min | money }}</span>
+        {% else %}
+          <span>{{ current_variant.price | money }}</span>
+        {% endif %}
+
+        {% if product.compare_at_price > product.price %}
+          {% unless product.price_varies %}
+            {% if current_variant.compare_at_price > current_variant.price %}
+              <s class="product-card__compare">
+                {{ current_variant.compare_at_price | money }}
+              </s>
+            {% endif %}
+          {% endunless %}
+        {% endif %}
+      </div>
+    </div>
+  </a>
+</article>
