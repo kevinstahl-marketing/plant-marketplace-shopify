@@ -1,0 +1,34 @@
+{% comment %}
+  Reusable carousel navigation controls.
+
+  Parameters:
+    track_id: ID of the carousel track
+    label: accessible description of the content
+{% endcomment %}
+
+<div class="carousel-controls"
+  data-control-style="{{ style | default: 'outline' }}"
+  data-control-shape="{{ shape | default: 'circle' }}"
+  data-control-size="{{ size | default: 'medium' }}" data-carousel-controls>
+  <button
+    type="button"
+    class="control-arrow"
+    data-carousel-prev
+    aria-label="Previous {{ label | escape }}"
+    aria-controls="{{ track_id }}"
+    disabled
+  >
+    <span aria-hidden="true">&larr;</span>
+  </button>
+
+  <button
+    type="button"
+    class="control-arrow"
+    data-carousel-next
+    aria-label="Next {{ label | escape }}"
+    aria-controls="{{ track_id }}"
+    disabled
+  >
+    <span aria-hidden="true">&rarr;</span>
+  </button>
+</div>

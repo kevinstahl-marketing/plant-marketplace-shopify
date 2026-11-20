@@ -17,6 +17,14 @@
   --text-2xl: 2rem;
   --text-3xl: clamp(2.5rem, 5vw, 4.5rem);
 
+  /* SEMANTIC TYPOGRAPHY */
+  --type-section-heading: clamp(2rem, 4vw, 4rem);
+  --type-card-heading: clamp(1rem, 1.4vw, 1.2rem);
+  --type-card-description: var(--text-sm);
+  --type-eyebrow: var(--text-xs);
+  --type-card-meta: 0.72rem;
+  --type-price: 0.94rem;
+
   /* SPACING */
   --space-1: 0.25rem;
   --space-2: 0.5rem;
@@ -29,9 +37,9 @@
   --space-24: 6rem;
 
   /* LAYOUT */
-  --container-width: 1280px;
+  --container-width: var(--page-width, 90rem);
   --content-width: 720px;
-  --page-gutter: clamp(1rem, 4vw, 4rem);
+  --page-gutter: max(var(--page-margin, 20px), min(4vw, 64px));
   --section-spacing: clamp(4rem, 7vw, 6rem);
 
   /* SHAPES */

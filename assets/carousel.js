@@ -1,9 +1,9 @@
 (() => {
-  if (window.CollectionListCarouselInitialized) return;
-  window.CollectionListCarouselInitialized = true;
+  if (window.__marketplaceCarousel) return;
+  window.__marketplaceCarousel = true;
 
-  const selector = '[data-collection-list]';
   const instances = new WeakMap();
+  const selector = '[data-carousel]';
 
   function initialize(root) {
     if (instances.has(root)) return;
@@ -26,29 +26,27 @@
       const active = isCarousel();
       const max = Math.max(0, track.scrollWidth - track.clientWidth);
       const scrollable = active && max > 2;
-      const current = Math.abs(track.scrollLeft);
+      const left = Math.max(0, track.scrollLeft);
 
       if (controls) controls.hidden = !scrollable;
-      if (prev) prev.disabled = !scrollable || current <= 2;
-      if (next) next.disabled = !scrollable || current >= max - 2;
+      if (prev) prev.disabled = !scrollable || left <= 2;
+      if (next) next.disabled = !scrollable || left >= max - 2;
     };
 
     const move = (direction) => {
       if (!isCarousel()) return;
 
-      const card = track.querySelector('.collection-list__card');
+      const card = track.querySelector('[data-carousel-item]');
       if (!card) return;
 
       const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
       const distance = card.getBoundingClientRect().width + gap;
 
-      const reducedMotion = window.matchMedia(
-        '(prefers-reduced-motion: reduce)'
-      ).matches;
-
       track.scrollBy({
-        left: direction * distance,
-        behavior: reducedMotion ? 'auto' : 'smooth'
+        left: distance * direction,
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+          ? 'auto'
+          : 'smooth'
       });
     };
 
@@ -58,18 +56,16 @@
     prev?.addEventListener('click', onPrev);
     next?.addEventListener('click', onNext);
     track.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update, { passive: true });
 
     const observer = new ResizeObserver(update);
     observer.observe(track);
-
-    const onResize = () => update();
-    window.addEventListener('resize', onResize, { passive: true });
 
     instances.set(root, () => {
       prev?.removeEventListener('click', onPrev);
       next?.removeEventListener('click', onNext);
       track.removeEventListener('scroll', update);
-      window.removeEventListener('resize', onResize);
+      window.removeEventListener('resize', update);
       observer.disconnect();
       instances.delete(root);
     });
@@ -87,8 +83,7 @@
       ...(scope.matches?.(selector) ? [scope] : []),
       ...scope.querySelectorAll(selector)
     ];
-
-    roots.forEach((root) => instances.get(root)?.());
+    roots.forEach(root => instances.get(root)?.());
   }
 
   if (document.readyState === 'loading') {
@@ -97,11 +92,11 @@
     initializeAll();
   }
 
-  document.addEventListener('shopify:section:unload', (event) => {
+  document.addEventListener('shopify:section:unload', event => {
     destroyAll(event.target);
   });
 
-  document.addEventListener('shopify:section:load', (event) => {
+  document.addEventListener('shopify:section:load', event => {
     initializeAll(event.target);
   });
 })();

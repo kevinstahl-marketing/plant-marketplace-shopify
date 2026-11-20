@@ -14,7 +14,7 @@
   background: var(--color-surface, var(--color-background));
   text-decoration: none;
   border: 1px solid var(--color-border);
-  border-radius: var(--featured-card-radius, var(--card-global-radius, 16px));
+  border-radius: var(--featured-card-radius, 16px);
   transition: transform 220ms ease, box-shadow 220ms ease;
 }
 
@@ -149,7 +149,7 @@
 
 .botanical-collection-card--cinematic
 .botanical-collection-card__content {
-  color: var(--card-photo-ink, #fff);
+  color: #fff;
   text-shadow: 0 1px 12px rgb(0 0 0 / .35);
 }
 
@@ -170,7 +170,7 @@
   padding: clamp(16px, 2vw, 26px);
   border-radius: max(
     6px,
-    calc(var(--featured-card-radius, var(--card-global-radius, 16px)) - 6px)
+    calc(var(--featured-card-radius, 16px) - 6px)
   );
   color: var(--material-ink);
   text-shadow: none;

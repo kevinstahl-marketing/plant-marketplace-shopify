@@ -1,0 +1,612 @@
+{{ 'controls.css' | asset_url | stylesheet_tag }}
+{{ 'carousel.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'carousel.js' | asset_url }}" defer="defer"></script>
+{{ 'glass.css' | asset_url | stylesheet_tag }}
+{{ 'product-card.css' | asset_url | stylesheet_tag }}
+{{ 'featured-products.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'product-quick-add.js' | asset_url }}" defer="defer"></script>
+
+<section
+  id="FeaturedProducts-{{ section.id }}"
+  class="featured-products full-width color-{{ section.settings.color_scheme }}"
+  data-carousel
+  data-heading-alignment="{{ section.settings.heading_alignment }}"
+  data-desktop-layout="{{ section.settings.desktop_layout }}"
+  data-mobile-layout="{{ section.settings.mobile_layout }}"
+  style="
+    --carousel-columns: {{ section.settings.columns }};
+    --carousel-mobile-columns: {{ section.settings.mobile_columns }};
+    --carousel-mobile-visible: {{ section.settings.mobile_visible }};
+    --carousel-desktop-peek: {{ section.settings.desktop_peek }}px;
+    --carousel-mobile-peek: {{ section.settings.mobile_peek }}px;
+    --carousel-gap: {{ section.settings.gap }}px;
+    --products-mobile-columns: {{ section.settings.mobile_columns }};
+    --products-gap: {{ section.settings.gap }}px;
+    --products-padding-top: {{ section.settings.padding_top }}px;
+    --products-padding-bottom: {{ section.settings.padding_bottom }}px;
+    --product-card-radius: {{ section.settings.card_radius }}px;
+  "
+>
+  <div class="{% if section.settings.full_width %}container-fluid{% else %}container{% endif %}">
+
+    <div class="featured-products__heading{% if section.settings.use_heading_color_scheme %} color-{{ section.settings.heading_color_scheme }} featured-products__heading--separate-scheme{% endif %}">
+      <div class="featured-products__intro">
+        {% if section.settings.eyebrow != blank %}
+          <p class="featured-products__eyebrow">
+            {{ section.settings.eyebrow | escape }}
+          </p>
+        {% endif %}
+
+        {% if section.settings.heading != blank %}
+          <h2 class="featured-products__title">
+            {{ section.settings.heading | escape }}
+          </h2>
+        {% endif %}
+
+        {% if section.settings.description != blank %}
+          <div class="featured-products__description">
+            {{ section.settings.description }}
+          </div>
+        {% endif %}
+      </div>
+
+      {% if section.settings.collection != blank and section.settings.show_view_all %}
+        <a
+          class="featured-products__view-all"
+          href="{{ section.settings.collection.url }}"
+        >
+          View all
+          <span aria-hidden="true">&rarr;</span>
+        </a>
+      {% endif %}
+    </div>
+
+
+{% assign carousel_track_id = 'ProductsTrack-' | append: section.id %}
+{% capture carousel_navigation %}
+  {% render 'carousel-controls',
+        track_id: carousel_track_id,
+        label: 'products',
+        style: section.settings.arrow_style,
+        shape: section.settings.arrow_shape,
+        size: section.settings.arrow_size
+      %}
+{% endcapture %}
+
+{% if section.settings.show_arrows and section.settings.arrow_placement == 'above' %}
+      {{ carousel_navigation }}
+    {% endif %}
+
+        <div
+      id="ProductsTrack-{{ section.id }}"
+      class="featured-products__grid"
+      data-carousel-track
+      aria-label="Featured products"
+    >
+      {% if section.settings.collection != blank %}
+        {% for product in section.settings.collection.products limit: section.settings.product_limit %}
+          <div class="featured-products__item{% if section.settings.use_card_color_scheme %} color-{{ section.settings.card_color_scheme }}{% endif %}" data-carousel-item>
+            {% render 'product-card',
+              product: product,
+            presentation: section.settings.card_presentation,
+            title_lines: section.settings.title_lines,
+            description_lines: section.settings.description_lines,
+              image_ratio: section.settings.image_ratio,
+              appearance: section.settings.card_appearance,
+              glass: section.settings.glass,
+              glass_material: section.settings.glass_material,
+              show_vendor: section.settings.show_vendor,
+              show_badges: section.settings.show_badges
+            %}
+          </div>
+        {% else %}
+          {% if request.design_mode %}
+            <p>No products in the selected collection.</p>
+          {% endif %}
+        {% endfor %}
+      {% elsif request.design_mode %}
+        <p>Select a collection to display products.</p>
+      {% endif %}
+    </div>
+
+    {% if section.settings.show_arrows and section.settings.arrow_placement == 'below' %}
+      {{ carousel_navigation }}
+    {% endif %}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Featured products",
+  "tag": "section",
+  "class": "featured-products-section",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Content colors"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_heading_color_scheme",
+      "label": "Use separate heading color scheme",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "heading_color_scheme",
+      "label": "Heading color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_card_color_scheme",
+      "label": "Use separate card color scheme",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "card_color_scheme",
+      "label": "Card color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "Heading alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "FRESH FROM THE GREENHOUSE"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Something worth growing."
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Meet the plants and growing essentials catching our eye.</p>"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "product_limit",
+      "label": "Maximum products",
+      "min": 2,
+      "max": 24,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show View all link",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Responsive display"
+    },
+    {
+      "type": "select",
+      "id": "desktop_layout",
+      "label": "Desktop layout",
+      "options": [
+        {
+          "value": "grid",
+          "label": "Grid"
+        },
+        {
+          "value": "carousel",
+          "label": "Carousel"
+        }
+      ],
+      "default": "grid"
+    },
+    {
+      "type": "select",
+      "id": "mobile_layout",
+      "label": "Mobile layout",
+      "options": [
+        {
+          "value": "grid",
+          "label": "Grid"
+        },
+        {
+          "value": "carousel",
+          "label": "Carousel"
+        }
+      ],
+      "default": "carousel"
+    },
+    {
+      "type": "select",
+      "id": "mobile_visible",
+      "label": "Mobile carousel cards",
+      "options": [
+        {
+          "value": "1",
+          "label": "One"
+        },
+        {
+          "value": "2",
+          "label": "Two"
+        }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "range",
+      "id": "desktop_peek",
+      "label": "Desktop next-card preview",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "mobile_peek",
+      "label": "Mobile next-card preview",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrows",
+      "label": "Show carousel arrows",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "arrow_style",
+      "label": "Arrow style",
+      "options": [
+        {
+          "value": "outline",
+          "label": "Outline"
+        },
+        {
+          "value": "filled",
+          "label": "Filled"
+        },
+        {
+          "value": "glass",
+          "label": "Glass"
+        }
+      ],
+      "default": "outline"
+    },
+    {
+      "type": "select",
+      "id": "arrow_shape",
+      "label": "Arrow shape",
+      "options": [
+        {
+          "value": "circle",
+          "label": "Circle"
+        },
+        {
+          "value": "rounded",
+          "label": "Rounded"
+        }
+      ],
+      "default": "circle"
+    },
+    {
+      "type": "select",
+      "id": "arrow_size",
+      "label": "Arrow size",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "arrow_placement",
+      "label": "Arrow placement",
+      "options": [
+        {
+          "value": "above",
+          "label": "Above cards"
+        },
+        {
+          "value": "below",
+          "label": "Below cards"
+        }
+      ],
+      "default": "above"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top spacing",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom spacing",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full-width content",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "Desktop columns",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "select",
+      "id": "mobile_columns",
+      "label": "Mobile columns",
+      "options": [
+        {
+          "value": "1",
+          "label": "One"
+        },
+        {
+          "value": "2",
+          "label": "Two"
+        }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Card spacing",
+      "min": 0,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Product cards"
+    },
+    {
+      "type": "select",
+      "id": "card_presentation",
+      "label": "Card presentation",
+      "options": [
+        {
+          "value": "shop",
+          "label": "Shop"
+        },
+        {
+          "value": "discover",
+          "label": "Discover"
+        },
+        {
+          "value": "minimal",
+          "label": "Minimal"
+        }
+      ],
+      "default": "shop"
+    },
+    {
+      "type": "select",
+      "id": "title_lines",
+      "label": "Product title lines",
+      "options": [
+        {
+          "value": "1",
+          "label": "1 line"
+        },
+        {
+          "value": "2",
+          "label": "2 lines"
+        },
+        {
+          "value": "3",
+          "label": "3 lines"
+        },
+        {
+          "value": "4",
+          "label": "4 lines"
+        }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "select",
+      "id": "description_lines",
+      "label": "Product description lines",
+      "options": [
+        {
+          "value": "1",
+          "label": "1 line"
+        },
+        {
+          "value": "2",
+          "label": "2 lines"
+        },
+        {
+          "value": "3",
+          "label": "3 lines"
+        },
+        {
+          "value": "4",
+          "label": "4 lines"
+        },
+        {
+          "value": "5",
+          "label": "5 lines"
+        }
+      ],
+      "default": "3"
+    },
+    {
+      "type": "checkbox",
+      "id": "glass",
+      "label": "Use glass cards",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "glass_material",
+      "label": "Glass material",
+      "options": [
+        {
+          "value": "default",
+          "label": "Global preset"
+        },
+        {
+          "value": "clear",
+          "label": "Clear"
+        },
+        {
+          "value": "mist",
+          "label": "Mist"
+        },
+        {
+          "value": "cloudlight",
+          "label": "Cloudlight"
+        },
+        {
+          "value": "canopy",
+          "label": "Canopy"
+        }
+      ],
+      "default": "default"
+    },
+    {
+      "type": "select",
+      "id": "card_appearance",
+      "label": "Card appearance",
+      "options": [
+        {
+          "value": "editorial",
+          "label": "Editorial"
+        },
+        {
+          "value": "glasshouse",
+          "label": "Glasshouse"
+        },
+        {
+          "value": "reveal",
+          "label": "Reveal"
+        }
+      ],
+      "default": "editorial"
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "label": "Card corner radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image ratio",
+      "options": [
+        {
+          "value": "portrait",
+          "label": "Portrait"
+        },
+        {
+          "value": "square",
+          "label": "Square"
+        },
+        {
+          "value": "landscape",
+          "label": "Landscape"
+        }
+      ],
+      "default": "portrait"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show vendor",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_badges",
+      "label": "Show sale and sold-out badges",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured products",
+      "category": "Products"
+    }
+  ]
+}
+{% endschema %}

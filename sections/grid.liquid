@@ -1,9 +1,11 @@
 {{ 'grid.css' | asset_url | stylesheet_tag }}
 
 <div
-  class="theme-grid-section color-{{ section.settings.color_scheme }}"
+  class="theme-grid-section full-width color-{{ section.settings.color_scheme }}"
   style="
-    --grid-section-width: {{ section.settings.max_width }}px;
+    {% if section.settings.use_custom_width %}
+      --grid-section-width: {{ section.settings.max_width }}px;
+    {% endif %}
     --grid-section-padding: {{ section.settings.padding }}px;
     --grid-section-mobile-padding: {{ section.settings.mobile_padding }}px;
   "
@@ -93,6 +95,12 @@
     {
       "type": "header",
       "content": "Section size"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_custom_width",
+      "label": "Override global content width",
+      "default": false
     },
     {
       "type": "range",
